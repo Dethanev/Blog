@@ -1,0 +1,60 @@
+---
+interface Props {
+  items: string[];
+  speed?: number;
+  direction?: "left" | "right";
+  variant?: "ink" | "pink" | "yellow" | "violet";
+  class?: string;
+}
+const { items, speed = 80, direction = "left", variant = "ink", class: cls = "" } = Astro.props;
+const sep = "★";
+const doubled = [...items, ...items];
+---
+
+<section
+  class:list={["marquee", `marquee-${variant}`, cls]}
+  data-marquee
+  data-marquee-speed={speed}
+  data-marquee-dir={direction}
+  aria-hidden="true"
+>
+  <div class="marquee-inner">
+    {doubled.map((it) => (
+      <span class="item">{it}<span class="sep">{sep}</span></span>
+    ))}
+  </div>
+</section>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    border-top: 4px solid var(--ink);
+    border-bottom: 4px solid var(--ink);
+    padding-block: 0.9rem;
+    width: 100%;
+  }
+  .marquee-ink { background: var(--ink); color: var(--bg); }
+  .marquee-pink { background: var(--accent-1); color: var(--ink); }
+  .marquee-yellow { background: var(--accent-2); color: var(--ink); }
+  .marquee-violet { background: var(--accent-4); color: white; }
+  :global(.dark) .marquee-violet { color: var(--ink); }
+  .marquee-inner {
+    display: inline-flex;
+    white-space: nowrap;
+    will-change: transform;
+  }
+  .item {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding-inline: 1.4rem;
+  }
+  .sep {
+    color: var(--accent-2);
+    padding-inline: 0.8rem;
+  }
+  .marquee-yellow .sep { color: var(--accent-1); }
+  .marquee-pink .sep { color: var(--ink); }
+</style>

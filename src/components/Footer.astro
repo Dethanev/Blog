@@ -1,0 +1,183 @@
+---
+const year = new Date().getFullYear();
+const socials = [
+  { label: "GitHub", href: "https://github.com/", handle: "@ethan" },
+  { label: "Email", href: "mailto:ethan.dev66@gmail.com", handle: "ethan.dev66" },
+  { label: "Discord", href: "#", handle: "@ethan" },
+];
+const friends = [
+  { name: "willie", href: "https://devvillie.me/", note: "終端機美學 / 我朋友" },
+  { name: "your-friend", href: "#", note: "待補" },
+  { name: "your-friend-2", href: "#", note: "待補" },
+];
+---
+
+<footer class="footer">
+  <div class="footer-grid">
+    <section class="block contact-block">
+      <h3 class="block-title">
+        <span class="badge badge-pink">say hi</span>
+      </h3>
+      <ul class="contact-list">
+        {socials.map((s) => (
+          <li>
+            <a href={s.href} class="contact-row">
+              <span class="contact-label">{s.label}</span>
+              <span class="contact-handle">{s.handle} →</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="block friends-block">
+      <h3 class="block-title">
+        <span class="badge badge-violet">friends</span>
+      </h3>
+      <ul class="friends-list">
+        {friends.map((f, i) => (
+          <li>
+            <a
+              href={f.href}
+              class="friend-row"
+              style={`--n:${i}`}
+              target={f.href.startsWith("http") ? "_blank" : undefined}
+              rel="noopener"
+            >
+              <span class="friend-name">{f.name}</span>
+              <span class="friend-note">{f.note}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="block sign-block">
+      <p class="signoff">
+        <span class="signoff-line">made with</span>
+        <span class="badge badge-yellow rotate-it">Astro 6 · Tailwind v4 · GSAP</span>
+      </p>
+      <p class="copyright">© {year} ETHAN. no rights reserved.</p>
+    </section>
+  </div>
+
+  <div class="big-mark" aria-hidden="true">ETHAN/2026</div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: 6rem;
+    border-top: 4px solid var(--ink);
+    background: var(--ink);
+    color: var(--bg);
+    padding: 3rem 1.5rem 1rem;
+    overflow: hidden;
+  }
+  :global(.dark) .footer {
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .footer-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2.5rem;
+  }
+  .block-title { margin-bottom: 1.2rem; }
+  .badge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 0.95rem;
+    padding: 0.25em 0.8em;
+    border: 3px solid var(--bg);
+    background: var(--accent-1);
+    color: var(--ink);
+    text-transform: uppercase;
+  }
+  :global(.dark) .badge { border-color: var(--ink); }
+  .badge-pink { background: var(--accent-1); }
+  .badge-violet { background: var(--accent-4); color: white; }
+  :global(.dark) .badge-violet { color: var(--ink); }
+  .badge-yellow { background: var(--accent-2); }
+  .rotate-it { transform: rotate(-3deg); }
+
+  .contact-list, .friends-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .contact-row, .friend-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    text-decoration: none;
+    color: inherit;
+    padding: 0.45rem 0;
+    border-bottom: 1.5px solid color-mix(in oklab, var(--bg) 30%, transparent);
+    transition: padding 0.15s ease, background 0.15s ease;
+  }
+  :global(.dark) .contact-row, :global(.dark) .friend-row {
+    border-color: color-mix(in oklab, var(--ink) 20%, transparent);
+  }
+  .contact-row:hover, .friend-row:hover {
+    padding-inline: 0.4rem;
+    background: var(--accent-2);
+    color: var(--ink);
+  }
+  .contact-label, .friend-name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+  }
+  .contact-handle, .friend-note {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+
+  .signoff {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .signoff-line { opacity: 0.6; }
+  .copyright {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    opacity: 0.5;
+    margin-top: 0.8rem;
+  }
+
+  .big-mark {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(4rem, 18vw, 14rem);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    -webkit-text-stroke: 2px var(--bg);
+    color: transparent;
+    margin-top: 1.5rem;
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  :global(.dark) .big-mark {
+    -webkit-text-stroke: 2px var(--ink);
+  }
+
+  @media (max-width: 720px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 1.8rem;
+    }
+  }
+</style>

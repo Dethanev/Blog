@@ -1,0 +1,49 @@
+---
+title: "用 GSAP 做 scroll 互動的幾個小技巧"
+description: "ScrollTrigger 的 pin、scrub、velocity 應用筆記。比較適合做 portfolio 跟 landing page，不太適合用在長文。"
+date: 2026-05-03
+tags: ["gsap", "animation", "frontend"]
+variant: "violet"
+---
+
+GSAP 從 2025 開始所有 plugin 免費了，包含以前要付錢的 ScrollTrigger、SplitText、MorphSVG。對個人站來說真的滿香的。
+
+## pin + scrub 不要過頭
+
+`pin: true` 是一個很容易上癮的功能。你會想：「啊這段 hero 卡在那邊讓字慢慢變色多酷」。然後你做了三個 section 都用 pin，整個頁面就變得很黏，使用者捲不出去。
+
+我自己的原則：
+
+- **整頁最多 1 個 pin section**
+- pin 的距離不要超過 `+=80%`
+- 有意義的轉場才 pin（例如 hero 標題從 stroke → fill），純粹「卡一下」就算了
+
+## velocity 連動
+
+ScrollTrigger 的 `getVelocity()` 可以拿到當下的捲動速度，做 marquee 反向加速很有趣：
+
+```ts
+ScrollTrigger.create({
+  trigger: track,
+  onUpdate: (self) => {
+    scrollVel = self.getVelocity() / 200;
+  },
+});
+```
+
+每一 frame 把 `scrollVel` 拿來修改 marquee 的目標速度，捲快了文字會反向被「拖」一下。互動感比單純等速跑馬燈強很多。
+
+## refresh 時機
+
+ScrollTrigger 內部會快取每個 trigger 的位置。如果你在頁面 mount 之後動態插入內容、或頁面剛切換完成，要手動 `ScrollTrigger.refresh()`，不然新內容的觸發點會錯亂。
+
+我把所有 init 包成一個 `boot()`，在 `DOMContentLoaded` 跟 `astro:after-swap` 都呼叫一次。
+
+## reduce motion 是底線
+
+```ts
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (reduce) return;
+```
+
+如果使用者系統設定要求減少動畫，**整套 ScrollTrigger 都不要跑**。CSS 那邊另外用 media query 把 transition 砍短就好。不要用 reduce motion 還硬要播 hero pin。

@@ -1,0 +1,59 @@
+---
+title: "Astro 6 + Tailwind v4 上手筆記"
+description: "把這個 blog 從零搭起來踩到的一些坑：content layer、tailwind v4 的 CSS-first 設定、view transitions 跟 GSAP 的整合。"
+date: 2026-05-10
+tags: ["astro", "tailwind", "tooling"]
+variant: "yellow"
+---
+
+把一個東西從零做起，最大的收穫往往不是 feature，而是「啊原來這裡這樣裝才不會打架」。簡單記一下 Astro 6 加 Tailwind v4 的幾個小發現。
+
+## Tailwind v4 的 CSS-first 設定
+
+v4 沒有 `tailwind.config.js` 了，所有 token 用 `@theme` 直接在 CSS 裡定義：
+
+```css
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Unbounded Variable", sans-serif;
+  --color-pink: #ff5c8a;
+  --shadow-brutal: 6px 6px 0 0 var(--color-ink);
+}
+```
+
+`@theme` 裡定義的 CSS variable 會自動產出對應的 utility class，例如 `--color-pink` 就會有 `bg-pink`、`text-pink`、`border-pink`。
+
+## Content Layer + glob loader
+
+Astro 5+ 把 content collection 升級成 content layer。我覺得最大的好處是它把「資料來源」抽出來當一等公民：
+
+```ts
+import { defineCollection, z } from "astro:content";
+import { glob } from "astro/loaders";
+
+const posts = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/posts" }),
+  schema: z.object({ ... }),
+});
+```
+
+之後如果要從 Notion / 自家 API 拉文章，loader 換掉就好，schema 跟 render 完全不用動。
+
+## View Transitions + GSAP
+
+跨頁切換用 `<ClientRouter />`，預設 fade 還算過得去。但是 GSAP ScrollTrigger 在頁面切換之後不會自己 refresh，所以我在 layout 裡監聽 `astro:after-swap`，重新跑一次 init。
+
+```ts
+document.addEventListener("astro:after-swap", boot);
+```
+
+`boot()` 內部會重設 Lenis、重註冊 ScrollTrigger，這樣切到單篇文章再切回首頁，動畫不會壞掉。
+
+## 結論
+
+Tailwind v4 + Astro 6 + GSAP 整體體驗滿好的，但要記得：
+
+- `prefers-reduced-motion` **一定**要尊重
+- 行動裝置 Lenis 直接關掉，省事又不會跟原生捲動打架
+- ScrollTrigger 要在 `after-swap` 重新 refresh

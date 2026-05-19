@@ -1,0 +1,146 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Sticker from "~/components/Sticker.astro";
+import { formatDate } from "~/lib/utils";
+
+const updated = new Date("2026-05-18");
+
+const items = [
+  { color: "pink", title: "工作", body: "正在做一個用 SwiftUI 寫的 iOS App，主題暫時保密。" },
+  { color: "yellow", title: "side project", body: "把這個 blog 跟另一個小工具收尾，順便練手 GSAP。" },
+  { color: "lime", title: "在學", body: "Astro 6、Tailwind v4、還有 Rust（很慢，但有在動）。" },
+  { color: "violet", title: "在看", body: "幾本前端設計書、跟一些 long-form essay。anime 看 2026 春番。" },
+  { color: "pink", title: "在聽", body: "lo-fi、city pop、偶爾 jazz。最近循環 Sangiovanni - lady。" },
+  { color: "yellow", title: "想做", body: "把這個 blog 的 RSS 加一加，順便寫一篇關於 vibe coding 的反思。" },
+];
+---
+
+<BaseLayout title="近況" description="我現在在幹嘛的即時頁面">
+  <section class="now">
+    <header class="now-head">
+      <h1 class="title">
+        <span class="line">/</span>
+        <span class="line now-word">NOW</span>
+      </h1>
+      <p class="lede">
+        靈感來自 <a href="https://nownownow.com/" target="_blank" rel="noopener">nownownow.com</a>
+        ——一個放「我目前到底在幹嘛」的頁面，不像社群上會 cosplay 自己一切都很好。
+      </p>
+      <p class="updated">
+        <span class="updated-label">last updated</span>
+        <Sticker text={formatDate(updated)} color="lime" rotate={-2} size="sm" />
+      </p>
+    </header>
+
+    <div class="grid" data-stagger>
+      {items.map((it) => (
+        <div class:list={["card", "brutal-border-thick", "brutal-shadow", `card-${it.color}`]} data-stagger-item>
+          <h3 class="card-title">{it.title}</h3>
+          <p class="card-body">{it.body}</p>
+        </div>
+      ))}
+    </div>
+
+    <p class="footnote">
+      這頁我有想到就改一下。如果距離 last updated 已經一年了，請假裝沒看到。
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .now {
+    max-width: 1000px;
+    margin: 3rem auto 6rem;
+    padding: 0 1.5rem;
+  }
+  .now-head { margin-bottom: 3rem; }
+  .title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(4rem, 14vw, 10rem);
+    line-height: 0.88;
+    letter-spacing: -0.05em;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.1em;
+  }
+  .title .line { display: inline-block; }
+  .now-word {
+    background: var(--accent-1);
+    color: var(--ink);
+    border: 5px solid var(--ink);
+    box-shadow: 10px 10px 0 0 var(--ink);
+    padding: 0 0.1em;
+    transform: rotate(-2deg);
+  }
+  :global(.dark) .now-word { box-shadow: 10px 10px 0 0 var(--accent-2); }
+  .lede {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    margin-bottom: 1.2rem;
+    max-width: 55ch;
+  }
+  .lede a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-decoration-color: var(--accent-2);
+  }
+  .updated {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+  .updated-label {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .card {
+    padding: 1.2rem 1.4rem 1.4rem;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0 0 var(--ink);
+  }
+  :global(.dark) .card:hover { box-shadow: 9px 9px 0 0 var(--accent-2); }
+  .card-pink { background: var(--accent-1); }
+  .card-yellow { background: var(--accent-2); }
+  .card-lime { background: var(--accent-3); }
+  .card-violet { background: var(--accent-4); color: white; }
+  :global(.dark) .card-violet { color: var(--ink); }
+  .card-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  .card-body {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .footnote {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-align: center;
+    max-width: 40ch;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>

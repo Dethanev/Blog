@@ -1,0 +1,28 @@
+---
+---
+<div class="scroll-progress" aria-hidden="true">
+  <div class="bar" data-scroll-progress></div>
+</div>
+
+<style>
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: var(--paper);
+    border-bottom: 2px solid var(--ink);
+    z-index: 60;
+  }
+  .bar {
+    height: 100%;
+    background: var(--accent-1);
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: background-color 0.3s ease;
+  }
+  :global(.dark) .bar {
+    background: var(--accent-2);
+  }
+</style>

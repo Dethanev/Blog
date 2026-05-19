@@ -1,0 +1,578 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Hero from "~/components/Hero.astro";
+import PostCard from "~/components/PostCard.astro";
+import Marquee from "~/components/Marquee.astro";
+import Sticker from "~/components/Sticker.astro";
+import { getCollection } from "astro:content";
+import { pickTilt, hashString } from "~/lib/utils";
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const stack = [
+  { name: "Astro", note: "靜態為主，動的部分自己加" },
+  { name: "TypeScript", note: "嚴格模式，沒得商量" },
+  { name: "Tailwind v4", note: "CSS-first，token 寫在 CSS 裡" },
+  { name: "GSAP", note: "ScrollTrigger 跟 timeline" },
+  { name: "Lenis", note: "絲滑捲動" },
+  { name: "MDX", note: "文章可以嵌元件" },
+  { name: "SwiftUI", note: "做 App 的時候" },
+  { name: "Figma", note: "想圖、不畫圖" },
+];
+
+const projects = [
+  { num: "01", name: "dotted", tagline: "極簡 to-do，一個畫面、一個按鈕。", tag: "SwiftUI", color: "pink" },
+  { num: "02", name: "stamp", tagline: "Neubrutalism 貼紙產生器。按一下就有。", tag: "Web", color: "yellow" },
+  { num: "03", name: "lo-fi radio", tagline: "寫 code 時聽的 BGM 集合，會自己換台。", tag: "Web", color: "lime" },
+  { num: "04", name: "commit-mood", tagline: "從你這週的 git log 算出你心情多差。", tag: "CLI", color: "violet" },
+  { num: "05", name: "noir", tagline: "深色系 markdown 筆記 app，沒有同步。", tag: "SwiftUI", color: "paper" },
+  { num: "06", name: "kana drill", tagline: "五十音閃卡，一天 5 分鐘還是會忘記。", tag: "Web", color: "pink" },
+  { num: "07", name: "brutal-ui", tagline: "給 React 的 Neubrutalism 元件庫。", tag: "OSS", color: "yellow" },
+  { num: "08", name: "this blog", tagline: "你正在看的東西。Astro + GSAP。", tag: "Astro", color: "lime" },
+] as const;
+
+const marqueeItems = [
+  "CURRENTLY VIBING",
+  "寫 code",
+  "喝咖啡",
+  "看 anime",
+  "做 side project",
+  "睡眠不足",
+  "整理桌面",
+  "假裝有在運動",
+];
+---
+
+<BaseLayout>
+  <Hero />
+
+  <!-- About preview -->
+  <section class="about-preview">
+    <div class="ap-grid">
+      <div class="ap-left">
+        <p class="quote">
+          <span class="q-mark" aria-hidden="true">"</span>
+          做東西、寫東西、然後在這裡留一點痕跡。
+        </p>
+      </div>
+      <div class="ap-right">
+        <p class="lede">
+          Hi，我是 Ethan。白天寫 App，晚上做 side project，週末假裝有在運動。
+          這裡會放一些 dev 筆記、設計上的想法，跟一點生活雜記。
+        </p>
+        <a href="/about" class="cta brutal-border-thick brutal-shadow brutal-hover">
+          → 更多關於我
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest posts -->
+  <section class="section">
+    <header class="section-head">
+      <h2 class="section-title">
+        <span>最近寫的</span>
+        <span class="section-en">latest posts</span>
+      </h2>
+      <a href="/blog" class="see-all">全部文章 →</a>
+    </header>
+
+    <div class="posts-grid">
+      {posts.map((p, i) => (
+        <PostCard
+          href={`/blog/${p.id}`}
+          title={p.data.title}
+          description={p.data.description}
+          date={p.data.date}
+          tags={p.data.tags}
+          variant={p.data.variant}
+          index={i}
+        />
+      ))}
+    </div>
+  </section>
+
+  <Marquee items={marqueeItems} variant="ink" speed={70} />
+
+  <!-- Horizontal showcase (pin + scroll) -->
+  <section class="h-showcase" data-h-scroll aria-label="做過的東西">
+    <div class="h-track" data-h-track>
+      <div class="h-intro">
+        <span class="h-kicker">SECTION / 03</span>
+        <h2 class="h-title">
+          <span class="line">做過的</span>
+          <span class="line accent">東西。</span>
+        </h2>
+        <p class="h-sub">side projects、experiments、半成品、廢棄品。</p>
+        <div class="h-cue">
+          <span class="cue-down">↓ scroll</span>
+          <span class="cue-eq">=</span>
+          <span class="cue-right">→ slide</span>
+        </div>
+      </div>
+
+      {projects.map((p, i) => (
+        <article
+          class:list={["h-card brutal-border-thick brutal-shadow", `card-${p.color}`]}
+          style={`--tilt:${pickTilt(hashString(p.name) + i)}deg`}
+        >
+          <span class="h-num">{p.num}</span>
+          <div class="h-card-body">
+            <h3 class="h-name">{p.name}</h3>
+            <p class="h-tagline">{p.tagline}</p>
+          </div>
+          <div class="h-card-foot">
+            <span class="h-tag">{p.tag}</span>
+            <span class="h-arrow" aria-hidden="true">→</span>
+          </div>
+        </article>
+      ))}
+
+      <a href="https://github.com/" target="_blank" rel="noopener" class="h-end brutal-border-thick brutal-shadow brutal-hover">
+        <span class="end-arrow">→</span>
+        <span class="end-text">看更多 on GitHub</span>
+      </a>
+    </div>
+
+    <div class="h-progress-wrap" aria-hidden="true">
+      <span class="h-progress-label">/ 橫向進度</span>
+      <div class="h-progress-bar">
+        <div class="h-progress-fill" data-h-progress></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stack -->
+  <section class="section">
+    <header class="section-head">
+      <h2 class="section-title">
+        <span>用的東西</span>
+        <span class="section-en">stack & tools</span>
+      </h2>
+      <Sticker text="✦ 隨時換" color="pink" rotate={-6} size="sm" />
+    </header>
+
+    <div class="stack-grid" data-stagger>
+      {stack.map((s) => (
+        <div class="stack-item brutal-border-thick brutal-shadow-sm" data-stagger-item>
+          <div class="stack-name">{s.name}</div>
+          <div class="stack-note">{s.note}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- CTA strip -->
+  <section class="cta-strip">
+    <div class="cta-inner brutal-border-thick brutal-shadow-lg">
+      <p class="cta-text">
+        想知道我現在在幹嘛？<br/>
+        <a href="/now" class="cta-link">→ 看看 /now</a>
+      </p>
+      <Sticker text="LIVE" color="pink" rotate={-8} size="md" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-preview {
+    max-width: 1100px;
+    margin: 5rem auto;
+    padding: 0 1.5rem;
+  }
+  .ap-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  .quote {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.8rem, 3.6vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    position: relative;
+  }
+  .q-mark {
+    color: var(--accent-1);
+    font-size: 2em;
+    line-height: 0;
+    margin-right: 0.1em;
+  }
+  .lede {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+  }
+  .cta {
+    display: inline-block;
+    background: var(--accent-2);
+    color: var(--ink);
+    text-decoration: none;
+    padding: 0.7rem 1.2rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    transform: rotate(-1.5deg);
+  }
+
+  .section {
+    max-width: 1100px;
+    margin: 6rem auto;
+    padding: 0 1.5rem;
+  }
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .section-en {
+    font-family: var(--font-mono);
+    font-size: 0.75em;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .see-all {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 3px solid var(--accent-1);
+    padding-bottom: 2px;
+  }
+  .see-all:hover { background: var(--accent-2); }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  .stack-item {
+    background: var(--paper);
+    padding: 1rem 1.1rem;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .stack-item:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 0 var(--ink);
+  }
+  :global(.dark) .stack-item:hover { box-shadow: 5px 5px 0 0 var(--accent-2); }
+  .stack-name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    margin-bottom: 0.2rem;
+  }
+  .stack-note {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* Horizontal showcase */
+  .h-showcase {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--paper);
+    border-block: 4px solid var(--ink);
+    margin-block: 5rem 0;
+  }
+  .h-track {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: max-content;
+    gap: 2.5rem;
+    padding-inline: 6rem;
+    will-change: transform;
+  }
+  .h-intro {
+    flex: 0 0 auto;
+    width: 360px;
+    padding-right: 2.5rem;
+    border-right: 4px solid var(--ink);
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .h-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .h-title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.2rem;
+  }
+  .h-title .line { display: block; }
+  .h-title .accent {
+    background: var(--accent-1);
+    color: var(--ink);
+    border: 4px solid var(--ink);
+    box-shadow: 6px 6px 0 0 var(--ink);
+    padding: 0 0.15em;
+    display: inline-block;
+    transform: rotate(-1.5deg);
+    margin-top: 0.1em;
+  }
+  :global(.dark) .h-title .accent { box-shadow: 6px 6px 0 0 var(--accent-2); }
+  .h-sub {
+    font-size: 1rem;
+    line-height: 1.55;
+    margin-bottom: 1.4rem;
+    color: var(--muted);
+  }
+  .h-cue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 3px solid var(--ink);
+    background: var(--accent-2);
+    color: var(--ink);
+    padding: 0.45rem 0.9rem;
+    align-self: flex-start;
+    transform: rotate(-2deg);
+  }
+  .h-cue .cue-eq { opacity: 0.5; }
+
+  .h-card {
+    flex: 0 0 auto;
+    width: 360px;
+    height: 62vh;
+    max-height: 480px;
+    background: var(--paper);
+    padding: 1.6rem 1.7rem 1.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transform: rotate(var(--tilt));
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    position: relative;
+  }
+  .h-card:hover {
+    transform: rotate(0deg) translate(-4px, -4px);
+    box-shadow: 10px 10px 0 0 var(--ink);
+    z-index: 2;
+  }
+  :global(.dark) .h-card:hover { box-shadow: 10px 10px 0 0 var(--accent-2); }
+  .h-card.card-paper { background: var(--paper); }
+  .h-card.card-pink { background: var(--accent-1); }
+  .h-card.card-yellow { background: var(--accent-2); }
+  .h-card.card-lime { background: var(--accent-3); }
+  .h-card.card-violet { background: var(--accent-4); color: white; }
+  :global(.dark) .h-card.card-violet { color: var(--ink); }
+
+  .h-num {
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 0.25em 0.6em;
+    align-self: flex-start;
+    border: 2px solid var(--ink);
+  }
+  :global(.dark) .h-num { background: var(--accent-2); color: var(--ink); }
+  .h-card-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .h-name {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(2rem, 3.2vw, 2.6rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.8rem;
+  }
+  .h-tagline {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    opacity: 0.9;
+  }
+  .h-card-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px dashed color-mix(in oklab, var(--ink) 30%, transparent);
+    padding-top: 0.9rem;
+  }
+  .card-violet .h-card-foot { border-color: color-mix(in oklab, white 35%, transparent); }
+  .h-tag {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 2px solid currentColor;
+    padding: 0.15em 0.55em;
+  }
+  .h-arrow {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+
+  .h-end {
+    flex: 0 0 auto;
+    width: 280px;
+    height: 62vh;
+    max-height: 480px;
+    background: var(--ink);
+    color: var(--bg);
+    text-decoration: none;
+    padding: 1.6rem 1.7rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: var(--font-display);
+    font-weight: 900;
+  }
+  :global(.dark) .h-end { background: var(--accent-2); color: var(--ink); }
+  .h-end .end-arrow { font-size: 4rem; line-height: 1; }
+  .h-end .end-text { font-size: 1.4rem; line-height: 1.2; letter-spacing: -0.02em; }
+
+  .h-progress-wrap {
+    position: absolute;
+    bottom: 1.2rem;
+    left: 2rem;
+    right: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    z-index: 5;
+  }
+  .h-progress-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+  .h-progress-bar {
+    flex: 1;
+    height: 6px;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+  }
+  .h-progress-fill {
+    height: 100%;
+    background: var(--accent-1);
+    transform-origin: left center;
+    transform: scaleX(0);
+  }
+  :global(.dark) .h-progress-fill { background: var(--accent-2); }
+
+  @media (max-width: 720px), (prefers-reduced-motion: reduce) {
+    .h-showcase {
+      height: auto;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-block: 2rem;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+    .h-showcase::-webkit-scrollbar { display: none; }
+    .h-track {
+      transform: none !important;
+      padding-inline: 1.5rem;
+      gap: 1rem;
+      width: max-content;
+    }
+    .h-intro {
+      width: 80vw;
+      height: auto;
+      padding: 1.5rem 1.5rem 1.5rem 0;
+      border-right: none;
+      border-bottom: 4px solid var(--ink);
+    }
+    .h-card {
+      width: 78vw;
+      height: 60vh;
+      scroll-snap-align: start;
+    }
+    .h-end {
+      width: 60vw;
+      height: 60vh;
+      scroll-snap-align: start;
+    }
+    .h-progress-wrap { display: none; }
+  }
+
+  .cta-strip {
+    max-width: 1100px;
+    margin: 5rem auto 7rem;
+    padding: 0 1.5rem;
+  }
+  .cta-inner {
+    background: var(--accent-4);
+    color: white;
+    padding: 2rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    transform: rotate(-0.8deg);
+  }
+  :global(.dark) .cta-inner { color: var(--ink); }
+  .cta-text {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.2rem, 2.4vw, 1.8rem);
+    line-height: 1.25;
+  }
+  .cta-link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 4px;
+    text-decoration-color: var(--accent-2);
+    text-underline-offset: 4px;
+  }
+
+  @media (max-width: 720px) {
+    .ap-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .posts-grid { grid-template-columns: 1fr; }
+    .stack-grid { grid-template-columns: repeat(2, 1fr); }
+    .cta-inner { flex-direction: column; text-align: center; }
+  }
+</style>

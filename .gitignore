@@ -1,0 +1,50 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# environment variables
+.env
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# editors / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Claude / AI tooling
+.claude/
+CLAUDE.md
+
+# misc
+*.tsbuildinfo
+.cache/
+.tmp/
+coverage/

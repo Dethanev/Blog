@@ -1,0 +1,58 @@
+---
+type Color = "pink" | "yellow" | "lime" | "violet" | "cyan";
+interface Props {
+  text: string;
+  color?: Color;
+  rotate?: number;
+  size?: "sm" | "md" | "lg";
+  class?: string;
+}
+const { text, color = "yellow", rotate = -4, size = "md", class: extraClass = "" } = Astro.props;
+
+const sizeMap = {
+  sm: "px-3 py-1.5 text-sm",
+  md: "px-4 py-2 text-base",
+  lg: "px-5 py-3 text-lg",
+} as const;
+---
+
+<button
+  type="button"
+  data-sticker
+  class:list={[
+    "sticker brutal-border brutal-shadow-sm",
+    `sticker-${color}`,
+    sizeMap[size],
+    extraClass,
+  ]}
+  style={`--rotate:${rotate}deg`}
+>
+  {text}
+</button>
+
+<style>
+  .sticker {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    transform: rotate(var(--rotate));
+    cursor: pointer;
+    color: var(--ink);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    user-select: none;
+  }
+  .sticker:hover {
+    transform: rotate(0deg) translate(-2px, -2px);
+    box-shadow: 5px 5px 0 0 var(--ink);
+  }
+  :global(.dark) .sticker:hover {
+    box-shadow: 5px 5px 0 0 var(--accent-2);
+  }
+  .sticker-pink { background: var(--accent-1); }
+  .sticker-yellow { background: var(--accent-2); }
+  .sticker-lime { background: var(--accent-3); }
+  .sticker-violet { background: var(--accent-4); color: white; }
+  .sticker-cyan { background: var(--color-cyan); }
+  :global(.dark) .sticker-violet { color: var(--ink); }
+</style>

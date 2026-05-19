@@ -1,0 +1,82 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Sticker from "~/components/Sticker.astro";
+---
+
+<BaseLayout title="404" description="這裡沒有東西。" showFooter={false}>
+  <section class="four-oh-four">
+    <div class="big">
+      <span class="digit">4</span>
+      <span class="digit middle">0</span>
+      <span class="digit">4</span>
+    </div>
+
+    <h1 class="title">這裡沒有東西。</h1>
+    <p class="sub">
+      你可能點到一個被搬走的連結，或網址打錯了。
+      <br/>
+      要不要回 <a href="/">首頁</a> 或看看 <a href="/blog">最新文章</a>？
+    </p>
+
+    <div class="stickers">
+      <Sticker text="oops" color="pink" rotate={-6} />
+      <Sticker text="¯\_(ツ)_/¯" color="yellow" rotate={3} />
+    </div>
+
+    <p class="hint">提示：點 logo 5 下可以發現一些東西。</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .four-oh-four {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 1.5rem;
+    gap: 1.5rem;
+  }
+  .big {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .digit {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(7rem, 22vw, 16rem);
+    line-height: 1;
+    border: 5px solid var(--ink);
+    background: var(--paper);
+    padding: 0 0.15em;
+    box-shadow: 10px 10px 0 0 var(--ink);
+    transform: rotate(-3deg);
+  }
+  .digit:nth-child(2) { transform: rotate(2deg); background: var(--accent-1); }
+  .digit:nth-child(3) { transform: rotate(-1deg); background: var(--accent-2); }
+  :global(.dark) .digit { box-shadow: 10px 10px 0 0 var(--accent-2); }
+  :global(.dark) .digit:nth-child(2) { box-shadow: 10px 10px 0 0 var(--accent-4); }
+
+  .title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    margin-top: 0.5rem;
+  }
+  .sub { font-size: 1rem; line-height: 1.6; max-width: 40ch; }
+  .sub a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-decoration-color: var(--accent-1);
+  }
+  .stickers { display: flex; gap: 1rem; margin-top: 0.5rem; }
+  .hint {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 1rem;
+  }
+</style>

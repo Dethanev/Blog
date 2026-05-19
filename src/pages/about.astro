@@ -1,0 +1,213 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import Sticker from "~/components/Sticker.astro";
+
+const factoids = [
+  { k: "現居", v: "台灣" },
+  { k: "白天", v: "做 App" },
+  { k: "晚上", v: "做 side project" },
+  { k: "週末", v: "假裝有在運動" },
+  { k: "咖啡", v: "黑咖、無糖、不冰" },
+  { k: "音樂", v: "lo-fi、jazz、city pop" },
+];
+---
+
+<BaseLayout title="關於" description="關於 Ethan 的二三事">
+  <section class="about">
+    <div class="hero-block">
+      <h1 class="big-title">
+        <span class="line">關於</span>
+        <span class="line accent">ETHAN.</span>
+      </h1>
+      <p class="lede">
+        我是 Ethan。寫 code 算長期工作，做 App 是日常，做 side project 是抒壓方式。
+        這個站是我隨手放東西的地方，你看到的，大概就是我這陣子在想/在做的事。
+      </p>
+      <div class="stickers">
+        <Sticker text="developer" color="pink" rotate={-5} />
+        <Sticker text="designer-ish" color="violet" rotate={3} />
+        <Sticker text="台灣" color="yellow" rotate={-2} />
+      </div>
+    </div>
+
+    <div class="facts brutal-border-thick brutal-shadow" data-stagger>
+      <h2 class="block-title">
+        <span class="badge">facts</span>
+      </h2>
+      <dl class="fact-list">
+        {factoids.map((f) => (
+          <div class="fact-row" data-stagger-item>
+            <dt>{f.k}</dt>
+            <dd>{f.v}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+
+    <div class="text-block">
+      <h2 class="block-title">
+        <span class="badge yellow">background</span>
+      </h2>
+      <p>
+        這邊原本應該要放正經的自介、學歷、經歷、得過什麼獎之類的。
+        但我目前還沒想到要怎麼寫，所以暫時讓它空著。
+      </p>
+      <p>
+        如果你是雇主，但很好奇我是怎樣的人——
+        看 <a href="/blog">我寫的東西</a> 大概比看履歷準確一點。
+      </p>
+    </div>
+
+    <div class="text-block">
+      <h2 class="block-title">
+        <span class="badge violet">what's here</span>
+      </h2>
+      <ul class="list">
+        <li><strong>/blog</strong> — 寫東西的地方，主要是 dev 跟設計</li>
+        <li><strong>/now</strong> — 我現在在幹嘛的即時頁面</li>
+        <li><strong>/about</strong> — 你現在看的這頁</li>
+        <li><strong>彩蛋</strong> — 點 5 下 logo 看看會發生什麼</li>
+      </ul>
+    </div>
+
+    <div class="text-block">
+      <h2 class="block-title">
+        <span class="badge pink">how to reach</span>
+      </h2>
+      <p>
+        最快的方式是 email：<a href="mailto:ethan.dev66@gmail.com">ethan.dev66@gmail.com</a>。
+        GitHub 跟 Discord 也都會看，但回覆速度看當週狀況。
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about {
+    max-width: 800px;
+    margin: 3rem auto 6rem;
+    padding: 0 1.5rem;
+    display: grid;
+    gap: 3rem;
+  }
+  .hero-block { margin-bottom: 1rem; }
+  .big-title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.2rem;
+  }
+  .big-title .line { display: block; }
+  .big-title .accent {
+    background: var(--accent-2);
+    color: var(--ink);
+    border: 4px solid var(--ink);
+    box-shadow: 8px 8px 0 0 var(--ink);
+    padding: 0 0.15em;
+    display: inline-block;
+    transform: rotate(-1deg);
+    margin-top: 0.1em;
+  }
+  :global(.dark) .big-title .accent { box-shadow: 8px 8px 0 0 var(--accent-1); }
+  .lede {
+    font-size: 1.1rem;
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+    max-width: 50ch;
+  }
+  .stickers { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+
+  .facts {
+    background: var(--paper);
+    padding: 1.6rem 1.8rem;
+    transform: rotate(-0.5deg);
+  }
+  .block-title { margin-bottom: 1.2rem; }
+  .badge {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 0.85rem;
+    background: var(--accent-1);
+    color: var(--ink);
+    border: 3px solid var(--ink);
+    padding: 0.2em 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transform: rotate(-2deg);
+  }
+  .badge.yellow { background: var(--accent-2); }
+  .badge.violet { background: var(--accent-4); color: white; }
+  :global(.dark) .badge.violet { color: var(--ink); }
+  .badge.pink { background: var(--accent-1); }
+
+  .fact-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem 2rem;
+    margin: 0;
+  }
+  .fact-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px dotted color-mix(in oklab, var(--ink) 25%, transparent);
+  }
+  .fact-row dt {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .fact-row dd {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .text-block {
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+  .text-block p { margin-block: 0.8em; }
+  .text-block a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-decoration-color: var(--accent-1);
+    text-underline-offset: 3px;
+  }
+  .text-block a:hover { background: var(--accent-2); }
+
+  .list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .list li { position: relative; padding-left: 1.5em; }
+  .list li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--accent-1);
+    font-weight: 900;
+  }
+  .list strong {
+    font-family: var(--font-mono);
+    background: var(--accent-2);
+    border: 2px solid var(--ink);
+    padding: 0.05em 0.4em;
+    font-size: 0.85em;
+    font-weight: 700;
+  }
+
+  @media (max-width: 640px) {
+    .fact-list { grid-template-columns: 1fr; }
+  }
+</style>

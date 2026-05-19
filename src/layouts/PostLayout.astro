@@ -1,0 +1,173 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import TagPill from "~/components/TagPill.astro";
+import ClapButton from "~/components/ClapButton.astro";
+import { formatDate, readingTime } from "~/lib/utils";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"posts">;
+  prev?: { slug: string; title: string };
+  next?: { slug: string; title: string };
+  rawBody: string;
+}
+const { post, prev, next, rawBody } = Astro.props;
+const { title, description, date, tags } = post.data;
+const minutes = readingTime(rawBody);
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="post" data-article>
+    <header class="post-header">
+      <div class="header-meta">
+        <time datetime={date.toISOString()}>{formatDate(date)}</time>
+        <span class="sep">/</span>
+        <span>{minutes} 分鐘</span>
+      </div>
+      <h1 class="post-title">{title}</h1>
+      <p class="post-desc">{description}</p>
+      <div class="post-tags">
+        {tags.map((t: string) => <TagPill tag={t} />)}
+      </div>
+    </header>
+
+    <div class="post-body-wrap">
+      <div class="reading-rail" aria-hidden="true">
+        <div class="rail-fill" data-reading-progress></div>
+      </div>
+
+      <div class="prose-body">
+        <slot />
+      </div>
+    </div>
+
+    <ClapButton start={Math.floor(Math.random() * 24)} />
+
+    <nav class="post-nav">
+      {prev ? (
+        <a href={`/blog/${prev.slug}`} class="nav-card prev brutal-border-thick brutal-shadow brutal-hover">
+          <span class="nav-label">← 上一篇</span>
+          <span class="nav-title">{prev.title}</span>
+        </a>
+      ) : <span class="nav-card placeholder">沒有更早的了</span>}
+      {next ? (
+        <a href={`/blog/${next.slug}`} class="nav-card next brutal-border-thick brutal-shadow brutal-hover">
+          <span class="nav-label">下一篇 →</span>
+          <span class="nav-title">{next.title}</span>
+        </a>
+      ) : <span class="nav-card placeholder">最新一篇</span>}
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    max-width: 760px;
+    margin: 3rem auto 0;
+    padding: 0 1.5rem;
+  }
+  .post-header {
+    border: 4px solid var(--ink);
+    background: var(--paper);
+    padding: 2rem 1.8rem 1.8rem;
+    box-shadow: 10px 10px 0 0 var(--ink);
+    margin-bottom: 3rem;
+    transform: rotate(-0.6deg);
+  }
+  :global(.dark) .post-header { box-shadow: 10px 10px 0 0 var(--accent-2); }
+  .header-meta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.8rem;
+    opacity: 0.7;
+  }
+  .header-meta .sep { margin-inline: 0.4rem; opacity: 0.4; }
+  .post-title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+  }
+  .post-desc {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    opacity: 0.85;
+    margin-bottom: 1.2rem;
+  }
+  .post-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  .post-body-wrap {
+    position: relative;
+    display: grid;
+    grid-template-columns: 8px 1fr;
+    gap: 1.6rem;
+  }
+  .reading-rail {
+    position: sticky;
+    top: 8rem;
+    height: 70vh;
+    background: color-mix(in oklab, var(--ink) 12%, transparent);
+    align-self: start;
+  }
+  .rail-fill {
+    width: 100%;
+    height: 100%;
+    background: var(--accent-1);
+    transform-origin: top center;
+    transform: scaleY(0);
+  }
+  :global(.dark) .rail-fill { background: var(--accent-2); }
+
+  .post-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 3rem;
+    margin-bottom: 4rem;
+  }
+  .nav-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--paper);
+    padding: 1rem 1.2rem;
+  }
+  .nav-card.placeholder {
+    border: 3px dashed color-mix(in oklab, var(--ink) 30%, transparent);
+    background: transparent;
+    box-shadow: none;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-card.next { text-align: right; }
+  .nav-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.6;
+  }
+  .nav-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+
+  @media (max-width: 720px) {
+    .post-body-wrap { grid-template-columns: 1fr; }
+    .reading-rail { display: none; }
+    .post-nav { grid-template-columns: 1fr; }
+    .nav-card.next { text-align: left; }
+  }
+</style>

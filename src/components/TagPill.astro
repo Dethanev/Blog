@@ -1,0 +1,53 @@
+---
+interface Props {
+  tag: string;
+  filter?: boolean;
+  active?: boolean;
+  href?: string;
+  class?: string;
+}
+const { tag, filter = false, active = false, href, class: cls = "" } = Astro.props;
+const Tag = href ? "a" : "span";
+---
+
+{filter ? (
+  <button
+    type="button"
+    class:list={["tag-pill brutal-border-thick", { "is-active": active }, cls]}
+    data-tag-filter={tag}
+  >
+    #{tag}
+  </button>
+) : (
+  <Tag href={href} class:list={["tag-pill brutal-border-thick", cls]}>
+    #{tag}
+  </Tag>
+)}
+
+<style>
+  .tag-pill {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.2em 0.7em;
+    background: var(--paper);
+    color: var(--ink);
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+    line-height: 1.4;
+  }
+  .tag-pill:hover {
+    background: var(--accent-2);
+    transform: translate(-1px, -1px);
+  }
+  button.tag-pill.is-active {
+    background: var(--accent-1);
+    transform: rotate(-1.5deg);
+  }
+  :global(.dark) button.tag-pill.is-active {
+    background: var(--accent-2);
+    color: var(--ink);
+  }
+</style>

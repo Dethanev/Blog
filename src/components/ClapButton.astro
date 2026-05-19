@@ -1,0 +1,74 @@
+---
+interface Props {
+  start?: number;
+}
+const { start = 0 } = Astro.props;
+---
+
+<div class="clap-wrap">
+  <button
+    type="button"
+    class="clap brutal-border-thick brutal-shadow"
+    data-clap
+    data-clap-start={start}
+    aria-label="拍手"
+  >
+    <span class="emoji" aria-hidden="true">✦</span>
+    <span class="text">CLAP</span>
+    <span class="count" data-clap-count>{start}</span>
+  </button>
+  <p class="hint">點下去看看會發生什麼事 →</p>
+</div>
+
+<style>
+  .clap-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 3.5rem auto;
+  }
+  .clap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: var(--accent-2);
+    color: var(--ink);
+    padding: 0.85rem 1.6rem;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.1rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  .clap:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0 0 var(--ink);
+  }
+  :global(.dark) .clap:hover {
+    box-shadow: 9px 9px 0 0 var(--accent-1);
+  }
+  .clap .emoji {
+    font-size: 1.5rem;
+    transform: rotate(-12deg);
+    display: inline-block;
+    color: var(--accent-1);
+    -webkit-text-stroke: 1.5px var(--ink);
+  }
+  .clap .count {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    padding: 0.05em 0.6em;
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 0.95rem;
+    min-width: 2.2em;
+    text-align: center;
+  }
+  .hint {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+</style>

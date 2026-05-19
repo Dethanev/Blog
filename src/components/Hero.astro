@@ -1,0 +1,158 @@
+---
+import Sticker from "./Sticker.astro";
+---
+
+<section class="hero" data-hero>
+  <div class="grid-bg" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+    <div class="kicker">
+      <span class="kicker-block">EST. 2026</span>
+      <span class="kicker-dots">●●●</span>
+      <span class="kicker-block kicker-block--alt">DEV / DESIGN / 碎念</span>
+    </div>
+
+    <h1 class="hero-title heading-stroke" data-hero-title>
+      <span class="line">HEY,</span>
+      <span class="line">I'M <em>ETHAN</em>.</span>
+    </h1>
+
+    <p class="hero-sub">
+      <span class="zh">我寫 code、做 App、偶爾在這裡碎碎念。</span>
+      <span class="en">A nice corner of the internet for code, design, and whatever else.</span>
+    </p>
+
+    <div class="hero-stickers">
+      <Sticker text="// click me" color="pink" rotate={-8} size="md" />
+      <Sticker text="✦ NEW ✦" color="yellow" rotate={4} size="md" />
+      <Sticker text="@ethan" color="violet" rotate={-3} size="md" />
+    </div>
+
+    <div class="scroll-cue" aria-hidden="true">
+      <span>↓ scroll</span>
+      <span class="bar"></span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 6rem 1.5rem 4rem;
+  }
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--ink) 8%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--ink) 8%, transparent) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    z-index: 0;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    width: 100%;
+    text-align: center;
+  }
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.6rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .kicker-block {
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    padding: 0.25em 0.7em;
+  }
+  .kicker-block--alt { background: var(--accent-2); }
+  .kicker-dots { color: var(--accent-1); }
+  .hero-title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(3.5rem, 11vw, 9rem);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    margin: 0 auto 1.5rem;
+    transition: -webkit-text-stroke 0.3s ease, color 0.3s ease;
+  }
+  .hero-title .line {
+    display: block;
+  }
+  .hero-title em {
+    font-style: normal;
+    background: var(--accent-1);
+    color: var(--ink);
+    -webkit-text-stroke: 0;
+    padding: 0 0.1em;
+    display: inline-block;
+    transform: rotate(-2deg);
+    margin-inline: 0.1em;
+    border: 4px solid var(--ink);
+    box-shadow: 6px 6px 0 0 var(--ink);
+  }
+  :global(.dark) .hero-title em {
+    box-shadow: 6px 6px 0 0 var(--accent-2);
+  }
+  .hero-sub {
+    max-width: 38ch;
+    margin: 0 auto 2.4rem;
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+    line-height: 1.55;
+  }
+  .hero-sub .zh { display: block; }
+  .hero-sub .en {
+    display: block;
+    margin-top: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: var(--muted);
+    letter-spacing: -0.01em;
+  }
+  .hero-stickers {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+  .scroll-cue {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    animation: bob 1.8s ease-in-out infinite;
+  }
+  .scroll-cue .bar {
+    width: 2px;
+    height: 28px;
+    background: var(--ink);
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  @media (max-width: 640px) {
+    .hero-stickers > :nth-child(3) { display: none; }
+    .hero-title { font-size: 14vw; }
+  }
+</style>

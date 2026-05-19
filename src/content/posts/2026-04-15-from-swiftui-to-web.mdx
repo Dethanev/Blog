@@ -1,0 +1,53 @@
+---
+title: "從 SwiftUI 跨到 web，幾個讓我頭痛的差異"
+description: "聲明式 UI 用習慣之後，回頭碰 HTML/CSS 的「文檔流」反而會卡住。整理我自己反覆撞牆的幾個點。"
+date: 2026-04-15
+tags: ["swiftui", "web", "frontend"]
+variant: "paper"
+---
+
+我大概有兩年主要寫 SwiftUI。之前寫過 React，但這次重新回來碰 web，明顯感覺自己的腦袋已經被聲明式 UI 重新接線了。
+
+## VStack / HStack 換 flex 還算順
+
+排版這塊其實滿好遷移的。`VStack` ≈ `flex-direction: column`，`HStack` ≈ `flex-direction: row`，`Spacer()` ≈ `margin-left: auto` 或 `flex: 1`。`alignment` / `justifyContent` 也差不多。
+
+## 真正卡住的是「文檔流」
+
+SwiftUI 的 view tree 就是 view tree，你給什麼結構它就排什麼結構。但 HTML 有 inline / block / inline-block / float / position 的混合系統，還有 margin collapse 這種神奇副作用。
+
+光是「我這個 span 為什麼會跟下面差 6px」這種問題，剛回 web 的時候我可以卡 30 分鐘。
+
+## state 跟 binding
+
+SwiftUI：
+
+```swift
+@State var count = 0
+Button("Tap") { count += 1 }
+Text("\(count)")
+```
+
+React：
+
+```tsx
+const [count, setCount] = useState(0);
+<button onClick={() => setCount(count + 1)}>Tap</button>
+<span>{count}</span>
+```
+
+概念一樣，語法不同。沒什麼好說的。但是 SwiftUI 的 `@Binding` 比較直覺，React 要傳 `value` 跟 `onChange` 兩個 prop 才能模擬，初學者很容易搞混。
+
+## 動畫思維完全不同
+
+SwiftUI 的 `.animation(.spring(), value: state)` 是「告訴系統這個 state 改變時請插值」。
+
+Web 是「告訴瀏覽器這兩個 CSS 屬性之間請過渡」，或者用 GSAP 直接 imperatively tween。後者比較像我以前在做遊戲時的寫法，反而很習慣。
+
+但 SwiftUI 的 matched geometry / transitions 那種東西，web 要做就要靠 [View Transitions API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API) 或自己排 GSAP，麻煩度高一個數量級。
+
+## 結論
+
+兩邊都好玩。SwiftUI 寫起來爽，但平台限制很多；web 自由但也代表你要自己處理一堆小問題。
+
+最近我兩個都用，不打算選邊站。
