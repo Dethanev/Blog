@@ -1,0 +1,8 @@
+services:
+  blog:
+    image: ghcr.io/dethanev/blog:latest
+    container_name: blog
+    restart: always
+    pull_policy: always
+    ports:
+      - "8080:80"

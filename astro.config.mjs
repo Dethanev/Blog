@@ -4,7 +4,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  site: "https://ethan.dev",
+  site: "https://dethanev.app",
   integrations: [mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
