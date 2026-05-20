@@ -37,10 +37,7 @@ const fullTitle = title === "ethan / blog" ? title : `${title} — ethan/blog`;
     <script is:inline>
       (function () {
         try {
-          var t = localStorage.getItem("theme");
-          if (!t) {
-            t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-          }
+          var t = localStorage.getItem("theme") || "light";
           if (t === "dark") document.documentElement.classList.add("dark");
           document.documentElement.dataset.theme = t;
         } catch (e) {}
