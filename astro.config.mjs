@@ -3,10 +3,9 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
-import cloudflare from "@astrojs/cloudflare";
-
 export default defineConfig({
   site: "https://dethanev.app",
+  output: "static",
   integrations: [mdx(), sitemap()],
 
   vite: {
@@ -19,6 +18,4 @@ export default defineConfig({
       wrap: true,
     },
   },
-
-  adapter: cloudflare(),
 });
