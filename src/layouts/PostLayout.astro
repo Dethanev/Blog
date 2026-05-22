@@ -2,6 +2,7 @@
 import BaseLayout from "./BaseLayout.astro";
 import TagPill from "~/components/TagPill.astro";
 import ClapButton from "~/components/ClapButton.astro";
+import Comments from "~/components/Comments.astro";
 import { formatDate, readingTime } from "~/lib/utils";
 import type { CollectionEntry } from "astro:content";
 
@@ -42,6 +43,8 @@ const minutes = readingTime(rawBody);
     </div>
 
     <ClapButton start={Math.floor(Math.random() * 24)} />
+
+    <Comments />
 
     <nav class="post-nav">
       {prev ? (
