@@ -1,45 +1,39 @@
-# 用 giscus 取代公開 email 作為留言/聯絡管道
+# 移除 Docker / GitHub Actions 殘留,清理為純 Cloudflare Pages 專案
 
 ## 目標
-- 把所有公開頁面上的 Gmail 拿掉,避免個資外流。
-- 改用 GitHub Discussions 作為唯一公開回饋管道。
-- 在每篇文章底部嵌入 giscus 留言區,讀者不用離開頁面就能留言。
+Blog 已從「LXC + Docker + Watchtower」遷到 Cloudflare Pages,Repo 裡舊部署檔案全部沒人引用,直接刪乾淨,讓 repo 看起來就只是一個 Astro 靜態站。
 
-## 主要變更
+## 刪除的檔案
+- `Dockerfile` — Astro build + nginx 兩階段 image
+- `compose.yaml` — `blog` 服務 + `watchtower` 自動更新
+- `nginx.conf` — runtime nginx 設定
+- `.dockerignore`
+- `.github/workflows/docker-publish.yml` — 推 image 到 `ghcr.io/dethanev/blog` 的 workflow(連同 `.github/` 整個目錄移除)
 
-### 新增 `src/components/Comments.astro`
-giscus 嵌入元件,做了三件事:
-1. 依 `document.documentElement.classList` 是否含 `dark` 自動帶入主題。
-2. 監聽 `html` 的 `class` 變化,主題切換時 `postMessage` 同步給 giscus iframe。
-3. 監聽 `astro:after-swap`(View Transition 切頁),重新掛載 giscus script,避免換文章後留言區消失。
+## 修改的檔案
 
-未填 ID 時會顯示橘色提示框,不會讓頁面壞掉:
+### `.gitignore`
+拿掉早期 Cloudflare Workers 嘗試留下的 wrangler 區塊:
 
-```astro
-const repo = "<OWNER/REPO>";
-const repoId = "<REPO_ID>";
-const category = "<CATEGORY_NAME>";
-const categoryId = "<CATEGORY_ID>";
+```diff
+-# wrangler files
+-.wrangler
+-.dev.vars*
+-!.dev.vars.example
+-!.env.example
 ```
 
-### `src/layouts/PostLayout.astro`
-匯入並掛上 `<Comments />`,放在 `<ClapButton />` 與 `post-nav` 之間。
+### `package-lock.json`
+上一次 `refactor: remove Cloudflare integration` 並沒有同步 lockfile,裡面還有 `wrangler` 與其 transitive deps 的孤兒條目。這次 `rm package-lock.json && npm install` 重生,`wrangler` 完全清除,lockfile 大小 256KB → 228KB。
 
-### `src/components/Footer.astro`
-Footer 聯絡清單中的 Email 列換成 Discussions:
+> 殘留的 `is-docker` 不是舊 docker 設定遺物,是 `@astrojs/telemetry` 的 transitive dep(Astro 用來判斷是否在容器內跑遙測),屬於正常依賴,保留。
 
-```ts
-{ label: "Discussions", href: "https://github.com/Dethanev/Blog/discussions", handle: "Dethanev/Blog" },
-```
-
-### `src/pages/about.astro`
-「how to reach」段落從 `mailto:` 改為 GitHub Discussions 連結。
+## 沒動的地方
+- `astro.config.mjs`:`output: "static"`、無 adapter,Cloudflare Pages 直接吃 `dist/`。
+- `src/` / `public/`:`grep -rIl -E "docker|ghcr|watchtower|nginx|workflow"` 無命中,原本就沒被引用。
 
 ## 手動驗證
-- [ ] `npx astro build` 通過(已確認)。
-- [ ] 全 repo `grep -iE "gmail|mailto:|ethan\.dev66"` 在 `src/` 與 `public/` 下找不到結果(已確認)。
-- [ ] 跑 `npm run dev`,打開任一篇文章,確認:
-  - 底部出現「留言區尚未設定 giscus」橘色提示框。
-  - 切換深淺主題時頁面其餘部分正常。
-- [ ] 在 giscus.app 拿到 4 個 ID 填入 `Comments.astro` 後,提示框換成真實留言區,且主題切換時 giscus 也跟著切。
-- [ ] Footer 與 `/about` 不再看到 email。
+- [x] `npm run build` 通過,10 頁正常產出。
+- [x] `git status` 為純刪除 + `.gitignore` / `package-lock.json` 兩處修改,沒誤動其他檔案。
+- [x] `npm ls wrangler` 顯示 `(empty)`。
+- [ ] push 後 Cloudflare Pages 自動部署成功,線上 `dethanev.app` 與部署前一致。
