@@ -2,10 +2,10 @@
 import ThemeToggle from "./ThemeToggle.astro";
 const path = Astro.url.pathname;
 const links = [
-  { href: "/", label: "首頁", en: "home" },
-  { href: "/blog", label: "文章", en: "blog" },
-  { href: "/about", label: "關於", en: "about" },
-  { href: "/now", label: "近況", en: "now" },
+  { href: "/", label: "首頁"},
+  { href: "/blog", label: "文章"},
+  { href: "/about", label: "關於"},
+  { href: "/now", label: "近況"},
 ];
 const isActive = (href: string) =>
   href === "/" ? path === "/" : path === href || path.startsWith(href + "/");
@@ -15,7 +15,7 @@ const isActive = (href: string) =>
   <nav class="nav brutal-border brutal-shadow-sm">
     <a href="/" class="logo" data-logo aria-label="首頁">
       <span class="logo-mark">D.</span>
-      <span class="logo-text">dethanev/blog</span>
+      <span class="logo-text">Dethanev/blog</span>
     </a>
     <ul class="links">
       {links.map((l) => (
@@ -24,8 +24,7 @@ const isActive = (href: string) =>
             href={l.href}
             class:list={["link", { active: isActive(l.href) }]}
           >
-            <span class="zh">{l.label}</span>
-            <span class="en">{l.en}</span>
+            {l.label}
           </a>
         </li>
       ))}
@@ -90,9 +89,7 @@ const isActive = (href: string) =>
     justify-content: center;
   }
   .link {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.35rem;
+    display: inline-block;
     padding: 0.45rem 0.75rem;
     text-decoration: none;
     color: var(--ink);
@@ -112,12 +109,6 @@ const isActive = (href: string) =>
     border-color: var(--ink);
   }
   :global(.dark) .link.active { background: var(--accent-2); }
-  .link .en {
-    font-family: var(--font-mono);
-    font-weight: 500;
-    font-size: 0.7rem;
-    opacity: 0.6;
-  }
   .actions { display: flex; align-items: center; gap: 0.6rem; }
 
   @media (max-width: 720px) {
@@ -125,6 +116,5 @@ const isActive = (href: string) =>
     .logo-text { display: none; }
     .links { gap: 0.1rem; }
     .link { padding: 0.35rem 0.55rem; font-size: 0.85rem; }
-    .link .en { display: none; }
   }
 </style>

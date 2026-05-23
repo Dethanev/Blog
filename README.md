@@ -1,48 +1,76 @@
-# Footer 大水印改成置中 Dethanev,favicon 回到粉紅底
+# Hero 名牌不再露出粉紅,Nav 拿掉英文副標
 
 ## 目標
-上一個 commit 把站上 Ethan 文字改成 Dethanev 系列、favicon 換成綠底 D 之後,還有兩個體感問題:
+這次 commit 解決兩件事:
 
-1. Footer 底部巨大水印是 `DETHANEV/2026`,字太長在多數寬度下會橫向溢出被 `overflow: hidden` 切掉,只露出一截;而且新版品牌不需要再帶年份。
-2. favicon 綠底跟 Nav 左上角的粉紅 `D.` logo-mark 顏色撞,兩個視覺錨點不一致。
-
-這次只做兩件事:把水印換成單純的 `Dethanev` 並置中、favicon 背景改回原本的粉紅 `#FF5C8A`(字母維持 D)。
+1. 首頁 Hero 大字裡的 `<em>DETHANEV</em>` 粉紅名牌,旋轉之後底色會從黑邊框外緣漏出來,看起來像有條粉紅細線繞著卡片。原因是 `border` + `box-shadow` 兩個獨立屬性,旋轉後次像素抗鋸齒讓背景色從邊框與陰影中間隙縫透出。
+2. Nav 原本每個連結同時顯示中文 + 英文 (例如「首頁 / home」),這次決定只留中文,讓連結列簡潔一些。
 
 ## 修改的檔案
 
-### `src/components/Footer.astro`
-水印內容跟對齊:
+### `src/components/Hero.astro`
+把名牌的「黑邊框 + 偏移陰影」改寫成一條 `box-shadow` 裡疊兩層:第一層用 spread 模擬邊框、第二層才是真正的偏移陰影。沒有 `border` 之後就不會有旋轉造成的邊緣破綻。
 ```diff
--<div class="big-mark" aria-hidden="true">DETHANEV/2026</div>
-+<div class="big-mark" aria-hidden="true">Dethanev</div>
-```
-
-```diff
- .big-mark {
+ .hero-title em {
    ...
-   pointer-events: none;
-   white-space: nowrap;
-   overflow: hidden;
-+  text-align: center;
+-  padding: 0 0.1em;
++  padding: 0.12em 0.15em 0.08em;
++  line-height: 1;
+   ...
+-  border: 4px solid var(--ink);
+-  box-shadow: 6px 6px 0 0 var(--ink);
++  border: none;
++  box-shadow:
++    0 0 0 4px var(--ink),
++    10px 10px 0 0 var(--ink);
+ }
+ :global(.dark) .hero-title em {
+-  box-shadow: 6px 6px 0 0 var(--accent-2);
++  box-shadow:
++    0 0 0 4px var(--ink),
++    10px 10px 0 0 var(--accent-2);
  }
 ```
 
-### `public/favicon.svg`
-底色從綠回粉:
+padding/line-height 一起改,是因為原本 `padding: 0` + 繼承的 `line-height: 0.92` 讓字本身會凸出卡片上下緣;順著這次改動補回。
+
+### `src/components/Nav.astro`
+連結拿掉英文副標 `en` 欄位,連同 `<span class="zh">` 包裝一起簡化:
 ```diff
--<rect ... fill="#B8E14A" .../>
-+<rect ... fill="#FF5C8A" .../>
+ const links = [
+-  { href: "/", label: "首頁", en: "home" },
+-  { href: "/blog", label: "文章", en: "blog" },
+-  { href: "/about", label: "關於", en: "about" },
+-  { href: "/now", label: "近況", en: "now" },
++  { href: "/", label: "首頁"},
++  { href: "/blog", label: "文章"},
++  { href: "/about", label: "關於"},
++  { href: "/now", label: "近況"},
+ ];
 ```
-字母維持 `D`,跟 Nav 的 `D.` logo 同色系。
+```diff
+-<span class="logo-text">dethanev/blog</span>
++<span class="logo-text">Dethanev/blog</span>
+```
+```diff
+-<span class="zh">{l.label}</span>
++{l.label}
+```
+
+CSS 也順手清掉死碼:`.link .en` 跟 `@media` 內的 `.link .en { display: none }` 都刪除;`.link` 從 `inline-flex + align-items: baseline + gap: 0.35rem` 簡化成 `inline-block`(那些屬性原本是為了讓中文跟英文兩個 span 對齊用的,現在不需要了)。
 
 ## 為什麼這樣選
-- **拿掉 `/2026`**:年份綁在水印裡每年都要改,且這次的命名統一是「Dethanev」這個名字本身,不是年度標語。
-- **首字大寫 `Dethanev` 而非全大寫 `DETHANEV`**:水印是 outline 描邊文字,首字大寫的混合字高比較有節奏,全大寫長條會更容易撞邊。
-- **置中靠 `text-align: center`**:`.big-mark` 是 block 元素,寬度撐滿 footer,直接給 `text-align: center` 最簡單,不動其他 box model。
-- **favicon 改回粉紅**:跟 Nav 的 `.logo-mark`(`background: var(--accent-1)`)同色,瀏覽器分頁跟頁面內 logo 視覺一致。
+- **疊兩層 `box-shadow` 取代 `border + box-shadow`**:單一屬性內的多層陰影是同一個 paint pass,沒有兩個獨立元素的次像素抗鋸齒問題,旋轉後也不會有縫隙漏色。`0 0 0 4px` 的 spread 模擬出 4px 寬的環,視覺等效於原本的 4px border。
+- **第二層偏移從 6px 改成 10px**:原本邊框 4px + 陰影偏移 6px,從邊框外緣往外看見的陰影是 6px。新做法沒有實體邊框,要讓陰影看起來「離卡片外緣 6px」,就得從卡片本體偏移 4(模擬邊框)+ 6 = 10px。
+- **logo 改大寫 D**:跟其他位置(Footer 水印 `Dethanev`、about 頁標題 `DETHANEV.`)的首字大寫風格對齊。
+- **Nav 連結純中文**:中英並列雖然好看,但連結用途是導航,中文已足夠;移掉後手機版也少擠一行。
 
 ## 手動驗證
-- [ ] `npm run dev` 開首頁拉到最底:
-  - Footer 描邊大字顯示 `Dethanev`,水平置中,寬螢幕兩側留白對稱。
-  - 縮窄視窗到 360px 左右,文字不會被切掉、不出現橫向卷軸。
-- [ ] favicon:無痕視窗或直接打 `http://localhost:xxxx/favicon.svg`,看到粉紅底 + 黑色 `D`(一般 reload 多半還是快取舊的綠底)。
+- [ ] `npm run dev` 開首頁:
+  - Hero 大字 `I'M DETHANEV.` 的粉紅名牌,旋轉後四個邊都被黑色 ring 完整包住,黑色陰影偏移仍然像原本一樣往右下露出。
+  - 字母不會凸出粉紅卡片(尤其 D / V 的上下緣)。
+  - 切換深淺主題,深色模式下偏移陰影變黃色 `var(--accent-2)`,ring 維持黑色。
+- [ ] Nav 列:
+  - 桌機/手機都只顯示中文「首頁 / 文章 / 關於 / 近況」,沒有英文小字。
+  - 點 active 那個連結背景變粉紅(深色變黃),hover 變黃色框 + 位移。
+  - logo 顯示 `D. Dethanev/blog`(手機 < 720px 時只顯示 `D.`)。
