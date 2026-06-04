@@ -1,42 +1,136 @@
-# 改寫 BaseLayout 的 SEO meta 標籤
+# Dethanev Blog
 
-## 目標
-讓 Google / Facebook / Twitter 抓網站時拿到更專業、可控的標題與描述,不要再讓搜尋結果靠 Hero 區的文字湊出 snippet。原本 default title 寫「dethanev / blog」(斜線會被 Google 誤判成 URL 路徑)、description 只有「我寫 code、做 App、偶爾在這裡碎碎念。」太短,前 100 字沒帶到任何關鍵字。
+Dethanev 的個人網站與部落格。這裡放開發筆記、專案紀錄、近況頁，以及一些做東西時踩到的坑。
 
-## 修改的檔案
+網站以 Astro 為主，內容走靜態產生，互動與動效用少量 client-side script 補上。視覺風格是 Neubrutalism：粗框、硬陰影、高彩度貼紙色、display 字體與一點故意不太正經的語氣。
 
-### `src/layouts/BaseLayout.astro`
-把 SEO 文字抽成三個常數放在 `Astro.props` 解構**上方**,以後改 SEO 文字只動一塊:
+## Tech Stack
 
-```diff
-+const SITE_NAME = "Dethanev";
-+const DEFAULT_TITLE = "Dethanev";
-+const DEFAULT_DESCRIPTION = "Dethanev 的個人網站與部落格。\n專注 App 開發、Web 前端、設計與 side project 紀錄,偶爾寫些開發筆記與生活碎念。";
- const {
--  title = "dethanev / blog",
--  description = "我寫 code、做 App、偶爾在這裡碎碎念。",
-+  title = DEFAULT_TITLE,
-+  description = DEFAULT_DESCRIPTION,
-   ogImage = "/og-default.png",
-   showFooter = true,
- } = Astro.props;
--const fullTitle = title === "dethanev / blog" ? title : `${title} — dethanev/blog`;
-+const fullTitle = title === DEFAULT_TITLE ? title : `${title} — ${SITE_NAME}`;
+- Astro 6
+- TypeScript
+- MDX content collections
+- Tailwind CSS v4
+- GSAP
+- Lenis
+- Astro sitemap
+- Fontsource variable fonts
+
+## Project Structure
+
+```text
+src/
+  components/       Reusable Astro components
+  content/posts/    Blog posts in MDX
+  layouts/          Base and post layouts
+  lib/              Shared utilities
+  pages/            Astro routes
+  scripts/          Browser-side interactions and animations
+  styles/           Global CSS and design tokens
+
+public/             Static public assets
+astro.config.mjs    Astro configuration
+src/content.config.ts
+                    Content collection schema
 ```
 
-`<title>` / `<meta description>` / `<meta og:title>` / `<meta og:description>` 都會自動跟著更新(因為下面 head 區是引用同一組變數)。
+## Getting Started
 
-## 為什麼這樣選
-- **title 用純品牌 `Dethanev`**:站台不只是 blog(有 about / now / side project 列表),寫成「Dethanev / blog」或「Dethanev 部落格」都不準。純品牌最乾淨,子頁面會自動接成 `xxx — Dethanev`。
-- **拋棄 `/` 分隔符**:Google 看到 `/` 容易誤判成 URL 路徑層級,改成 em-dash `—` 是 SEO 標準寫法。
-- **description 拉到 70 字左右**:Google 建議 120~160 字元,中文 60~80 字最剛好。前半「Dethanev 的個人網站與部落格」拿來定位身份,後半列出可被搜尋到的關鍵字(App 開發、Web 前端、設計、side project、開發筆記、生活碎念)。
-- **抽常數而不是直接寫死**:`fullTitle` 的等號比對之前依賴硬編字串,改文字時兩處要同步,容易漏。抽成 `DEFAULT_TITLE` 後只動一處。
+Install dependencies:
 
-## 手動驗證
-- [ ] `npm run dev` 開首頁,F12 看 `<head>`:
-  - `<title>` 顯示 `Dethanev`(不是 `Dethanev — Dethanev`,因為首頁沒傳 title prop,fullTitle 走 if 分支只顯示 title 本身)。
-  - `<meta name="description">` 是新的長版描述。
-  - `<meta property="og:title">` / `og:description` 跟著一起更新。
-- [ ] 隨便開一篇文章頁(走 `PostLayout`),title 應該變成 `文章標題 — Dethanev`,不是舊的 `文章標題 — dethanev/blog`。
-- [ ] 部署完後,用 https://www.opengraph.xyz 或在 Slack 貼 https://www.dethanev.app/ 看 OG 預覽卡是新版本。
-- [ ] 等 1~3 天 Googlebot 重爬,在 Google 搜 `dethanev` 確認搜尋結果標題已換成 `Dethanev`、描述換成新版。
+```bash
+npm install
+```
+
+Run local development server:
+
+```bash
+npm run dev
+```
+
+Build static output:
+
+```bash
+npm run build
+```
+
+Preview production build:
+
+```bash
+npm run preview
+```
+
+## Content
+
+Blog posts live in `src/content/posts/` and use MDX.
+
+Required frontmatter:
+
+```yaml
+---
+title: "Post title"
+description: "Short post description"
+date: 2026-06-05
+tags: ["project", "astro"]
+variant: "yellow"
+---
+```
+
+Supported `variant` values:
+
+```text
+paper
+pink
+yellow
+lime
+violet
+```
+
+Draft posts can be hidden from listing pages with:
+
+```yaml
+draft: true
+```
+
+## Main Routes
+
+- `/` - Home page with intro, latest posts, project showcase, and stack cards.
+- `/blog` - Blog index and tag filtering.
+- `/blog/[slug]` - Individual post pages.
+- `/about` - Public self-introduction.
+- `/now` - Current status page.
+
+## Design Notes
+
+The site uses CSS tokens defined in `src/styles/global.css`. New UI should reuse the existing colors, typography, borders, shadows, and component patterns instead of introducing a separate design system.
+
+Core visual rules:
+
+- Use `var(--bg)`, `var(--ink)`, `var(--paper)`, and `var(--accent-*)`.
+- Keep the rough Neubrutalism feel: thick borders, hard shadows, high contrast, and small rotations.
+- Prefer scoped Astro styles for page/component-specific CSS.
+- Avoid soft SaaS cards, glassmorphism, generic gradients, and unrelated UI frameworks.
+
+## Local-Only Notes
+
+Local AI/project notes are kept under `.local-docs/` and are intentionally ignored by git.
+
+Examples:
+
+```text
+.local-docs/instructions/
+.local-docs/style/
+.local-docs/info/
+```
+
+These files are for local planning and agent guidance only. They should not be committed as part of the public site.
+
+## Deployment
+
+The site is configured as a static Astro build with:
+
+```js
+site: "https://dethanev.app"
+output: "static"
+```
+
+The production artifact is generated in `dist/` by `npm run build`.

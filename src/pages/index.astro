@@ -12,36 +12,34 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft))
   .slice(0, 3);
 
 const stack = [
-  { name: "Astro", note: "靜態為主，動的部分自己加" },
-  { name: "TypeScript", note: "嚴格模式，沒得商量" },
-  { name: "Tailwind v4", note: "CSS-first，token 寫在 CSS 裡" },
-  { name: "GSAP", note: "ScrollTrigger 跟 timeline" },
-  { name: "Lenis", note: "絲滑捲動" },
-  { name: "MDX", note: "文章可以嵌元件" },
-  { name: "SwiftUI", note: "做 App 的時候" },
-  { name: "Figma", note: "想圖、不畫圖" },
+  { name: "Flutter", note: "App 主力，UI 跟流程都在這裡磨" },
+  { name: "FastAPI", note: "後端 API，先能跑再慢慢補硬" },
+  { name: "Supabase", note: "Postgres + auth，自架時順便練維運" },
+  { name: "Docker", note: "服務拆開，不要全部塞同一台" },
+  { name: "Proxmox", note: "家裡小機房，VM 跟容器都丟上去" },
+  { name: "Cloudflare", note: "Tunnel 出門，少開一些奇怪的洞" },
+  { name: "Astro", note: "這個 blog，靜態為主動的自己加" },
+  { name: "Ollama", note: "本地 LLM 實驗，Qwen 先玩起來" },
 ];
 
 const projects = [
-  { num: "01", name: "dotted", tagline: "極簡 to-do，一個畫面、一個按鈕。", tag: "SwiftUI", color: "pink" },
-  { num: "02", name: "stamp", tagline: "Neubrutalism 貼紙產生器。按一下就有。", tag: "Web", color: "yellow" },
-  { num: "03", name: "lo-fi radio", tagline: "寫 code 時聽的 BGM 集合，會自己換台。", tag: "Web", color: "lime" },
-  { num: "04", name: "commit-mood", tagline: "從你這週的 git log 算出你心情多差。", tag: "CLI", color: "violet" },
-  { num: "05", name: "noir", tagline: "深色系 markdown 筆記 app，沒有同步。", tag: "SwiftUI", color: "paper" },
-  { num: "06", name: "kana drill", tagline: "五十音閃卡，一天 5 分鐘還是會忘記。", tag: "Web", color: "pink" },
-  { num: "07", name: "brutal-ui", tagline: "給 React 的 Neubrutalism 元件庫。", tag: "OSS", color: "yellow" },
-  { num: "08", name: "this blog", tagline: "你正在看的東西。Astro + GSAP。", tag: "Astro", color: "lime" },
+  { num: "01", name: "LinkPet", tagline: "目前還在推進的主專案。細節先保留，做出來再講大話。", tag: "WIP", color: "pink" },
+  { num: "02", name: "Tap2Go", tagline: "暑假狂練 Flutter UI 的成果，算是有收尾的那種。", tag: "Flutter", color: "yellow" },
+  { num: "03", name: "this blog", tagline: "你正在看的東西。Astro + Tailwind v4 + GSAP。", tag: "Astro", color: "lime" },
+  { num: "04", name: "DriveWorth", tagline: "放棄了。不是不能做，是我低估資料的重要性。", tag: "Lessons", color: "violet" },
+  { num: "05", name: "Hawk Guardian", tagline: "防詐 App 原型，後來發現 Whoscall 已經在前面很遠。", tag: "Archived", color: "paper" },
 ] as const;
 
 const marqueeItems = [
-  "CURRENTLY VIBING",
+  "CURRENTLY BUILDING",
   "寫 code",
-  "喝咖啡",
-  "看 anime",
-  "做 side project",
-  "睡眠不足",
-  "整理桌面",
-  "假裝有在運動",
+  "做 App",
+  "架服務",
+  "修 bug",
+  "LinkPet",
+  "CachyOS",
+  "Ollama",
+  "不要低估資料",
 ];
 ---
 
@@ -54,13 +52,13 @@ const marqueeItems = [
       <div class="ap-left">
         <p class="quote">
           <span class="q-mark" aria-hidden="true">"</span>
-          做東西、寫東西、然後在這裡留一點痕跡。
+          做東西、做壞東西，然後把教訓留下來。
         </p>
       </div>
       <div class="ap-right">
         <p class="lede">
-          Hi，我是 Dethanev。白天寫 App，晚上做 side project，週末假裝有在運動。
-          這裡會放一些 dev 筆記、設計上的想法，跟一點生活雜記。
+          Hi，我是 Dethanev。私校資工系學生，成績維持在系排前 5%。
+          平常寫 App、做後端、折騰自架服務；這裡放 dev 筆記、專案紀錄，還有一些踩坑後才懂的事。
         </p>
         <a href="/about" class="cta brutal-border-thick brutal-shadow brutal-hover">
           → 更多關於我
@@ -105,7 +103,7 @@ const marqueeItems = [
           <span class="line">做過的</span>
           <span class="line accent">東西。</span>
         </h2>
-        <p class="h-sub">side projects、experiments、半成品、廢棄品。</p>
+        <p class="h-sub">side projects、experiments、完成品、廢棄品。</p>
         <div class="h-cue">
           <span class="cue-down">↓ scroll</span>
           <span class="cue-eq">=</span>
@@ -130,7 +128,7 @@ const marqueeItems = [
         </article>
       ))}
 
-      <a href="https://github.com/" target="_blank" rel="noopener" class="h-end brutal-border-thick brutal-shadow brutal-hover">
+      <a href="https://github.com/Dethanev" target="_blank" rel="noopener" class="h-end brutal-border-thick brutal-shadow brutal-hover">
         <span class="end-arrow">→</span>
         <span class="end-text">看更多 on GitHub</span>
       </a>

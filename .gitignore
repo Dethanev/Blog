@@ -43,6 +43,12 @@ Desktop.ini
 .claude/
 CLAUDE.md
 
+# local-only AI/project notes
+.local-docs/
+AGENTS.md
+WEB_STYLE_GUIDE.md
+MyInfo.md
+
 # misc
 *.tsbuildinfo
 .cache/
