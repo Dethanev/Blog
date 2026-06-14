@@ -192,6 +192,26 @@ body {
 .prose-body a:hover {
   background: var(--accent-2);
 }
+.prose-body mark {
+  --marker: #2de2e6;
+  color: inherit;
+  background:
+    linear-gradient(
+      to top,
+      color-mix(in oklab, var(--marker) 82%, transparent) 0 42%,
+      transparent 42% 100%
+    );
+  padding: 0 0.08em;
+  border-radius: 0.12em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.prose-body mark.marker-cyan { --marker: #2de2e6; }
+.prose-body mark.marker-pink { --marker: #ff5c8a; }
+.prose-body mark.marker-yellow { --marker: #fcec52; }
+.prose-body mark.marker-lime { --marker: #b8e14a; }
+.prose-body mark.marker-orange { --marker: #ff9f1c; }
+.prose-body mark.marker-violet { --marker: #9d8aff; }
 .prose-body code:not(pre code) {
   font-family: var(--font-mono);
   background: var(--accent-2);
