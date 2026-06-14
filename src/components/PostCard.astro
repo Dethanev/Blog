@@ -9,7 +9,7 @@ interface Props {
   date: Date;
   tags: string[];
   cover?: string;
-  variant?: "paper" | "pink" | "yellow" | "lime" | "violet";
+  variant?: "paper" | "pink" | "yellow" | "lime" | "violet" | "blue";
   index?: number;
 }
 const {
@@ -58,6 +58,7 @@ const tilt = pickTilt(hashString(title) + index);
   .card-yellow { background: var(--accent-2); }
   .card-lime { background: var(--accent-3); }
   .card-violet { background: var(--accent-4); color: white; }
+  .card-blue { background: var(--color-blue); }
   :global(.dark) .card-violet { color: var(--ink); }
   .card-link {
     display: block;

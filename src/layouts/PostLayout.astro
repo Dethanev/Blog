@@ -13,7 +13,8 @@ interface Props {
   rawBody: string;
 }
 const { post, prev, next, rawBody } = Astro.props;
-const { title, description, date, tags } = post.data;
+const { title, displayTitle, description, date, tags } = post.data;
+const titleLines = (displayTitle ?? title).split("\n");
 const minutes = readingTime(rawBody);
 ---
 
@@ -25,7 +26,9 @@ const minutes = readingTime(rawBody);
         <span class="sep">/</span>
         <span>{minutes} 分鐘</span>
       </div>
-      <h1 class="post-title">{title}</h1>
+      <h1 class="post-title">
+        {titleLines.map((line: string) => <span>{line}</span>)}
+      </h1>
       <p class="post-desc">{description}</p>
       <div class="post-tags">
         {tags.map((t: string) => <TagPill tag={t} />)}
@@ -88,6 +91,8 @@ const minutes = readingTime(rawBody);
   }
   .header-meta .sep { margin-inline: 0.4rem; opacity: 0.4; }
   .post-title {
+    display: grid;
+    gap: 0.08em;
     font-family: var(--font-display);
     font-weight: 900;
     font-size: clamp(2rem, 5vw, 3.2rem);

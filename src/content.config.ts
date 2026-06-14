@@ -5,12 +5,13 @@ const posts = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/posts" }),
   schema: z.object({
     title: z.string(),
+    displayTitle: z.string().optional(),
     description: z.string(),
     date: z.coerce.date(),
     tags: z.array(z.string()).default([]),
     cover: z.string().optional(),
     draft: z.boolean().default(false),
-    variant: z.enum(["paper", "pink", "yellow", "lime", "violet"]).default("paper"),
+    variant: z.enum(["paper", "pink", "yellow", "lime", "violet", "blue"]).default("paper"),
   }),
 });
 
