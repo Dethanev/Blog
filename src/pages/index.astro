@@ -5,11 +5,9 @@ import PostCard from "~/components/PostCard.astro";
 import Marquee from "~/components/Marquee.astro";
 import Sticker from "~/components/Sticker.astro";
 import { getCollection } from "astro:content";
-import { pickTilt, hashString } from "~/lib/utils";
+import { pickTilt, hashString, sortPostsNewestFirst } from "~/lib/utils";
 
-const posts = (await getCollection("posts", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+const posts = sortPostsNewestFirst(await getCollection("posts", ({ data }) => !data.draft)).slice(0, 3);
 
 const stack = [
   { name: "Flutter", note: "App 主力，UI 跟流程都在這裡磨" },
@@ -23,11 +21,11 @@ const stack = [
 ];
 
 const projects = [
-  { num: "01", name: "LinkPet", tagline: "目前還在推進的主專案。細節先保留，做出來再講大話。", tag: "WIP", color: "pink" },
-  { num: "02", name: "Tap2Go", tagline: "暑假狂練 Flutter UI 的成果，算是有收尾的那種。", tag: "Flutter", color: "yellow" },
-  { num: "03", name: "this blog", tagline: "你正在看的東西。Astro + Tailwind v4 + GSAP。", tag: "Astro", color: "lime" },
-  { num: "04", name: "DriveWorth", tagline: "放棄了。不是不能做，是我低估資料的重要性。", tag: "Lessons", color: "violet" },
-  { num: "05", name: "Hawk Guardian", tagline: "防詐 App 原型，後來發現 Whoscall 已經在前面很遠。", tag: "Archived", color: "paper" },
+  { num: "01", name: "LinkPet", tagline: "目前還在推進的主專案。細節先保留，做出來再講大話。", tag: "WIP", color: "pink", href: "/blog/2026-06-14-linkpet-ar-ai-companion" },
+  { num: "02", name: "Tap2Go", tagline: "暑假狂練 Flutter UI 的成果，算是有收尾的那種。", tag: "Flutter", color: "yellow", href: "/blog/2026-06-04-projects-that-broke" },
+  { num: "03", name: "this blog", tagline: "你正在看的東西。Astro + Tailwind v4 + GSAP。", tag: "Astro", color: "lime", href: "/blog/2026-05-10-astro-6-tailwind-v4" },
+  { num: "04", name: "DriveWorth", tagline: "放棄了。不是不能做，是我低估資料的重要性。", tag: "Lessons", color: "violet", href: "/blog/2026-06-14-driveworth-app" },
+  { num: "05", name: "Hawk Guardian", tagline: "防詐 App 原型，後來發現 Whoscall 已經在前面很遠。", tag: "Archived", color: "paper", href: "/blog/2026-06-14-hawkguard-app" },
 ] as const;
 
 const marqueeItems = [
@@ -112,9 +110,11 @@ const marqueeItems = [
       </div>
 
       {projects.map((p, i) => (
-        <article
+        <a
+          href={p.href}
           class:list={["h-card brutal-border-thick brutal-shadow", `card-${p.color}`]}
           style={`--tilt:${pickTilt(hashString(p.name) + i)}deg`}
+          aria-label={`閱讀 ${p.name} 相關文章`}
         >
           <span class="h-num">{p.num}</span>
           <div class="h-card-body">
@@ -125,7 +125,7 @@ const marqueeItems = [
             <span class="h-tag">{p.tag}</span>
             <span class="h-arrow" aria-hidden="true">→</span>
           </div>
-        </article>
+        </a>
       ))}
 
       <a href="https://github.com/Dethanev" target="_blank" rel="noopener" class="h-end brutal-border-thick brutal-shadow brutal-hover">
@@ -385,6 +385,8 @@ const marqueeItems = [
     transform: rotate(var(--tilt));
     transition: transform 0.18s ease, box-shadow 0.18s ease;
     position: relative;
+    color: var(--ink);
+    text-decoration: none;
   }
   .h-card:hover {
     transform: rotate(0deg) translate(-4px, -4px);
