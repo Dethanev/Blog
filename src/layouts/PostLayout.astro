@@ -3,6 +3,7 @@ import BaseLayout from "./BaseLayout.astro";
 import TagPill from "~/components/TagPill.astro";
 import ClapButton from "~/components/ClapButton.astro";
 import Comments from "~/components/Comments.astro";
+import ViewCounter from "~/components/ViewCounter.astro";
 import { formatDate, readingTime } from "~/lib/utils";
 import type { CollectionEntry } from "astro:content";
 
@@ -25,6 +26,8 @@ const minutes = readingTime(rawBody);
         <time datetime={date.toISOString()}>{formatDate(date)}</time>
         <span class="sep">/</span>
         <span>{minutes} 分鐘</span>
+        <span class="sep">/</span>
+        <ViewCounter scope="post" viewKey={post.id} />
       </div>
       <h1 class="post-title">
         {titleLines.map((line: string) => <span>{line}</span>)}
@@ -82,6 +85,10 @@ const minutes = readingTime(rawBody);
   }
   :global(.dark) .post-header { box-shadow: 10px 10px 0 0 var(--accent-2); }
   .header-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.45rem;
     font-family: var(--font-mono);
     font-size: 0.78rem;
     text-transform: uppercase;
@@ -89,7 +96,7 @@ const minutes = readingTime(rawBody);
     margin-bottom: 0.8rem;
     opacity: 0.7;
   }
-  .header-meta .sep { margin-inline: 0.4rem; opacity: 0.4; }
+  .header-meta .sep { opacity: 0.4; }
   .post-title {
     display: grid;
     gap: 0.08em;

@@ -1,5 +1,6 @@
 import { gsap } from "gsap";
 import { toggleTheme } from "./theme";
+import { initViewCounters } from "./views";
 
 const CONFETTI_COLORS = ["#ff5c8a", "#fcec52", "#b8e14a", "#7b61ff", "#2de2e6"];
 
@@ -229,6 +230,7 @@ function initTagFilter() {
 }
 
 export function initInteractions() {
+  initViewCounters();
   initStickers();
   initThemeToggle();
   initClap();

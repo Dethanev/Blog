@@ -1,4 +1,6 @@
 ---
+import ViewCounter from "./ViewCounter.astro";
+
 const year = new Date().getFullYear();
 const socials = [
   { label: "GitHub", href: "https://github.com/Dethanev", handle: "@Dethanev" },
@@ -58,6 +60,9 @@ const friends = [
         <span class="badge badge-yellow rotate-it">Astro 6 · Tailwind v4 · GSAP</span>
       </p>
       <p class="copyright">© {year} DETHANEV. no rights reserved.</p>
+      <div class="footer-views">
+        <ViewCounter scope="site" label="total views" tone="footer" />
+      </div>
     </section>
   </div>
 
@@ -101,6 +106,10 @@ const friends = [
   .badge-violet { background: var(--accent-4); color: white; }
   :global(.dark) .badge-violet { color: var(--ink); }
   .badge-yellow { background: var(--accent-2); }
+  .sign-block .badge-yellow {
+    box-sizing: border-box;
+    width: var(--footer-badge-width);
+  }
   .rotate-it { transform: none; }
 
   .contact-list, .friends-list {
@@ -141,6 +150,7 @@ const friends = [
   }
 
   .signoff {
+    --footer-badge-width: min(100%, 40.75rem, calc(100vw - 3rem));
     font-family: var(--font-mono);
     font-size: 0.9rem;
     margin-bottom: 0.6rem;
@@ -154,7 +164,12 @@ const friends = [
     font-family: var(--font-mono);
     font-size: 0.75rem;
     opacity: 0.5;
-    margin-top: 0.8rem;
+    margin-top: 1rem;
+  }
+  .footer-views {
+    --footer-badge-width: min(100%, 40.75rem, calc(100vw - 3rem));
+    display: flex;
+    margin-top: 1.7rem;
   }
 
   .big-mark {
