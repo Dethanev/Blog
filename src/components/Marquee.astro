@@ -8,7 +8,7 @@ interface Props {
 }
 const { items, speed = 80, direction = "left", variant = "ink", class: cls = "" } = Astro.props;
 const sep = "★";
-const doubled = [...items, ...items];
+const looped = Array.from({ length: 4 }, () => items).flat();
 ---
 
 <section
@@ -19,7 +19,7 @@ const doubled = [...items, ...items];
   aria-hidden="true"
 >
   <div class="marquee-inner">
-    {doubled.map((it) => (
+    {looped.map((it) => (
       <span class="item">{it}<span class="sep">{sep}</span></span>
     ))}
   </div>
@@ -40,10 +40,12 @@ const doubled = [...items, ...items];
   :global(.dark) .marquee-violet { color: var(--ink); }
   .marquee-inner {
     display: inline-flex;
+    min-width: max-content;
     white-space: nowrap;
     will-change: transform;
   }
   .item {
+    flex: 0 0 auto;
     font-family: var(--font-display);
     font-weight: 900;
     font-size: clamp(1.4rem, 2.6vw, 2.2rem);

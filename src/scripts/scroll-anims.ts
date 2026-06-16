@@ -44,7 +44,10 @@ function initHeroPin() {
 
 function initMarquees() {
   document.querySelectorAll<HTMLElement>("[data-marquee]").forEach((track) => {
-    const direction = track.dataset.marqueeDir === "right" ? 1 : -1;
+    if (track.dataset.marqueeReady === "true") return;
+    track.dataset.marqueeReady = "true";
+
+    const direction = track.dataset.marqueeDir === "right" ? -1 : 1;
     const baseSpeed = Number(track.dataset.marqueeSpeed ?? 60);
     const inner = track.firstElementChild as HTMLElement | null;
     if (!inner) return;
@@ -66,14 +69,14 @@ function initMarquees() {
     function tick(now: number) {
       const dt = (now - lastT) / 1000;
       lastT = now;
-      const targetVel = baseSpeed * direction - scrollVel * direction;
+      const targetVel = baseSpeed * direction + scrollVel * 0.35;
       velocity += (targetVel - velocity) * 0.08;
       position += velocity * dt;
-      const w = inner!.scrollWidth / 2;
+      const w = inner!.scrollWidth / 4;
       if (w > 0) {
         position = ((position % w) + w) % w;
       }
-      inner!.style.transform = `translate3d(${-position * direction}px, 0, 0)`;
+      inner!.style.transform = `translate3d(${-position}px, 0, 0)`;
       requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
