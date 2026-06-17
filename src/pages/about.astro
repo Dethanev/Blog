@@ -270,7 +270,7 @@ const stackGroups = [
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`了解 ${item.name}`}
-                  style={`--tilt:${[-0.9, 0.6, -0.35, 0.85, -0.55, 0.25][itemIndex % 6]}deg`}
+                  style={`--tilt:0deg`}
                 >
                   {item.name}
                 </a>
@@ -608,17 +608,17 @@ const stackGroups = [
     border: 3px solid var(--ink);
     box-shadow: var(--shadow-sm);
     padding: 0.25rem 0.55rem;
-    transform: rotate(-1deg);
+    transform: none;
   }
   .stack-group:nth-child(3n + 1) h3 { background: var(--paper); }
   .stack-group:nth-child(3n + 2) h3 {
     background: var(--paper);
-    transform: rotate(0.8deg);
+    transform: none;
   }
   .stack-group:nth-child(3n) h3 {
     background: var(--paper);
     color: var(--ink);
-    transform: rotate(-0.4deg);
+    transform: none;
   }
   .stack-num {
     font-family: var(--font-mono);
