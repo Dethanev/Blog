@@ -85,14 +85,20 @@ function initThemeToggle() {
 
 function initClap() {
   document.querySelectorAll<HTMLElement>("[data-clap]").forEach((btn) => {
+    if (btn.dataset.clapBound === "1") return;
+    btn.dataset.clapBound = "1";
+
     const counter = btn.querySelector<HTMLElement>("[data-clap-count]");
     let count = Number(btn.dataset.clapStart ?? counter?.textContent ?? "0");
     let combo = 0;
     let comboTimer: number | null = null;
 
     btn.addEventListener("click", (e) => {
-      count++;
-      combo++;
+      const isCombo = combo > 0;
+      const increment = isCombo ? 2 : 1;
+
+      count += increment;
+      combo = isCombo ? combo + 1 : 1;
       if (counter) counter.textContent = String(count);
 
       gsap.fromTo(
@@ -111,9 +117,9 @@ function initClap() {
       const cy = rect.top + 6;
       spawnConfetti(cx, cy, 5);
 
-      if (combo > 3) {
+      if (isCombo) {
         const comboEl = document.createElement("div");
-        comboEl.textContent = `+${combo} COMBO!`;
+        comboEl.textContent = `+${increment} COMBO!`;
         comboEl.style.cssText = `
           position: fixed; left: ${cx}px; top: ${cy}px;
           transform: translate(-50%, 0);

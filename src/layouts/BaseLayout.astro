@@ -60,10 +60,18 @@ const fullTitle = title === DEFAULT_TITLE ? title : `${title} — ${SITE_NAME}`;
       import { initScrollAnimations } from "~/scripts/scroll-anims";
       import { initInteractions } from "~/scripts/interactions";
 
+      function runInit(fn) {
+        try {
+          fn();
+        } catch (error) {
+          console.error("[site:init]", error);
+        }
+      }
+
       function boot() {
-        initLenis();
-        initInteractions();
-        initScrollAnimations();
+        runInit(initInteractions);
+        runInit(initLenis);
+        runInit(initScrollAnimations);
       }
 
       if (document.readyState === "loading") {
