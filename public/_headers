@@ -1,2 +1,0 @@
-/*
-  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://giscus.app; script-src 'self' 'unsafe-inline' https://giscus.app; font-src 'self'; connect-src 'self'; frame-src https://giscus.app; child-src https://giscus.app; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
