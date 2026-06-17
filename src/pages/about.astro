@@ -4,29 +4,178 @@ import Sticker from "~/components/Sticker.astro";
 
 const factoids = [
   { k: "現居", v: "台灣" },
-  { k: "身份", v: "資工學生" },
-  { k: "成績", v: "系排前 5%" },
-  { k: "主線", v: "App / backend" },
-  { k: "現在", v: "LinkPet" },
-  { k: "環境", v: "Mac + Linux" },
+  { k: "身份", v: "資工大二生" },
+  { k: "角色", v: "Developer / Server Admin" },
+  { k: "目前", v: "LinkPet" },
+  { k: "主線", v: "App / Web /Server" },
+  { k: "環境", v: "macOS / Linux" },
+];
+
+const focusAreas = [
+  {
+    title: "App 與產品實作",
+    body: "主要用 Flutter 做跨平台 App，也持續關注 Swift、ARKit、RealityKit 與互動體驗。比起只把畫面刻完，我更在意流程能不能真的被使用。",
+  },
+  {
+    title: "後端與資料",
+    body: "偏好 FastAPI、PostgreSQL、Supabase 這類清楚、可維護的組合，也碰過 Node.js、MySQL、SQLite。資料模型、API 邊界和型別安全，是我現在很重視的部分。",
+  },
+  {
+    title: "自架與維運",
+    body: "會折騰 Docker、Proxmox、Nginx、Cloudflare / Zero Trust、Prometheus、Grafana，以及 Linux / macOS 開發環境。目的不是堆工具，而是理解系統怎麼跑起來。",
+  },
+];
+
+const projects = [
+  {
+    name: "LinkPet",
+    status: "Teamwork",
+    href: "/blog/2026-04-18-linkpet-ar-ai-companion",
+    body: "AR 與 AI 陪伴 App 概念，想讓虛擬角色不只是聊天框，而是能在 2D / AR 模式出現在生活空間裡。特色是語音互動、觸碰與餵食反應、個人化設定與本機記憶，讓陪伴感有延續性。這也是一次雙人合作的比賽型專案練習，重點放在把情緒陪伴拆成可落地的互動體驗。",
+  },
+  {
+    name: "DriveWorth",
+    status: "Lessons",
+    href: "/blog/2026-02-11-driveworth-app",
+    body: "買車前養車成本評估工具，想幫使用者在下手前看懂 3 到 5 年的長期支出。最有趣的是里程節點預算卡，把大保養、耗材、稅金、保險和油耗變成比較白話的成本提醒。它結合汽車修護背景與資料模型思考，適合發展成購車決策輔助工具。",
+  },
+  {
+    name: "HawkGuard",
+    status: "Archived",
+    href: "/blog/2025-12-03-hawkguard-app",
+    body: "反詐騙 App 概念，讓使用者輸入文字、網址、電話或圖片後取得風險提示。特色是把單次分析、分析紀錄、社群回報和論壇整合成一個防護網，不只靠個人直覺判斷。技術上以 Flutter 為主，並規劃 Supabase、FastAPI、OCR 與網址檢測等延伸能力。",
+  },
+  {
+    name: "Tap2Go",
+    status: "Done",
+    href: "/blog/2025-08-07-tap2go-flutter-ui-practice",
+    body: "第一個自己完成的 Flutter App Demo，從環境安裝、畫面組成、頁面切換到 Android APK Release 都走過一次。它用 BottomNavigationBar 搭配 PageView 做多頁切換，也加入 AppBar 動態變色、Drawer / EndDrawer 和音效回饋。對我來說，Tap2Go 最有趣的是它真的跑進手機裡，把「看教學」變成「做出可以操作的 App」。",
+  },
+];
+
+const stackGroups = [
+  {
+    label: "Languages",
+    items: [
+      { name: "Swift", href: "https://docs.swift.org/swift-book/documentation/the-swift-programming-language/aboutswift/" },
+      { name: "Java", href: "https://dev.java/learn/" },
+      { name: "C", href: "https://www.open-std.org/jtc1/sc22/wg14/" },
+      { name: "Dart", href: "https://dart.dev/overview" },
+      { name: "Python", href: "https://docs.python.org/3/tutorial/index.html" },
+      { name: "JavaScript", href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+    ],
+  },
+  {
+    label: "Mobile / AR",
+    items: [
+      { name: "Flutter", href: "https://docs.flutter.dev/" },
+      { name: "ARKit", href: "https://developer.apple.com/documentation/arkit" },
+      { name: "Xcode", href: "https://developer.apple.com/documentation/xcode" },
+    ],
+  },
+  {
+    label: "Frontend",
+    items: [
+      { name: "Astro", href: "https://docs.astro.build/en/getting-started/" },
+      { name: "Vue", href: "https://vuejs.org/guide/introduction.html" },
+      { name: "Nuxt", href: "https://nuxt.com/docs/getting-started/introduction" },
+      { name: "Vite", href: "https://vite.dev/guide/" },
+      { name: "HTML", href: "https://developer.mozilla.org/en-US/docs/Web/HTML" },
+      { name: "CSS", href: "https://developer.mozilla.org/en-US/docs/Web/CSS" },
+    ],
+  },
+  {
+    label: "Backend",
+    items: [
+      { name: "FastAPI", href: "https://fastapi.tiangolo.com/" },
+      { name: "Node.js", href: "https://nodejs.org/en/learn/getting-started/introduction-to-nodejs" },
+      { name: "Nginx", href: "https://docs.nginx.com/nginx/admin-guide/" },
+      { name: "Supabase", href: "https://supabase.com/docs/guides/getting-started" },
+    ],
+  },
+  {
+    label: "Databases",
+    items: [
+      { name: "PostgreSQL", href: "https://www.postgresql.org/docs/current/intro-whatis.html" },
+      { name: "MySQL", href: "https://dev.mysql.com/doc/refman/8.4/en/what-is.html" },
+      { name: "SQLite", href: "https://www.sqlite.org/about.html" },
+    ],
+  },
+  {
+    label: "Infra",
+    items: [
+      { name: "Docker", href: "https://docs.docker.com/get-started/docker-overview/" },
+      { name: "Proxmox VE", href: "https://pve.proxmox.com/pve-docs/" },
+      { name: "Cloudflare", href: "https://developers.cloudflare.com/fundamentals/concepts/how-cloudflare-works/" },
+      { name: "Zero Trust", href: "https://developers.cloudflare.com/cloudflare-one/" },
+    ],
+  },
+  {
+    label: "Observability",
+    items: [
+      { name: "Prometheus", href: "https://prometheus.io/docs/introduction/overview/" },
+      { name: "Grafana", href: "https://grafana.com/docs/grafana/latest/introduction/" },
+    ],
+  },
+  {
+    label: "Tools",
+    items: [
+      { name: "Git", href: "https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control" },
+      { name: "GitHub", href: "https://docs.github.com/en/get-started/start-your-journey/about-github-and-git" },
+      { name: "Postman", href: "https://learning.postman.com/docs/introduction/overview/" },
+      { name: "Termius", href: "https://support.termius.com/hc/en-us" },
+      { name: "VS Code", href: "https://code.visualstudio.com/docs" },
+      { name: "IntelliJ IDEA", href: "https://www.jetbrains.com/help/idea/getting-started.html" },
+    ],
+  },
+  {
+    label: "AI / ML",
+    items: [
+      { name: "Claude Code", href: "https://docs.anthropic.com/en/docs/claude-code/overview" },
+      { name: "Codex", href: "https://developers.openai.com/codex/" },
+      { name: "Gemini", href: "https://ai.google.dev/gemini-api/docs" },
+      { name: "GPT", href: "https://platform.openai.com/docs/models" },
+      { name: "Perplexity", href: "https://docs.perplexity.ai/" },
+      { name: "PyTorch", href: "https://pytorch.org/docs/stable/index.html" },
+    ],
+  },
+  {
+    label: "Game Server",
+    items: [
+      { name: "Minecraft Server", href: "https://www.minecraft.net/en-us/download/server" },
+      { name: "Minecraft Plugins", href: "https://docs.papermc.io/" },
+      { name: "Rust Server", href: "https://wiki.facepunch.com/rust/Creating-a-server" },
+      { name: "Assetto Server", href: "https://assettocorsa.gg/" },
+    ],
+  },
 ];
 ---
 
-<BaseLayout title="關於" description="關於 Dethanev 的二三事">
+<BaseLayout title="關於" description="關於 Dethanev：台灣資工學生、實作型開發者，專注 App、後端、自架系統與資料驅動應用。">
   <section class="about">
     <div class="hero-block">
       <h1 class="big-title">
         <span class="line">關於</span>
         <span class="line accent">DETHANEV.</span>
       </h1>
-      <p class="lede">
-        我是 Dethanev。私校資工系學生，主要做 App、後端服務跟自架系統。
-        這個站放我正在做的東西、寫壞的東西，還有下一次不要再踩的坑。
-      </p>
+      <div class="hero-copy">
+        <div class="hero-line">
+          <span>Who</span>
+          <p>Dethanev 是我的開發暱稱，台灣資工系學生，偏實作型開發者。</p>
+        </div>
+        <div class="hero-line">
+          <span>Build</span>
+          <p>主要做 應用程式、後端服務、自架系統，也會把資料驅動原型做成真的東西。</p>
+        </div>
+        <div class="hero-line">
+          <span>Write</span>
+          <p>這裡放開發筆記、專案紀錄、踩坑反思，還有回頭看才發現該重做的技術選擇。</p>
+        </div>
+      </div>
       <div class="stickers">
-        <Sticker text="Computer" color="pink" rotate={-5} />
-        <Sticker text="Science" color="violet" rotate={3} />
-        <Sticker text="Student" color="yellow" rotate={-2} />
+        <Sticker text="CS Student" color="pink" rotate={-5} />
+        <Sticker text="Software Dev" color="violet" rotate={3} />
+        <Sticker text="Server Admin" color="yellow" rotate={-2} />
       </div>
     </div>
 
@@ -44,30 +193,106 @@ const factoids = [
       </dl>
     </div>
 
-    <div class="text-block">
-      <h2 class="block-title">
-        <span class="badge yellow">background</span>
-      </h2>
-      <p>
-        我是一名私校資工系學生，成績維持在系排前 5%。平常的重心放在實作：
-        Flutter App、FastAPI 後端、Supabase / PostgreSQL，以及 Docker、Proxmox、Cloudflare Tunnels 這類自架服務。
-      </p>
-      <p>
-        我也有汽車修護乙級與丙級技術士證照，但這不是這個網站的主線。
-        它比較像一段背景：證明我不是只會坐在電腦前，也曾經真的拆過東西，只是現在拆的是 bug。
-      </p>
+    <div class="text-block intro-section">
+      <div class="intro-copy">
+        <h2 class="block-title">
+          <span class="badge yellow">background</span>
+        </h2>
+        <p>
+          我的學習方式偏自學和實作：先把東西做出來，再回頭整理架構、補知識缺口、檢查自己到底懂了多少。
+          這不代表只追求能跑，而是我比較相信「做過、壞過、修過」之後，原理會變得更立體。
+        </p>
+        <p>
+          平常會在 Swift、Java、C、Dart、Python、JavaScript 之間切換。不同語言各有脾氣，
+          但共同目標一樣：把問題拆清楚，讓程式碼能被維護，而不是只讓它今天剛好能跑。
+        </p>
+        <p>
+          我有汽車修護乙級與丙級技術士證照。這段背景後來影響了 DriveWorth「駕直觀」這類專案：
+          技術不只是在螢幕裡跑，也可以用來整理真實世界裡很混亂、很分散的成本與維修資訊。
+        </p>
+      </div>
+      <aside class="note brutal-border-thick brutal-shadow-sm">
+        <strong>我現在比較在意的事</strong>
+        <div class="note-items">
+          <span>把想法收斂成能驗證的功能。</span>
+          <span>把資料來源、系統邊界和維護成本想清楚。</span>
+          <span>把專案做成能展示能力的作品，而不是只停在截圖。</span>
+        </div>
+      </aside>
     </div>
 
     <div class="text-block">
       <h2 class="block-title">
-        <span class="badge violet">projects</span>
+        <span class="badge violet">what I build</span>
       </h2>
-      <ul class="list">
-        <li><strong>LinkPet</strong> — 目前還在推進的主專案，先做出來再講漂亮話</li>
-        <li><strong>Tap2Go</strong> — 已完成的 Flutter UI 練習專案，暑假有認真過的證據</li>
-        <li><strong>DriveWorth</strong> — 已放棄，最大的教訓是不要低估資料的重要性</li>
-        <li><strong>Hawk Guardian</strong> — 已放棄，市場判斷跟資料問題都沒有想夠</li>
-      </ul>
+      <div class="focus-grid">
+        {focusAreas.map((item) => (
+          <article class="focus-card brutal-border-thick brutal-shadow-sm">
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <div class="text-block projects-section">
+      <h2 class="block-title">
+        <span class="badge pink">projects</span>
+      </h2>
+      <div class="project-list">
+        {projects.map((project) => (
+          <a class="project-row" href={project.href} aria-label={`閱讀 ${project.name} 文章`}>
+            <div class="project-head">
+              <h3>{project.name}</h3>
+              <span>{project.status}</span>
+            </div>
+            <p>{project.body}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div class="text-block">
+      <h2 class="block-title">
+        <span class="badge yellow">stack</span>
+      </h2>
+      <div class="stack-groups">
+        {stackGroups.map((group, groupIndex) => (
+          <section class="stack-group">
+            <h3>
+              <span class="stack-num">{String(groupIndex + 1).padStart(2, "0")}</span>
+              {group.label}
+            </h3>
+            <div>
+              {group.items.map((item, itemIndex) => (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`了解 ${item.name}`}
+                  style={`--tilt:${[-0.9, 0.6, -0.35, 0.85, -0.55, 0.25][itemIndex % 6]}deg`}
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+    </div>
+
+    <div class="text-block">
+      <h2 class="block-title">
+        <span class="badge violet">direction</span>
+      </h2>
+      <p>
+        學術和職涯上，我目前關注軟體工程、系統架構、資料驅動應用與實務型研究。
+        接下來希望累積更完整的作品集，也會把研究計畫或研究所申請需要的技術脈絡慢慢整理出來。
+      </p>
+      <p>
+        長期目標很簡單：成為能把前端、後端、資料和部署串起來的全端開發者。
+        不是每個領域都假裝自己最強，而是能理解系統全貌，知道問題卡在哪裡，然後把它修到能用。
+      </p>
     </div>
 
     <div class="text-block">
@@ -76,27 +301,30 @@ const factoids = [
       </h2>
       <ul class="list">
         <li><strong>/blog</strong> — dev 筆記、專案反思、工具踩坑</li>
-        <li><strong>/now</strong> — 我現在在幹嘛，不是履歷頁</li>
+        <li><strong>/now</strong> — 我現在正在做什麼，不是履歷頁</li>
         <li><strong>/about</strong> — 公開版自介，也就是你現在看的東西</li>
-        <li><strong>彩蛋</strong> — 點 5 下 logo，看網站是不是有偷偷藏東西</li>
+        <li><strong>GitHub</strong> — 程式碼、實驗、也可能有半成品</li>
       </ul>
     </div>
 
-    <div class="text-block">
-      <h2 class="block-title">
-        <span class="badge yellow">how to reach</span>
-      </h2>
-      <p>
-        最快的方式是到 <a href="https://github.com/Dethanev/Blog/discussions" target="_blank" rel="noopener">GitHub Discussions</a> 留言，公開討論或私訊都行。
-        GitHub 跟 Discord 也都會看，但回覆速度看當週狀況。
-      </p>
+    <div class="contact brutal-border-thick brutal-shadow">
+      <div>
+        <h2>想找我？</h2>
+        <p>
+          最快的方式是到 <a href="https://github.com/Dethanev/Blog/discussions" target="_blank" rel="noopener">GitHub Discussions</a> 留言。
+          專案討論、技術交流、作品建議都可以，回覆速度看當週課業與開發進度。
+        </p>
+      </div>
+      <a class="contact-link brutal-border-thick brutal-hover" href="https://github.com/Dethanev" target="_blank" rel="noopener">
+        GitHub →
+      </a>
     </div>
   </section>
 </BaseLayout>
 
 <style>
   .about {
-    max-width: 800px;
+    max-width: 940px;
     margin: 3rem auto 6rem;
     padding: 0 1.5rem;
     box-sizing: border-box;
@@ -108,9 +336,9 @@ const factoids = [
   .big-title {
     font-family: var(--font-display);
     font-weight: 900;
-    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-size: 5.5rem;
     line-height: 0.92;
-    letter-spacing: -0.04em;
+    letter-spacing: 0;
     margin-bottom: 1.2rem;
   }
   .big-title .line { display: block; }
@@ -119,19 +347,49 @@ const factoids = [
     color: var(--ink);
     border: 4px solid var(--ink);
     box-shadow: 8px 8px 0 0 var(--ink);
-    padding: 0 0.15em;
+    padding: 0.08em 0.15em 0.1em;
     display: inline-block;
     transform: rotate(-1deg);
     margin-top: 0.1em;
   }
   :global(.dark) .big-title .accent { box-shadow: 8px 8px 0 0 var(--accent-1); }
-  .lede {
-    font-size: 1.1rem;
-    line-height: 1.65;
-    margin-bottom: 1.5rem;
-    max-width: 50ch;
+  .hero-copy {
+    width: min(100%, 760px);
+    margin-top: 2.15rem;
+    margin-bottom: 2.05rem;
+    display: grid;
+    gap: 0.85rem;
   }
-  .stickers { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+  .hero-line {
+    display: grid;
+    grid-template-columns: 5.4rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+  }
+  .hero-line span {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    background: var(--accent-2);
+    border: 2px solid var(--ink);
+    padding: 0.28rem 0.42rem;
+    text-align: center;
+  }
+  .hero-line p {
+    font-size: 1.08rem;
+    line-height: 1.62;
+    margin: 0;
+    max-width: 58ch;
+  }
+  .stickers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 0;
+  }
 
   .facts {
     background: var(--paper);
@@ -199,6 +457,203 @@ const factoids = [
   }
   .text-block a:hover { background: var(--accent-2); }
 
+  .intro-section {
+    display: grid;
+    gap: 1.35rem;
+  }
+  .intro-copy {
+    max-width: 68ch;
+  }
+  .note {
+    background: var(--accent-3);
+    padding: 1rem 1.1rem;
+    width: min(100%, 760px);
+    box-sizing: border-box;
+    display: grid;
+    gap: 0.85rem;
+    transform: rotate(-0.5deg);
+  }
+  .note strong {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.35;
+    text-align: center;
+  }
+  .note-items {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .note-items span {
+    display: block;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    position: relative;
+    padding-left: 0.9rem;
+  }
+  .note-items span::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.42rem;
+    height: 0.42rem;
+    background: var(--ink);
+  }
+
+  .focus-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    align-items: stretch;
+    padding-block: 0.4rem;
+  }
+  .focus-card {
+    background: var(--paper);
+    padding: 1rem 1.1rem;
+    min-height: 13.5rem;
+    transform: rotate(var(--tilt, 0deg));
+    transform-origin: center center;
+  }
+  .focus-card:nth-child(1) { --tilt: -0.6deg; }
+  .focus-card:nth-child(2) {
+    --tilt: 0.7deg;
+    background: var(--accent-2);
+  }
+  .focus-card:nth-child(3) { --tilt: -0.9deg; }
+  .focus-card h3,
+  .project-head h3,
+  .stack-group h3,
+  .contact h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+  }
+  .focus-card h3 {
+    font-size: 1rem;
+    line-height: 1.35;
+    margin-bottom: 0.55rem;
+  }
+  .focus-card p {
+    font-size: 0.92rem;
+    line-height: 1.58;
+    margin: 0;
+  }
+
+  .project-list {
+    display: grid;
+    gap: 1.3rem;
+  }
+  .projects-section {
+    margin-top: 1rem;
+  }
+  .project-row {
+    display: block;
+    color: var(--ink);
+    text-decoration: none !important;
+    text-decoration-thickness: 0;
+    padding-bottom: 1.1rem;
+    border-bottom: 3px solid color-mix(in oklab, var(--ink) 18%, transparent);
+    transition: background-color 0.15s ease, transform 0.15s ease;
+  }
+  .project-row:hover {
+    background: color-mix(in oklab, var(--accent-2) 28%, transparent);
+    transform: translateX(0.25rem);
+    text-decoration: none !important;
+  }
+  .project-row:hover .project-head h3::after {
+    content: " →";
+  }
+  .project-head {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+  }
+  .project-head h3 {
+    font-size: 1.2rem;
+  }
+  .project-head span {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    background: var(--accent-2);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    padding: 0.1rem 0.45rem;
+    white-space: nowrap;
+  }
+  .project-row p { margin: 0; }
+
+  .stack-groups {
+    display: grid;
+    gap: 0;
+  }
+  .stack-group {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: 1.1rem;
+    align-items: start;
+    padding: 1.05rem 0;
+    border-bottom: 3px dotted color-mix(in oklab, var(--ink) 22%, transparent);
+  }
+  .stack-group h3 {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.92rem;
+    line-height: 1.35;
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    box-shadow: var(--shadow-sm);
+    padding: 0.25rem 0.55rem;
+    transform: rotate(-1deg);
+  }
+  .stack-group:nth-child(3n + 1) h3 { background: var(--paper); }
+  .stack-group:nth-child(3n + 2) h3 {
+    background: var(--paper);
+    transform: rotate(0.8deg);
+  }
+  .stack-group:nth-child(3n) h3 {
+    background: var(--paper);
+    color: var(--ink);
+    transform: rotate(-0.4deg);
+  }
+  .stack-num {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    line-height: 1;
+    background: var(--ink);
+    color: var(--paper);
+    border: 2px solid var(--ink);
+    padding: 0.15rem 0.25rem;
+  }
+  .stack-group div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem 0.5rem;
+    padding-top: 0.1rem;
+  }
+  .stack-group div a {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--ink);
+    text-decoration: none !important;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    box-shadow: 2px 2px 0 0 var(--ink);
+    padding: 0.16rem 0.5rem;
+    transform: rotate(var(--tilt));
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+  .stack-group div a:nth-child(4n + 2) { background: color-mix(in oklab, var(--accent-2) 42%, var(--paper)); }
+  .stack-group div a:nth-child(4n + 3) { background: color-mix(in oklab, var(--accent-3) 34%, var(--paper)); }
+  .stack-group div a:hover {
+    background: var(--accent-2);
+    transform: translate(-2px, -2px) rotate(var(--tilt));
+  }
+
   .list {
     list-style: none;
     padding: 0;
@@ -222,9 +677,79 @@ const factoids = [
     font-weight: 700;
   }
 
+  .contact {
+    background: var(--accent-1);
+    color: var(--ink);
+    padding: 1.3rem 1.5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    align-items: center;
+    transform: rotate(-0.5deg);
+  }
+  .contact h2 {
+    font-size: 1.35rem;
+    margin-bottom: 0.4rem;
+  }
+  .contact p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 62ch;
+  }
+  .contact a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 3px;
+  }
+  .contact-link {
+    background: var(--paper);
+    padding: 0.65rem 0.95rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-decoration: none !important;
+    white-space: nowrap;
+  }
+
   @media (max-width: 640px) {
-    .big-title { font-size: clamp(2.4rem, 12vw, 5.5rem); }
+    .about { gap: 2.4rem; }
+    .big-title { font-size: 3rem; }
     .big-title .accent { box-sizing: border-box; max-width: 100%; }
     .fact-list { grid-template-columns: 1fr; }
+    .focus-grid,
+    .contact {
+      grid-template-columns: 1fr;
+    }
+    .focus-card {
+      min-height: auto;
+      transform: none;
+    }
+    .note {
+      grid-template-columns: 1fr;
+      transform: none;
+    }
+    .note-items { grid-template-columns: 1fr; }
+    .stack-group {
+      grid-template-columns: 1fr;
+      gap: 0.65rem;
+    }
+    .stack-group h3 {
+      transform: none !important;
+    }
+    .stack-group div a {
+      transform: none;
+    }
+    .project-head {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .contact-link { justify-self: start; }
+  }
+
+  @media (min-width: 641px) and (max-width: 860px) {
+    .big-title { font-size: 4.4rem; }
+    .focus-grid { grid-template-columns: 1fr; }
   }
 </style>
