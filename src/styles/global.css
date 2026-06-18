@@ -67,6 +67,7 @@ html {
   font-family: var(--font-sans);
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 html.lenis,
@@ -90,6 +91,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   min-height: 100dvh;
+  overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 

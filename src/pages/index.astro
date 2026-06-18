@@ -106,6 +106,7 @@ const marqueeItems = [
           <span class="cue-down">↓ scroll</span>
           <span class="cue-eq">=</span>
           <span class="cue-right">→ slide</span>
+          <span class="cue-touch">← 左右滑動 →</span>
         </div>
       </div>
 
@@ -149,7 +150,7 @@ const marqueeItems = [
         <span>用的東西</span>
         <span class="section-en">stack & tools</span>
       </h2>
-      <Sticker text="✦ 隨時換" color="pink" rotate={-6} size="sm" />
+      <Sticker text="✦ 隨時換" color="pink" rotate={0} size="sm" />
     </header>
 
     <div class="stack-grid" data-stagger>
@@ -169,7 +170,7 @@ const marqueeItems = [
         想知道我現在在幹嘛？<br/>
         <a href="/now" class="cta-link">→ 看看 /now</a>
       </p>
-      <Sticker text="LIVE" color="pink" rotate={-8} size="md" />
+      <Sticker text="LIVE" color="pink" rotate={0} size="md" />
     </div>
   </section>
 </BaseLayout>
@@ -365,6 +366,7 @@ const marqueeItems = [
     transform: rotate(-2deg);
   }
   .h-cue .cue-eq { opacity: 0.5; }
+  .h-cue .cue-touch { display: none; }
 
   .h-card {
     flex: 0 0 auto;
@@ -497,7 +499,30 @@ const marqueeItems = [
   }
   :global(.dark) .h-progress-fill { background: var(--accent-2); }
 
-  @media (max-width: 720px), (prefers-reduced-motion: reduce) {
+  @media (max-width: 720px) {
+    .h-showcase {
+      height: 100dvh;
+    }
+    .h-track {
+      padding-inline: 1.5rem;
+      gap: 2.5rem;
+    }
+    .h-intro {
+      width: 80vw;
+      height: 70%;
+      padding: 1.5rem 1.5rem 1.5rem 0;
+      border-right: none;
+      border-bottom: 4px solid var(--ink);
+    }
+    .h-card { width: 78vw; height: 60vh; }
+    .h-end {
+      width: 60vw;
+      height: 60vh;
+    }
+    .h-progress-wrap { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
     .h-showcase {
       height: auto;
       overflow-x: auto;
@@ -519,17 +544,14 @@ const marqueeItems = [
       padding: 1.5rem 1.5rem 1.5rem 0;
       border-right: none;
       border-bottom: 4px solid var(--ink);
-    }
-    .h-card {
-      width: 78vw;
-      height: 60vh;
       scroll-snap-align: start;
     }
-    .h-end {
-      width: 60vw;
-      height: 60vh;
-      scroll-snap-align: start;
-    }
+    .h-cue .cue-down,
+    .h-cue .cue-eq,
+    .h-cue .cue-right { display: none; }
+    .h-cue .cue-touch { display: inline; }
+    .h-card { width: 78vw; height: 60vh; scroll-snap-align: start; }
+    .h-end { width: 60vw; height: 60vh; scroll-snap-align: start; }
     .h-progress-wrap { display: none; }
   }
 

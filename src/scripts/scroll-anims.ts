@@ -158,9 +158,6 @@ function initHeadingUnderlines() {
 }
 
 function initHorizontalScroll() {
-  const narrow = window.matchMedia("(max-width: 720px)").matches;
-  if (narrow) return;
-
   document.querySelectorAll<HTMLElement>("[data-h-scroll]").forEach((section) => {
     const track = section.querySelector<HTMLElement>("[data-h-track]");
     const progress = section.querySelector<HTMLElement>("[data-h-progress]");
