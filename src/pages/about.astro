@@ -1,12 +1,11 @@
 ---
 import BaseLayout from "~/layouts/BaseLayout.astro";
-import Sticker from "~/components/Sticker.astro";
 
 const factoids = [
   { k: "現居", v: "台灣" },
   { k: "身份", v: "資工大二生" },
   { k: "角色", v: "Developer / Server Admin" },
-  { k: "目前", v: "LinkPet" },
+  { k: "目前", v: "Building Blog" },
   { k: "主線", v: "App / Web /Server" },
   { k: "環境", v: "macOS / Linux" },
 ];
@@ -171,11 +170,6 @@ const stackGroups = [
           <span>Write</span>
           <p>這裡放開發筆記、專案紀錄、踩坑反思，還有回頭看才發現該重做的技術選擇。</p>
         </div>
-      </div>
-      <div class="stickers">
-        <Sticker text="CS Student" color="pink" rotate={-5} />
-        <Sticker text="Software Dev" color="violet" rotate={3} />
-        <Sticker text="Server Admin" color="yellow" rotate={-2} />
       </div>
     </div>
 
@@ -384,17 +378,10 @@ const stackGroups = [
     margin: 0;
     max-width: 58ch;
   }
-  .stickers {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-    margin-top: 0;
-  }
-
   .facts {
     background: var(--paper);
     padding: 1.6rem 1.8rem;
-    transform: rotate(-0.5deg);
+    transform: none;
   }
   .facts { box-sizing: border-box; }
   .block-title { margin-bottom: 1.2rem; }
@@ -409,7 +396,7 @@ const stackGroups = [
     padding: 0.2em 0.7em;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    transform: rotate(-2deg);
+    transform: none;
   }
   .badge.yellow { background: var(--accent-2); }
   .badge.violet { background: var(--accent-4); color: white; }
@@ -471,7 +458,7 @@ const stackGroups = [
     box-sizing: border-box;
     display: grid;
     gap: 0.85rem;
-    transform: rotate(-0.5deg);
+    transform: none;
   }
   .note strong {
     font-family: var(--font-display);
@@ -512,15 +499,12 @@ const stackGroups = [
     background: var(--paper);
     padding: 1rem 1.1rem;
     min-height: 13.5rem;
-    transform: rotate(var(--tilt, 0deg));
+    transform: none;
     transform-origin: center center;
   }
-  .focus-card:nth-child(1) { --tilt: -0.6deg; }
   .focus-card:nth-child(2) {
-    --tilt: 0.7deg;
     background: var(--accent-2);
   }
-  .focus-card:nth-child(3) { --tilt: -0.9deg; }
   .focus-card h3,
   .project-head h3,
   .stack-group h3,
@@ -685,7 +669,7 @@ const stackGroups = [
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 1.5rem;
     align-items: center;
-    transform: rotate(-0.5deg);
+    transform: none;
   }
   .contact h2 {
     font-size: 1.35rem;
