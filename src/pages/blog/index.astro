@@ -34,9 +34,6 @@ const categoryCounts = Object.fromEntries(
         <span class="line">所有</span>
         <span class="line accent">文章</span>
       </h1>
-      <p class="page-sub">
-        從專案到筆記，挑一個你有興趣的方向。現在顯示 <strong data-filter-count>{posts.length}</strong> 篇。
-      </p>
 
       <div class="category-grid" aria-label="文章分類">
         <button type="button" class="category-card category-all is-active" data-category-filter="all" aria-pressed="true">
@@ -72,6 +69,7 @@ const categoryCounts = Object.fromEntries(
           category={getPostCategory(p.data.tags)}
           variant={p.data.variant}
           index={i}
+          tilt={1.5}
         />
       ))}
     </div>
@@ -110,15 +108,11 @@ const categoryCounts = Object.fromEntries(
   :global(.dark) .page-title .accent {
     box-shadow: 8px 8px 0 0 var(--accent-2);
   }
-  .page-sub {
-    font-size: 1rem;
-    margin-bottom: 1.6rem;
-    max-width: 50ch;
-  }
   .category-grid {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 0.75rem;
+    margin-top: 4.1rem;
   }
   .category-card {
     min-width: 0;

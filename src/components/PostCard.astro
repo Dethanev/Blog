@@ -12,6 +12,7 @@ interface Props {
   cover?: string;
   variant?: "paper" | "pink" | "yellow" | "lime" | "violet" | "blue";
   index?: number;
+  tilt?: number;
 }
 const {
   href,
@@ -22,8 +23,9 @@ const {
   category,
   variant = "paper",
   index = 0,
+  tilt: tiltOverride,
 } = Astro.props;
-const tilt = pickTilt(hashString(title) + index);
+const tilt = tiltOverride ?? pickTilt(hashString(title) + index);
 ---
 
 <article
