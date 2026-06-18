@@ -209,28 +209,45 @@ function initLogoEgg() {
 }
 
 function initTagFilter() {
-  const tags = document.querySelectorAll<HTMLElement>("[data-tag-filter]");
+  const tags = document.querySelectorAll<HTMLElement>("[data-tag-filter], [data-category-filter]");
   if (tags.length === 0) return;
   const cards = document.querySelectorAll<HTMLElement>("[data-post-tags]");
+  const count = document.querySelector<HTMLElement>("[data-filter-count]");
 
   tags.forEach((t) => {
     t.addEventListener("click", () => {
-      const target = t.dataset.tagFilter ?? "all";
-      tags.forEach((x) => x.classList.toggle("is-active", x === t));
+      const target = t.dataset.categoryFilter ?? t.dataset.tagFilter ?? "all";
+      const isCategoryFilter = t.dataset.categoryFilter !== undefined;
+      tags.forEach((x) => {
+        const active = x === t;
+        x.classList.toggle("is-active", active);
+        x.setAttribute("aria-pressed", String(active));
+      });
 
       gsap.fromTo(t, { scale: 1 }, { scale: 1.1, duration: 0.12, yoyo: true, repeat: 1 });
 
+      let visibleCount = 0;
       cards.forEach((card) => {
         const tagsAttr = card.dataset.postTags ?? "";
-        const match = target === "all" || tagsAttr.split(",").includes(target);
+        const match = target === "all" || (isCategoryFilter
+          ? card.dataset.postCategory === target
+          : tagsAttr.split(",").includes(target));
+        if (match) visibleCount += 1;
+
+        gsap.killTweensOf(card);
+        if (match) card.hidden = false;
         gsap.to(card, {
-          opacity: match ? 1 : 0.15,
+          opacity: match ? 1 : 0,
           scale: match ? 1 : 0.95,
           duration: 0.25,
           ease: "power2.out",
+          onComplete: () => {
+            if (!match) card.hidden = true;
+          },
         });
         card.style.pointerEvents = match ? "auto" : "none";
       });
+      if (count) count.textContent = String(visibleCount);
     });
   });
 }

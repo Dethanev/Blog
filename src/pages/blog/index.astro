@@ -1,13 +1,30 @@
 ---
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import PostCard from "~/components/PostCard.astro";
-import TagPill from "~/components/TagPill.astro";
 import { getCollection } from "astro:content";
 import { sortPostsNewestFirst } from "~/lib/utils";
 
 const posts = sortPostsNewestFirst(await getCollection("posts", ({ data }) => !data.draft));
 
-const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+const categories = [
+  { id: "project", label: "專案實作", description: "作品、產品與踩坑紀錄", mark: "↗", color: "pink" },
+  { id: "tech", label: "技術筆記", description: "開發工具與實作方法", mark: "{ }", color: "yellow" },
+  { id: "design", label: "設計探索", description: "介面、動態與視覺觀察", mark: "✦", color: "lime" },
+  { id: "meta", label: "站務隨筆", description: "關於這個網站的近況", mark: "…", color: "violet" },
+] as const;
+
+type CategoryId = (typeof categories)[number]["id"];
+
+function getPostCategory(tags: string[]): CategoryId {
+  if (tags.includes("project")) return "project";
+  if (tags.some((tag) => ["design", "ui"].includes(tag))) return "design";
+  if (tags.includes("meta")) return "meta";
+  return "tech";
+}
+
+const categoryCounts = Object.fromEntries(
+  categories.map(({ id }) => [id, posts.filter((post) => getPostCategory(post.data.tags) === id).length]),
+);
 ---
 
 <BaseLayout title="文章" description="所有文章列表">
@@ -18,12 +35,27 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
         <span class="line accent">文章</span>
       </h1>
       <p class="page-sub">
-        共 <strong>{posts.length}</strong> 篇。點 tag 過濾，再點一次「all」回到全部。
+        從專案到筆記，挑一個你有興趣的方向。現在顯示 <strong data-filter-count>{posts.length}</strong> 篇。
       </p>
 
-      <div class="filter-row">
-        <TagPill tag="all" filter active />
-        {allTags.map((t) => <TagPill tag={t} filter />)}
+      <div class="category-grid" aria-label="文章分類">
+        <button type="button" class="category-card category-all is-active" data-category-filter="all" aria-pressed="true">
+          <span class="category-top"><span class="category-mark">ALL</span><strong>{posts.length}</strong></span>
+          <span class="category-label">全部文章</span>
+          <span class="category-description">一次看看所有內容</span>
+        </button>
+        {categories.map((category) => (
+          <button
+            type="button"
+            class:list={["category-card", `category-${category.color}`]}
+            data-category-filter={category.id}
+            aria-pressed="false"
+          >
+            <span class="category-top"><span class="category-mark">{category.mark}</span><strong>{categoryCounts[category.id]}</strong></span>
+            <span class="category-label">{category.label}</span>
+            <span class="category-description">{category.description}</span>
+          </button>
+        ))}
       </div>
     </div>
   </section>
@@ -37,6 +69,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
           description={p.data.description}
           date={p.data.date}
           tags={p.data.tags}
+          category={getPostCategory(p.data.tags)}
           variant={p.data.variant}
           index={i}
         />
@@ -82,10 +115,65 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
     margin-bottom: 1.6rem;
     max-width: 50ch;
   }
-  .filter-row {
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .category-card {
+    min-width: 0;
+    padding: 0.8rem 0.85rem 0.9rem;
+    border: 3px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .category-card:hover {
+    transform: translate(-2px, -2px) rotate(-1deg);
+    box-shadow: 7px 7px 0 var(--ink);
+  }
+  .category-card:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .category-card:focus-visible {
+    outline: 3px dashed var(--ink);
+    outline-offset: 4px;
+  }
+  .category-card.is-active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .category-all { background: var(--paper); }
+  .category-pink { background: var(--accent-1); }
+  .category-yellow { background: var(--accent-2); }
+  .category-lime { background: var(--accent-3); }
+  .category-violet { background: var(--accent-4); }
+  .category-top {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    margin-bottom: 0.65rem;
+  }
+  .category-mark { font-weight: 900; }
+  .category-label {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 900;
+    line-height: 1.2;
+  }
+  .category-description {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.72rem;
+    line-height: 1.35;
+    opacity: 0.78;
   }
 
   .posts-section {
@@ -100,6 +188,11 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
   }
 
   @media (max-width: 720px) {
+    .blog-head { margin-top: 2rem; }
+    .category-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .category-card:first-child { grid-column: 1 / -1; }
     .posts-list { grid-template-columns: 1fr; }
   }
 </style>

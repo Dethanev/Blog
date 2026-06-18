@@ -85,6 +85,9 @@ function initMarquees() {
 
 function initRevealCards() {
   document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((el, i) => {
+    if (el.dataset.revealReady === "true") return;
+    el.dataset.revealReady = "true";
+
     const dir = i % 2 === 0 ? -1 : 1;
     gsap.from(el, {
       x: 60 * dir,
@@ -96,7 +99,7 @@ function initRevealCards() {
       scrollTrigger: {
         trigger: el,
         start: "top 85%",
-        toggleActions: "play none none reverse",
+        once: true,
       },
     });
   });
