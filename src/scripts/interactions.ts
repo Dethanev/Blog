@@ -1,6 +1,7 @@
 import { gsap } from "gsap";
 import { toggleTheme } from "./theme";
 import { initViewCounters } from "./views";
+import { getLenis } from "./lenis";
 
 const CONFETTI_COLORS = ["#ff5c8a", "#fcec52", "#b8e14a", "#7b61ff", "#2de2e6"];
 
@@ -252,11 +253,39 @@ function initTagFilter() {
   });
 }
 
+let cleanupBackToTop: (() => void) | null = null;
+
+function initBackToTop() {
+  const button = document.querySelector<HTMLButtonElement>("[data-back-to-top]");
+  if (!button || button.dataset.backToTopBound === "1") return;
+  button.dataset.backToTopBound = "1";
+  cleanupBackToTop?.();
+
+  const updateVisibility = () => {
+    button.classList.toggle("is-visible", window.scrollY > 160);
+  };
+  window.addEventListener("scroll", updateVisibility, { passive: true });
+  cleanupBackToTop = () => window.removeEventListener("scroll", updateVisibility);
+  updateVisibility();
+
+  button.addEventListener("click", () => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const activeLenis = getLenis();
+
+    if (activeLenis && !reduceMotion) {
+      activeLenis.scrollTo(0);
+    } else {
+      window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    }
+  });
+}
+
 export function initInteractions() {
   initViewCounters();
   initStickers();
   initThemeToggle();
   initClap();
   initLogoEgg();
+  initBackToTop();
   initTagFilter();
 }
