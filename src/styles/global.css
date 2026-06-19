@@ -70,6 +70,16 @@ html {
   overflow-x: hidden;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  html {
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 html.lenis,
 html.lenis body {
   height: auto;
