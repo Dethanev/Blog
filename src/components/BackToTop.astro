@@ -27,7 +27,7 @@
     padding: 0.5rem 0;
     border: 0;
     background: transparent;
-    color: var(--ink);
+    color: var(--color-ink);
     font-family: var(--font-mono);
     font-weight: 700;
     cursor: pointer;
@@ -41,6 +41,25 @@
       transform 0.2s ease;
   }
 
+  .back-to-top::before {
+    position: absolute;
+    inset-block: 0.25rem;
+    left: 50%;
+    z-index: -1;
+    width: 1.2rem;
+    border-radius: 999px;
+    background: #f8849c;
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 28%),
+      0 2px 10px rgb(10 10 15 / 8%);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    content: "";
+    opacity: 0.62;
+    transform: translateX(-50%);
+    transition: opacity 0.15s ease, box-shadow 0.15s ease;
+  }
+
   .back-to-top.is-visible {
     opacity: 1;
     visibility: visible;
@@ -48,8 +67,11 @@
   }
 
   .back-to-top:hover {
-    color: var(--accent-1);
     transform: translate(-4px, -50%);
+  }
+
+  .back-to-top:hover::before {
+    opacity: 0.76;
   }
 
   .back-to-top:active {
@@ -80,9 +102,17 @@
     .back-to-top {
       right: 0.35rem;
       width: 3rem;
-      min-height: 16rem;
       gap: 1.4rem;
       padding: 1rem 0;
+      color: var(--ink);
+    }
+
+    .back-to-top::before {
+      display: none;
+    }
+
+    .back-to-top:hover {
+      color: var(--accent-1);
     }
 
     .label {
@@ -95,11 +125,13 @@
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 720px) {
     .back-to-top {
-      right: 0.45rem;
+      right: -0.4rem;
     }
+  }
 
+  @media (max-width: 480px) {
     .label {
       font-size: 0.6rem;
     }
