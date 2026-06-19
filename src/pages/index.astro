@@ -166,13 +166,16 @@ const marqueeItems = [
 
   <!-- CTA strip -->
   <section class="cta-strip">
-    <div class="cta-inner brutal-border-thick brutal-shadow-lg">
+    <a href="/now" class="cta-inner brutal-border-thick brutal-shadow-lg" aria-label="查看我的近況">
       <p class="cta-text">
         想知道我現在在幹嘛？<br/>
-        <a href="/now" class="cta-link">→ 看看 /now</a>
+        <span class="cta-link"><span class="cta-arrow" aria-hidden="true">→</span> 看看 /now</span>
       </p>
-      <Sticker text="LIVE" color="pink" rotate={0} size="md" />
-    </div>
+      <span class="live-badge" aria-hidden="true">
+        <span class="live-dot"></span>
+        LIVE&nbsp; 正在寫 Blog
+      </span>
+    </a>
   </section>
 </BaseLayout>
 
@@ -599,8 +602,26 @@ const marqueeItems = [
     align-items: center;
     gap: 2rem;
     transform: rotate(0deg);
+    text-decoration: none;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .cta-inner:hover,
+  .cta-inner:focus-visible {
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0 0 var(--ink);
+  }
+  .cta-inner:active {
+    transform: translate(2px, 2px);
+    box-shadow: 4px 4px 0 0 var(--ink);
+  }
+  .cta-inner:focus-visible {
+    outline: 4px solid var(--accent-2);
+    outline-offset: 4px;
   }
   :global(.dark) .cta-inner { color: var(--ink); }
+  :global(.dark) .cta-inner:hover,
+  :global(.dark) .cta-inner:focus-visible { box-shadow: 12px 12px 0 0 var(--accent-2); }
+  :global(.dark) .cta-inner:active { box-shadow: 4px 4px 0 0 var(--accent-2); }
   .cta-text {
     font-family: var(--font-display);
     font-weight: 800;
@@ -613,6 +634,49 @@ const marqueeItems = [
     text-decoration-thickness: 4px;
     text-decoration-color: var(--accent-2);
     text-underline-offset: 4px;
+  }
+  .cta-arrow {
+    display: inline-block;
+    transition: transform 0.18s ease;
+  }
+  .cta-inner:hover .cta-arrow,
+  .cta-inner:focus-visible .cta-arrow { transform: translateX(8px); }
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex: 0 0 auto;
+    padding: 0.5rem 1rem;
+    border: 3px solid var(--ink);
+    background: #fff;
+    color: var(--ink);
+    box-shadow: 4px 4px 0 0 var(--ink);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .cta-inner:hover .live-badge,
+  .cta-inner:focus-visible .live-badge {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 0 var(--ink);
+  }
+  .cta-inner:active .live-badge {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 0 var(--ink);
+  }
+  .live-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    background: var(--accent-1);
+    animation: live-pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes live-pulse {
+    0%, 100% { transform: scale(0.8); opacity: 0.55; }
+    50% { transform: scale(1.15); opacity: 1; }
   }
 
   @media (max-width: 720px) {
