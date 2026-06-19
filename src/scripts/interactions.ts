@@ -261,16 +261,31 @@ function initBackToTop() {
   button.dataset.backToTopBound = "1";
   cleanupBackToTop?.();
 
-  const updateVisibility = () => {
-    button.classList.toggle("is-visible", window.scrollY > 160);
+  const updateState = () => {
+    const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = scrollableHeight > 0 ? Math.min(window.scrollY / scrollableHeight, 1) : 0;
+    const isMobile = window.matchMedia("(max-width: 720px)").matches;
+
+    button.style.setProperty("--scroll-progress", String(progress));
+    button.classList.toggle("is-visible", isMobile ? progress >= 0.2 : window.scrollY > 160);
   };
-  window.addEventListener("scroll", updateVisibility, { passive: true });
-  cleanupBackToTop = () => window.removeEventListener("scroll", updateVisibility);
-  updateVisibility();
+  window.addEventListener("scroll", updateState, { passive: true });
+  window.addEventListener("resize", updateState, { passive: true });
+  cleanupBackToTop = () => {
+    window.removeEventListener("scroll", updateState);
+    window.removeEventListener("resize", updateState);
+  };
+  updateState();
 
   button.addEventListener("click", () => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const activeLenis = getLenis();
+
+    if (!reduceMotion) {
+      button.classList.remove("is-jumping");
+      requestAnimationFrame(() => button.classList.add("is-jumping"));
+      button.addEventListener("animationend", () => button.classList.remove("is-jumping"), { once: true });
+    }
 
     if (activeLenis && !reduceMotion) {
       activeLenis.scrollTo(0);

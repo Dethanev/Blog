@@ -127,19 +127,86 @@
 
   @media (max-width: 720px) {
     .back-to-top {
-      right: -0.4rem;
+      --scroll-progress: 0;
+
+      right: 1rem;
+      top: auto;
+      bottom: max(1rem, env(safe-area-inset-bottom));
+      width: 3.25rem;
+      height: 3.25rem;
+      padding: 0;
+      border: 3px solid var(--ink);
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--accent-1) calc(var(--scroll-progress) * 1turn),
+        color-mix(in oklab, var(--ink) 16%, var(--paper)) 0
+      );
+      box-shadow: 4px 4px 0 var(--ink);
+      color: var(--ink);
+      transform: translateY(1rem) scale(0.9);
+    }
+
+    .back-to-top::before {
+      inset: 5px;
+      left: 5px;
+      z-index: 0;
+      width: auto;
+      border-radius: 50%;
+      background: var(--paper);
+      box-shadow: none;
+      opacity: 1;
+      transform: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .back-to-top.is-visible {
+      transform: translateY(0) scale(1);
+    }
+
+    .back-to-top:hover,
+    .back-to-top:active {
+      transform: translateY(0) scale(1);
+    }
+
+    .back-to-top:active {
+      box-shadow: 1px 1px 0 var(--ink);
+      translate: 3px 3px;
+    }
+
+    .arrow {
+      position: relative;
+      z-index: 1;
+      font-size: 1.35rem;
+    }
+
+    .back-to-top.is-jumping .arrow {
+      animation: jump-to-top 0.45s ease-out;
+    }
+
+    .label {
+      display: none;
+    }
+
+    :global(.dark) .back-to-top {
+      box-shadow: 4px 4px 0 var(--accent-2);
     }
   }
 
-  @media (max-width: 480px) {
-    .label {
-      font-size: 0.6rem;
-    }
+  @keyframes jump-to-top {
+    0% { transform: translateY(0); opacity: 1; }
+    45% { transform: translateY(-0.75rem); opacity: 0; }
+    46% { transform: translateY(0.65rem); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .back-to-top {
       transition: none;
+    }
+
+    .back-to-top.is-jumping .arrow {
+      animation: none;
     }
   }
 </style>
