@@ -9,6 +9,12 @@ tags: ["project", "ai", "ar"]
 variant: "violet"
 ---
 
+import ProjectGallery from "~/components/ProjectGallery.astro";
+import linkPet1 from "~/assets/projects/linkpet-1.png";
+import linkPet2 from "~/assets/projects/linkpet-2.png";
+import linkPet3 from "~/assets/projects/linkpet-3.png";
+import linkPet4 from "~/assets/projects/linkpet-4.png";
+
 LinkPet 是我們為 2026 行動應用創新賽準備的專案。
 
 它的核心想法，是做一個可以陪伴使用者的 AI 虛擬角色。不是只把聊天機器人包成可愛外皮，而是希望透過 2D 互動、AR 空間呈現、語音對話與持續記憶，讓角色更像是日常生活中可以自然出現的陪伴夥伴。
@@ -16,6 +22,16 @@ LinkPet 是我們為 2026 行動應用創新賽準備的專案。
 雖然這個專案最後初審沒有通過，也沒有繼續完整實作，但它對我來說仍然是一段很扎實的專案練習。
 
 <mark className="marker-yellow">LinkPet 不是一個完成品，但它讓我更完整地走過一次比賽型專案從想法、定位、功能設計到技術規劃的流程。</mark>
+
+<ProjectGallery
+  items={[
+    { src: linkPet1, alt: "LinkPet 模式與角色選擇畫面" },
+    { src: linkPet2, alt: "LinkPet 2D 陪伴角色與互動畫面" },
+    { src: linkPet3, alt: "LinkPet 2D 陪伴角色的快樂狀態" },
+    { src: linkPet4, alt: "LinkPet AR 空間模式與寵物互動畫面" },
+  ]}
+  caption="LinkPet App 介面與 AR 空間模式展示"
+/>
 
 ## 專案起點：AI 不一定只能提高生產力
 
