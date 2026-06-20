@@ -6,9 +6,18 @@ tags: ["project", "flutter", "data"]
 variant: "lime"
 ---
 
+import ProjectShowcase from "~/components/ProjectShowcase.astro";
+import hawkGuardImage from "~/assets/projects/hawkguard.png";
+
 鷹眼守護是我以前做過的一個反詐騙 App 概念。
 
 它最後沒有變成完整產品，但回頭看，這個專案其實滿重要。它讓我第一次比較具體地意識到：<mark className="marker-cyan">一個 App 不只是畫面做出來、功能串起來就好，真正麻煩的東西通常藏在資料、判斷邏輯和使用情境裡</mark>。
+
+<ProjectShowcase
+  src={hawkGuardImage}
+  alt="HawkGuard 開發環境與反詐騙 App 首頁畫面"
+  caption="HawkGuard 開發畫面 / Flutter + iOS Simulator"
+/>
 
 ## 專案起點：詐騙不只來自電話
 

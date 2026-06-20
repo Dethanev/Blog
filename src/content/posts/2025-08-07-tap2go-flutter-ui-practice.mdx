@@ -6,6 +6,9 @@ tags: ["project", "flutter", "ui"]
 variant: "pink"
 ---
 
+import ProjectShowcase from "~/components/ProjectShowcase.astro";
+import tap2GoImage from "~/assets/projects/tap2go.png";
+
 Tap2Go 是我去年暑假練習 Flutter 時做的小作品，也是我人生第一個自己做出來的 App。
 
 它不是一個一開始就打算完整上架的 App，也沒有很複雜的產品規劃。比較準確地說，它是我當時用來熟悉 Flutter 開發流程、介面組成、頁面切換、元件拆分與互動效果的練習專案。
@@ -13,6 +16,12 @@ Tap2Go 是我去年暑假練習 Flutter 時做的小作品，也是我人生第�
 回頭看，Tap2Go 對我來說最重要的地方，不是它做了多厲害的功能，而是它讓我第一次比較完整地走過一次 App Demo 的開發流程。
 
 <mark className="marker-yellow">它讓我從「看 Flutter 教學」往前走了一步，開始真的自己組出一個可以操作、可以切換、也能跑進手機裡的 App。</mark>
+
+<ProjectShowcase
+  src={tap2GoImage}
+  alt="Tap2Go 開發環境與 Flutter App 首頁畫面"
+  caption="Tap2Go UI 練習畫面 / Flutter + iOS Simulator"
+/>
 
 ## 專案起點：光是裝環境就卡很久
 

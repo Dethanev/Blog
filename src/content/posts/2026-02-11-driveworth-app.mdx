@@ -9,6 +9,9 @@ tags: ["project", "product", "data"]
 variant: "blue"
 ---
 
+import ProjectShowcase from "~/components/ProjectShowcase.astro";
+import driveWorthImage from "~/assets/projects/driveworth.png";
+
 駕值觀 DriveWorth 是一個以「買車前成本評估」為核心的 App 概念。
 
 當初會想做這個專案，是因為我發現很多人在考慮買車時，第一眼看到的通常都是車價。
@@ -22,6 +25,12 @@ variant: "blue"
 簡單來說，我希望使用者在買車之前，就可以先知道自己未來 3 到 5 年大概會花多少錢。
 
 不要等到車買了之後，才發現自己其實是<mark className="marker-orange">買得起，但養不起</mark>。
+
+<ProjectShowcase
+  src={driveWorthImage}
+  alt="DriveWorth 開發環境與總擁有成本分析畫面"
+  caption="DriveWorth 總擁有成本分析 / Flutter + iOS Simulator"
+/>
 
 ## 專案起點：車價只是第一筆成本
 
