@@ -20,7 +20,7 @@ const minutes = readingTime(rawBody);
 ---
 
 <BaseLayout title={title} description={description}>
-  <article class="post" data-article>
+  <article class="post">
     <header class="post-header">
       <div class="header-meta">
         <time datetime={date.toISOString()}>{formatDate(date)}</time>
@@ -122,11 +122,8 @@ const minutes = readingTime(rawBody);
     gap: 1.6rem;
   }
   .reading-rail {
-    position: sticky;
-    top: 8rem;
-    height: 70vh;
     background: color-mix(in oklab, var(--ink) 12%, transparent);
-    align-self: start;
+    align-self: stretch;
   }
   .rail-fill {
     width: 100%;

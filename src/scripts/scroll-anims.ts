@@ -128,13 +128,13 @@ function initStaggerGrid() {
 
 function initReadingProgress() {
   const bar = document.querySelector<HTMLElement>("[data-reading-progress]");
-  const article = document.querySelector<HTMLElement>("[data-article]");
-  if (!bar || !article) return;
+  const content = document.querySelector<HTMLElement>(".prose-body");
+  if (!bar || !content) return;
   gsap.to(bar, {
     scaleY: 1,
     ease: "none",
     scrollTrigger: {
-      trigger: article,
+      trigger: content,
       start: "top center",
       end: "bottom center",
       scrub: true,
