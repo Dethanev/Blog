@@ -1,6 +1,9 @@
 ---
 import BaseLayout from "~/layouts/BaseLayout.astro";
 
+const wakatimeProfile = "https://wakatime.com/@Dethanev";
+const wakatimeBadge = "https://wakatime.com/badge/user/befca022-bf1e-4d10-a1fe-ce2001dfc840.svg?style=for-the-badge";
+
 const factoids = [
   { k: "現居", v: "台灣" },
   { k: "身份", v: "資工大二生" },
@@ -268,6 +271,26 @@ const stackGroups = [
       </div>
     </div>
 
+    <a
+      class="wakatime-card brutal-border-thick brutal-shadow brutal-hover"
+      href={wakatimeProfile}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="查看 Dethanev 的完整 WakaTime Coding 統計"
+    >
+      <div class="wakatime-copy">
+        <span class="wakatime-label">coding time</span>
+        <img
+          src={wakatimeBadge}
+          alt="Dethanev 的 WakaTime 累積 Coding 時數"
+          width="248"
+          height="28"
+        />
+        <span class="wakatime-since">WakaTime tracked since 2025/08/17</span>
+      </div>
+      <span class="wakatime-link">完整統計 <span aria-hidden="true">↗</span></span>
+    </a>
+
     <div class="text-block">
       <h2 class="block-title">
         <span class="badge yellow">stack</span>
@@ -499,6 +522,52 @@ const stackGroups = [
     font-weight: 700;
     font-size: 1rem;
     margin: 0;
+  }
+
+  .wakatime-card {
+    background: var(--accent-3);
+    color: var(--ink);
+    padding: 1.25rem 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    text-decoration: none;
+  }
+  .wakatime-copy {
+    min-width: 0;
+    display: grid;
+    gap: 0.55rem;
+  }
+  .wakatime-label {
+    width: fit-content;
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0.3rem 0.55rem;
+  }
+  .wakatime-card img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  .wakatime-since {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.4;
+    opacity: 0.7;
+  }
+  .wakatime-link {
+    flex: 0 0 auto;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 800;
+    border-bottom: 3px solid var(--ink);
   }
 
   .text-block {
@@ -929,6 +998,11 @@ const stackGroups = [
     .big-title { font-size: 3rem; }
     .big-title .accent { box-sizing: border-box; max-width: 100%; }
     .fact-list { grid-template-columns: 1fr; }
+    .wakatime-card {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 1rem;
+    }
     .focus-grid,
     .certifications-grid,
     .contact {
