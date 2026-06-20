@@ -1,10 +1,20 @@
 ---
 title: "那些做壞的專案教我的事"
-description: "整理 Tap2Go、DriveWorth、HawkGuard、LinkPet 這幾個專案留下來的教訓：完成、放棄、資料、產品判斷、團隊協作，還有下一次不要再怎麼亂衝。"
+description: "整理 Tap2Go、HawkGuard、DriveWorth、LinkPet 這幾個專案留下來的教訓：完成、放棄、資料、產品判斷、團隊協作，還有下一次不要再怎麼亂衝。"
 date: 2026-06-04
 tags: ["project", "reflection"]
 variant: "yellow"
 ---
+
+import ProjectShowcase from "~/components/ProjectShowcase.astro";
+import ProjectGallery from "~/components/ProjectGallery.astro";
+import tap2GoImage from "~/assets/projects/tap2go.png";
+import hawkGuardImage from "~/assets/projects/hawkguard.png";
+import driveWorthImage from "~/assets/projects/driveworth.png";
+import linkPet1 from "~/assets/projects/linkpet-1.png";
+import linkPet2 from "~/assets/projects/linkpet-2.png";
+import linkPet3 from "~/assets/projects/linkpet-3.png";
+import linkPet4 from "~/assets/projects/linkpet-4.png";
 
 我以前很容易把「有想法」誤會成「可以做」。
 
@@ -14,13 +24,19 @@ variant: "yellow"
 
 我想整理的不是「我做過哪些 App」，而是這些專案各自打醒了我什麼。
 
-Tap2Go 讓我知道完成一個小東西本身就是能力。DriveWorth 讓我知道資料不是最後再補的裝飾。HawkGuard 讓我知道市場上已經有人跑很遠時，不能只靠熱血硬追。LinkPet 則讓我知道，比賽型專案不是兩個人各做一半就好，而是要把問題、分工、文件和決策同步清楚。
+Tap2Go 讓我知道完成一個小東西本身就是能力。HawkGuard 讓我知道市場上已經有人跑很遠時，不能只靠熱血硬追。DriveWorth 讓我知道資料不是最後再補的裝飾。LinkPet 則讓我知道，比賽型專案不是兩個人各做一半就好，而是要把問題、分工、文件和決策同步清楚。
 
 它們有些完成了，有些放棄了，有些還沒真正落地。
 
 但它們都留下同一個提醒：<mark className="marker-yellow">專案不是從寫 code 開始，而是從你能不能清楚回答「為什麼要做、靠什麼做、做到哪裡算完成」開始。</mark>
 
 ## Tap2Go：完成本身就是一個技能
+
+<ProjectShowcase
+  src={tap2GoImage}
+  alt="Tap2Go 開發環境與 Flutter App 首頁畫面"
+  caption="Tap2Go UI 練習畫面 / Flutter + iOS Simulator"
+/>
 
 Tap2Go 是我早期練習 Flutter 時做的小作品，也是我人生第一個自己做出來、可以安裝到手機裡的 App。
 
@@ -44,41 +60,13 @@ Tap2Go 教我的不是怎麼做一個偉大的產品，而是怎麼把一個小�
 
 這個技能比我原本想像的更重要。
 
-## DriveWorth：我低估了資料
-
-DriveWorth，也就是駕值觀，原本想做的是買車前的養車成本評估工具。
-
-我自己的背景有汽車修護乙級和丙級，所以這個題目一開始對我來說很自然。很多人買車時只看車價，但真正壓力通常在買下去之後：保養、稅金、保險、油錢、耗材、輪胎、大保養、突發維修。
-
-我想做的不是單純記帳，而是一個購車前的決策工具。使用者輸入車款、年份、里程、油耗、保險、稅金、預期持有年限後，系統可以估算未來 3 到 5 年的總擁有成本，甚至提醒哪些里程點可能會遇到比較大的保養支出。
-
-想法本身不是沒有價值。問題是，我太早把注意力放在 App、API、畫面跟架構，太晚面對真正麻煩的地方：資料。
-
-資料從哪裡來？品質穩不穩？不同車款、年份、保養項目、零件價格、工資行情、稅金級距、保險條件能不能對齊？沒有足夠資料時，是不是只能靠一堆假設硬撐？
-
-<mark className="marker-orange">這些問題沒有先處理，後面寫再多 code 都像在漂亮地修補一個不穩的地基。</mark>
-
-尤其 DriveWorth 這種會影響金錢決策的工具，不能只算出一個看起來很精準的數字。它必須讓使用者知道每個估算背後的假設，也要提供可信、可調整、能幫助判斷的成本範圍。
-
-這才是它真正難的地方。
-
-所以 DriveWorth 後來停下來了。不是因為這個題目完全不能做，而是我當時還沒有把資料來源、資料結構、估算模型和可信度問題想清楚。
-
-DriveWorth 教我的結論很直接：<mark className="marker-lime">資料密集的題目，不是 UI 做出來就算有進度。</mark>
-
-如果資料是產品的底層，那我就不能把它當成最後再補的東西。
-
-下一次碰到這種題目，我應該先做的不是畫漂亮畫面，而是先問：
-
-- 最小可用資料集是什麼？
-- 哪些資料可以人工整理？
-- 哪些資料需要長期維護？
-- 使用者為什麼要相信這個結果？
-- 如果估算錯了，會造成什麼風險？
-
-這些問題聽起來不像寫程式，但它們就是產品能不能成立的核心。
-
 ## HawkGuard：市場不會等我慢慢想
+
+<ProjectShowcase
+  src={hawkGuardImage}
+  alt="HawkGuard 鷹眼守護防詐騙 App 介面"
+  caption="HawkGuard（鷹眼守護）防詐騙 App 原型"
+/>
 
 HawkGuard，也就是鷹眼守護，是我做過的一個反詐騙 App 原型。
 
@@ -115,7 +103,57 @@ HawkGuard 教我的不是「不要做防詐騙」，而是：<mark className="ma
 
 沒有回答這些問題前，功能列再多都只是讓專案看起來很熱鬧。
 
+## DriveWorth：我低估了資料
+
+<ProjectShowcase
+  src={driveWorthImage}
+  alt="DriveWorth 駕值觀的車輛養護成本評估介面"
+  caption="DriveWorth（駕值觀）專案介面"
+/>
+
+DriveWorth，也就是駕值觀，原本想做的是買車前的養車成本評估工具。
+
+我自己的背景有汽車修護乙級和丙級，所以這個題目一開始對我來說很自然。很多人買車時只看車價，但真正壓力通常在買下去之後：保養、稅金、保險、油錢、耗材、輪胎、大保養、突發維修。
+
+我想做的不是單純記帳，而是一個購車前的決策工具。使用者輸入車款、年份、里程、油耗、保險、稅金、預期持有年限後，系統可以估算未來 3 到 5 年的總擁有成本，甚至提醒哪些里程點可能會遇到比較大的保養支出。
+
+想法本身不是沒有價值。問題是，我太早把注意力放在 App、API、畫面跟架構，太晚面對真正麻煩的地方：資料。
+
+資料從哪裡來？品質穩不穩？不同車款、年份、保養項目、零件價格、工資行情、稅金級距、保險條件能不能對齊？沒有足夠資料時，是不是只能靠一堆假設硬撐？
+
+<mark className="marker-orange">這些問題沒有先處理，後面寫再多 code 都像在漂亮地修補一個不穩的地基。</mark>
+
+尤其 DriveWorth 這種會影響金錢決策的工具，不能只算出一個看起來很精準的數字。它必須讓使用者知道每個估算背後的假設，也要提供可信、可調整、能幫助判斷的成本範圍。
+
+這才是它真正難的地方。
+
+所以 DriveWorth 後來停下來了。不是因為這個題目完全不能做，而是我當時還沒有把資料來源、資料結構、估算模型和可信度問題想清楚。
+
+DriveWorth 教我的結論很直接：<mark className="marker-lime">資料密集的題目，不是 UI 做出來就算有進度。</mark>
+
+如果資料是產品的底層，那我就不能把它當成最後再補的東西。
+
+下一次碰到這種題目，我應該先做的不是畫漂亮畫面，而是先問：
+
+- 最小可用資料集是什麼？
+- 哪些資料可以人工整理？
+- 哪些資料需要長期維護？
+- 使用者為什麼要相信這個結果？
+- 如果估算錯了，會造成什麼風險？
+
+這些問題聽起來不像寫程式，但它們就是產品能不能成立的核心。
+
 ## LinkPet：比賽教我的團隊合作
+
+<ProjectGallery
+  items={[
+    { src: linkPet1, alt: "LinkPet 首頁與角色互動畫面" },
+    { src: linkPet2, alt: "LinkPet AR 陪伴模式畫面" },
+    { src: linkPet3, alt: "LinkPet 語音與文字對話畫面" },
+    { src: linkPet4, alt: "LinkPet 個人化設定畫面" },
+  ]}
+  caption="LinkPet App 介面概念：角色互動、AR 陪伴、對話與個人化設定"
+/>
 
 LinkPet 是我們為 2026 行動應用創新賽準備的 AR AI 陪伴 App。
 
@@ -167,11 +205,11 @@ LinkPet 教我的重點是：<mark className="marker-violet">團隊合作不是�
 
 ## 這幾個專案串起來，其實在講同一件事
 
-把 Tap2Go、DriveWorth、HawkGuard 和 LinkPet 放在一起看，我發現它們不是四個完全分開的故事。
+把 Tap2Go、HawkGuard、DriveWorth 和 LinkPet 放在一起看，我發現它們不是四個完全分開的故事。
 
 它們比較像是我學做專案時的幾個階段。
 
-Tap2Go 解決的是「我能不能把東西做出來」。DriveWorth 開始問「這個東西背後的資料撐不撐得住」。HawkGuard 讓我看到「市場和信任不是等我做好才開始存在」。LinkPet 則提醒我「一個想法要和別人一起做出來，需要清楚的溝通、分工和協作方式」。
+Tap2Go 解決的是「我能不能把東西做出來」。HawkGuard 讓我看到「市場和信任不是等我做好才開始存在」。DriveWorth 開始問「這個東西背後的資料撐不撐得住」。LinkPet 則提醒我「一個想法要和別人一起做出來，需要清楚的溝通、分工和協作方式」。
 
 以前我會把技術棧看得很重。
 
@@ -228,7 +266,7 @@ Flutter、FastAPI、Supabase、PostgreSQL、ARKit、AI、Docker，這些都很�
 
 我現在回頭看這些專案，不會覺得它們只是黑歷史。
 
-Tap2Go 讓我真的開始做 App。DriveWorth 讓我重視資料。HawkGuard 讓我重視市場和信任。LinkPet 讓我重視表達、分工和團隊協作。
+Tap2Go 讓我真的開始做 App。HawkGuard 讓我重視市場和信任。DriveWorth 讓我重視資料。LinkPet 讓我重視表達、分工和團隊協作。
 
 它們有些沒有完成，有些方向不夠清楚，有些真的太早開始寫。
 
