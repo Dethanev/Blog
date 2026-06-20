@@ -25,6 +25,28 @@ const focusAreas = [
   },
 ];
 
+const certifications = [
+  { name: "汽車修護乙級", category: "技術士證照", color: "auto", date: "2024-02-21", href: "https://www.1111edu.com.tw/licence_content.php?autono=898" },
+  { name: "汽車修護丙級", category: "技術士證照", color: "auto", date: "2023-06-26", href: "https://www.1111edu.com.tw/licence_content.php?autono=899" },
+  { name: "培力英檢", category: "語言能力", color: "language", date: "2025-07-01", href: "https://bestep.tw/About/page?id=f5bab1a4153247f6abd8ae0fad362643" },
+  { name: "HITCON 台灣駭客", category: "資安社群", color: "security", date: "2025-08-15", href: "https://hitcon.org/2025/zh-TW/" },
+  { name: "ITS Java", category: "程式與資訊", color: "it", date: "2026-05-20", href: "https://www.gotop.com.tw/certifications/itemdetails.aspx?subid=230" },
+  { name: "ITS Database", category: "程式與資訊", color: "it", date: "2026-06-10", href: "https://www.gotop.com.tw/certifications/itemdetails.aspx?subid=226" },
+  { name: "高斯數學競賽｜優等", category: "數學競賽", color: "math", date: "2025-12-03", href: "https://zh.wikipedia.org/zh-tw/%E5%8D%A1%E7%88%BE%C2%B7%E5%BC%97%E9%87%8C%E5%BE%B7%E9%87%8C%E5%B8%8C%C2%B7%E9%AB%98%E6%96%AF" },
+  { name: "高斯數學競賽｜甲等", category: "數學競賽", color: "math", date: "2025-06-04", href: "https://zh.wikipedia.org/zh-tw/%E5%8D%A1%E7%88%BE%C2%B7%E5%BC%97%E9%87%8C%E5%BE%B7%E9%87%8C%E5%B8%8C%C2%B7%E9%AB%98%E6%96%AF" },
+];
+
+const mosCertifications = [
+  { name: "Microsoft Office Specialist Associate 2019", date: "2025-11-18", href: "https://learn.microsoft.com/zh-tw/credentials/certifications/microsoft-office-specialist-associate-2019/" },
+  { name: "Microsoft Office Specialist Expert 2019", date: "2026-05-08", href: "https://learn.microsoft.com/zh-tw/credentials/certifications/microsoft-office-specialist-expert-2019/" },
+  { name: "Excel 2019 Associate", date: "2025-11-11", href: "https://learn.microsoft.com/zh-tw/credentials/certifications/mos-excel-2019/?practice-assessment-type=certification" },
+  { name: "Excel 2019 Expert", date: "2026-05-08", href: "https://learn.microsoft.com/zh-tw/credentials/certifications/mos-excel-expert-2019/?practice-assessment-type=certification" },
+  { name: "Word 2019 Associate", date: "2025-11-18", href: "https://learn.microsoft.com/zh-tw/credentials/certifications/mos-word-2019/?practice-assessment-type=certification" },
+  { name: "Word 2019 Expert", date: "2026-05-08", href: "https://learn.microsoft.com/zh-tw/credentials/certifications/mos-word-expert-2019/?practice-assessment-type=certification" },
+  { name: "PowerPoint 2019 Associate", date: "2025-11-11", href: "https://learn.microsoft.com/zh-tw/credentials/certifications/mos-powerpoint-2019/?practice-assessment-type=certification" },
+  { name: "PowerPoint 2016", date: "2025-05-19", href: "https://learn.microsoft.com/zh-tw/credentials/certifications/mos-powerpoint-2016/?practice-assessment-type=certification" },
+];
+
 const projects = [
   {
     name: "LinkPet",
@@ -275,6 +297,55 @@ const stackGroups = [
       </div>
     </div>
 
+    <div class="text-block certifications-section">
+      <h2 class="block-title">
+        <span class="badge pink">certifications</span>
+      </h2>
+      <p class="certifications-intro">
+        這些證照記錄了我在不同階段完成的學習成果；其中部分來自學校提供的培訓與獎學金機會。
+        它們不是技術能力的全部，但汽車修護、程式與工具能力，也確實影響了我後來選擇的專案方向。
+      </p>
+      <div class="certifications-grid" data-stagger>
+        {certifications.map((cert) => (
+          <a
+            href={cert.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`查看 ${cert.name} 官方介紹`}
+            class:list={["certification-card", "brutal-border-thick", "brutal-shadow-sm", `cert-${cert.color}`]}
+            data-stagger-item
+          >
+            <span class="certification-category">{cert.category}</span>
+            <div class="certification-info">
+              <h3>{cert.name}</h3>
+              <time datetime={cert.date}>{cert.date.replaceAll("-", "/")}</time>
+            </div>
+          </a>
+        ))}
+
+        <details class="mos-card brutal-border-thick brutal-shadow-sm" data-stagger-item>
+          <summary>
+            <span>
+              <span class="certification-category">辦公軟體</span>
+              <strong>Microsoft Office Specialist</strong>
+              <small>Associate &amp; Expert</small>
+            </span>
+            <span class="mos-toggle" aria-hidden="true">＋</span>
+          </summary>
+          <ul>
+            {mosCertifications.map((cert) => (
+              <li>
+                <a href={cert.href} target="_blank" rel="noopener noreferrer" aria-label={`查看 ${cert.name} 官方介紹`}>
+                  <span>{cert.name}</span>
+                  <time datetime={cert.date}>{cert.date.replaceAll("-", "/")}</time>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      </div>
+    </div>
+
     <div class="text-block">
       <h2 class="block-title">
         <span class="badge violet">direction</span>
@@ -486,6 +557,163 @@ const stackGroups = [
     width: 0.42rem;
     height: 0.42rem;
     background: var(--ink);
+  }
+
+  .certifications-intro {
+    max-width: 68ch;
+    margin-bottom: 1rem !important;
+  }
+  .certifications-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .certification-card {
+    min-height: 7rem;
+    padding: 0.75rem 0.9rem;
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    color: inherit !important;
+    text-decoration: none !important;
+    transition: transform 0.15s ease;
+  }
+  .certification-card.cert-auto,
+  .certifications-grid .certification-card.cert-auto:hover { background: var(--accent-2); }
+  .certification-card.cert-it,
+  .certifications-grid .certification-card.cert-it:hover { background: var(--accent-4); color: white !important; }
+  .certification-card.cert-math,
+  .certifications-grid .certification-card.cert-math:hover { background: var(--accent-1); }
+  .certification-card.cert-language,
+  .certifications-grid .certification-card.cert-language:hover { background: var(--accent-3); }
+  .certification-card.cert-security,
+  .certifications-grid .certification-card.cert-security:hover { background: var(--color-cyan); }
+  .certifications-grid .certification-card:hover { transform: translate(-2px, -2px); }
+  :global(.dark) .certification-card.cert-it,
+  :global(.dark) .certifications-grid .certification-card.cert-it:hover { color: var(--ink) !important; }
+  .certification-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.32rem;
+    width: fit-content;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    color: inherit;
+    opacity: 0.72;
+    text-transform: uppercase;
+  }
+  .certification-card h3,
+  .mos-card strong {
+    font-family: var(--font-display);
+    font-weight: 800;
+  }
+  .certification-card h3 {
+    font-size: 1.15rem;
+    line-height: 1.35;
+    margin: 0;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .certification-info {
+    position: absolute;
+    inset: 0;
+  }
+  .certification-info time {
+    position: absolute;
+    right: 0;
+    bottom: 0.75rem;
+    left: 0;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.2;
+    opacity: 0.75;
+  }
+  .mos-card li time {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.2;
+    opacity: 0.75;
+  }
+  .mos-card {
+    grid-column: 1 / -1;
+    background: var(--color-blue);
+    color: var(--color-ink);
+    overflow: hidden;
+  }
+  .mos-card summary {
+    min-height: 5.5rem;
+    padding: 0.75rem 0.9rem;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .mos-card summary::-webkit-details-marker { display: none; }
+  .mos-card summary > span:first-child {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .mos-card strong {
+    font-size: 1.2rem;
+    line-height: 1.35;
+  }
+  .mos-card small {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    opacity: 0.72;
+  }
+  .mos-toggle {
+    flex: 0 0 auto;
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1;
+    transition: transform 0.15s ease;
+  }
+  .mos-card[open] .mos-toggle { transform: rotate(45deg); }
+  .mos-card ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0 0.9rem 0.9rem;
+    list-style: none;
+  }
+  .mos-card li {
+    padding: 0;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+  .mos-card li a {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.45rem 0.55rem;
+    color: var(--ink);
+    text-decoration: none !important;
+    background: var(--paper);
+    transition: transform 0.15s ease;
+  }
+  .mos-card li a:hover {
+    background: var(--paper);
+    transform: translate(-2px, -2px);
   }
 
   .focus-grid {
@@ -702,9 +930,12 @@ const stackGroups = [
     .big-title .accent { box-sizing: border-box; max-width: 100%; }
     .fact-list { grid-template-columns: 1fr; }
     .focus-grid,
+    .certifications-grid,
     .contact {
       grid-template-columns: 1fr;
     }
+    .mos-card { grid-column: auto; }
+    .mos-card ul { grid-template-columns: 1fr; }
     .focus-card {
       min-height: auto;
       transform: none;
@@ -735,5 +966,8 @@ const stackGroups = [
   @media (min-width: 641px) and (max-width: 860px) {
     .big-title { font-size: 4.4rem; }
     .focus-grid { grid-template-columns: 1fr; }
+    .certifications-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .certification-card.cert-language,
+    .mos-card { grid-column: 1 / -1; }
   }
 </style>
