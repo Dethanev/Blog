@@ -36,9 +36,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin)
     <meta name="theme-color" content="#fff7e6" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="preload" href={bricolageFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
-    <link rel="preload" href={jetbrainsFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
-    <link rel="preload" href={unboundedFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
+    <link rel="preload" href={bricolageFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={jetbrainsFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={unboundedFont} as="font" type="font/woff2" crossorigin />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={fullTitle} />
