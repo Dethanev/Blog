@@ -6,6 +6,9 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: "https://dethanev.app",
   output: "static",
+  build: {
+    inlineStylesheets: "always",
+  },
   integrations: [mdx(), sitemap()],
 
   vite: {

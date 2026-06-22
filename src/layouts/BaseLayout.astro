@@ -5,6 +5,9 @@ import Footer from "~/components/Footer.astro";
 import ScrollProgress from "~/components/ScrollProgress.astro";
 import BackToTop from "~/components/BackToTop.astro";
 import { ClientRouter } from "astro:transitions";
+import bricolageFont from "@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url";
+import jetbrainsFont from "@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url";
+import unboundedFont from "@fontsource-variable/unbounded/files/unbounded-latin-wght-normal.woff2?url";
 
 interface Props {
   title?: string;
@@ -33,6 +36,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin)
     <meta name="theme-color" content="#fff7e6" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="preload" href={bricolageFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
+    <link rel="preload" href={jetbrainsFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
+    <link rel="preload" href={unboundedFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={fullTitle} />
@@ -61,10 +67,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin)
     <BackToTop />
 
     <script>
-      import { initLenis } from "~/scripts/lenis";
-      import { initScrollAnimations } from "~/scripts/scroll-anims";
-      import { initInteractions } from "~/scripts/interactions";
-
       function runInit(fn: () => void) {
         try {
           fn();
@@ -73,19 +75,32 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin)
         }
       }
 
-      function boot() {
+      async function boot() {
+        const [{ initInteractions }, { initLenis }, { initScrollAnimations }] = await Promise.all([
+          import("~/scripts/interactions"),
+          import("~/scripts/lenis"),
+          import("~/scripts/scroll-anims"),
+        ]);
         runInit(initInteractions);
         runInit(initLenis);
         runInit(initScrollAnimations);
       }
 
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", boot);
-      } else {
-        boot();
+      function scheduleBoot() {
+        if ("requestIdleCallback" in window) {
+          window.requestIdleCallback(() => void boot(), { timeout: 1500 });
+        } else {
+          window.setTimeout(() => void boot(), 1);
+        }
       }
 
-      document.addEventListener("astro:after-swap", boot);
+      if (document.readyState === "complete") {
+        scheduleBoot();
+      } else {
+        window.addEventListener("load", scheduleBoot, { once: true });
+      }
+
+      document.addEventListener("astro:after-swap", scheduleBoot);
     </script>
   </body>
 </html>
