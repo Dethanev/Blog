@@ -26,6 +26,29 @@ const {
 } = Astro.props;
 const fullTitle = title === DEFAULT_TITLE ? title : `${title} — ${SITE_NAME}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
+const fontFaceCSS = `
+  @font-face {
+    font-family: "Unbounded Variable";
+    font-style: normal;
+    font-display: optional;
+    font-weight: 200 900;
+    src: url("${unboundedFont}") format("woff2-variations");
+  }
+  @font-face {
+    font-family: "Bricolage Grotesque Variable";
+    font-style: normal;
+    font-display: optional;
+    font-weight: 200 800;
+    src: url("${bricolageFont}") format("woff2-variations");
+  }
+  @font-face {
+    font-family: "JetBrains Mono Variable";
+    font-style: normal;
+    font-display: optional;
+    font-weight: 100 800;
+    src: url("${jetbrainsFont}") format("woff2-variations");
+  }
+`;
 ---
 
 <!doctype html>
@@ -36,9 +59,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin)
     <meta name="theme-color" content="#fff7e6" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="preload" href={bricolageFont} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={jetbrainsFont} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={unboundedFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={bricolageFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
+    <link rel="preload" href={jetbrainsFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
+    <link rel="preload" href={unboundedFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
+    <style is:inline set:html={fontFaceCSS}></style>
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={fullTitle} />
