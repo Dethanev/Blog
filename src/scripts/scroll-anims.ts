@@ -19,6 +19,9 @@ function initScrollProgress() {
 }
 
 function initHeroPin() {
+  const isTouch = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+  if (isTouch) return;
+
   const hero = document.querySelector<HTMLElement>("[data-hero]");
   const title = document.querySelector<HTMLElement>("[data-hero-title]");
   if (!hero || !title) return;
