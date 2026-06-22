@@ -3,15 +3,12 @@
 @import "@fontsource-variable/unbounded/index.css";
 @import "@fontsource-variable/bricolage-grotesque/index.css";
 @import "@fontsource-variable/jetbrains-mono/index.css";
-@import "@fontsource/noto-sans-tc/400.css";
-@import "@fontsource/noto-sans-tc/700.css";
-@import "@fontsource/noto-sans-tc/900.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-display: "Unbounded Variable", "Noto Sans TC", system-ui, sans-serif;
-  --font-sans: "Bricolage Grotesque Variable", "Noto Sans TC", system-ui, sans-serif;
+  --font-display: "Unbounded Variable", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --font-sans: "Bricolage Grotesque Variable", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
 
   --color-bg: #fff7e6;
