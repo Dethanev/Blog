@@ -173,13 +173,12 @@ body {
 .prose-body h2::before {
   content: "";
   position: absolute;
-  left: -1.2em;
+  left: -0.6em;
   top: 0.55em;
   width: 0.8em;
   height: 0.45em;
   background: var(--accent-2);
   border: 2px solid var(--ink);
-  transform: rotate(-3deg);
 }
 .prose-body h3 {
   font-family: var(--font-display);
@@ -234,6 +233,29 @@ body {
   overflow-x: auto;
   font-size: 0.9rem;
   border-radius: 4px;
+}
+.prose-body table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin-block: 1.6em;
+  font-size: 0.95rem;
+}
+.prose-body table code:not(pre code) {
+  white-space: nowrap;
+}
+.prose-body th,
+.prose-body td {
+  border: 2px solid var(--ink);
+  padding: 0.65em 0.8em;
+  vertical-align: top;
+}
+.prose-body th {
+  background: var(--accent-2);
+  font-family: var(--font-display);
+  text-align: left;
 }
 .prose-body blockquote {
   margin-block: 1.4em;
