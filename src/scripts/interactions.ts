@@ -1,7 +1,10 @@
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { toggleTheme } from "./theme";
 import { initViewCounters } from "./views";
 import { getLenis } from "./lenis";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const CONFETTI_COLORS = ["#ff5c8a", "#fcec52", "#b8e14a", "#7b61ff", "#2de2e6"];
 
@@ -215,6 +218,16 @@ function initTagFilter() {
   const cards = document.querySelectorAll<HTMLElement>("[data-post-tags]");
   const count = document.querySelector<HTMLElement>("[data-filter-count]");
 
+  const releaseRevealState = (card: HTMLElement) => {
+    ScrollTrigger.getAll().forEach((trigger) => {
+      if (trigger.trigger === card) trigger.kill(false);
+    });
+    card.style.removeProperty("transform");
+    card.style.removeProperty("translate");
+    card.style.removeProperty("rotate");
+    card.style.removeProperty("scale");
+  };
+
   tags.forEach((t) => {
     t.addEventListener("click", () => {
       const target = t.dataset.categoryFilter ?? t.dataset.tagFilter ?? "all";
@@ -235,20 +248,41 @@ function initTagFilter() {
           : tagsAttr.split(",").includes(target));
         if (match) visibleCount += 1;
 
+        const wasHidden = card.hidden;
         gsap.killTweensOf(card);
-        if (match) card.hidden = false;
+        releaseRevealState(card);
+        card.style.pointerEvents = match ? "auto" : "none";
+
+        if (match) {
+          card.hidden = false;
+          const fadeIn = {
+            opacity: 1,
+            duration: 0.2,
+            ease: "power2.out",
+            clearProps: "opacity",
+          };
+          if (wasHidden) {
+            gsap.fromTo(card, { opacity: 0 }, fadeIn);
+          } else {
+            gsap.to(card, fadeIn);
+          }
+          return;
+        }
+
+        if (wasHidden) return;
+
         gsap.to(card, {
-          opacity: match ? 1 : 0,
-          scale: match ? 1 : 0.95,
-          duration: 0.25,
+          opacity: 0,
+          duration: 0.18,
           ease: "power2.out",
           onComplete: () => {
-            if (!match) card.hidden = true;
+            card.hidden = true;
+            gsap.set(card, { clearProps: "opacity" });
           },
         });
-        card.style.pointerEvents = match ? "auto" : "none";
       });
       if (count) count.textContent = String(visibleCount);
+      gsap.delayedCall(0.22, () => ScrollTrigger.refresh());
     });
   });
 }
