@@ -114,7 +114,7 @@ const fontFaceCSS = `
         if ("requestIdleCallback" in window) {
           window.requestIdleCallback(() => void boot(), { timeout: 1500 });
         } else {
-          window.setTimeout(() => void boot(), 1);
+          setTimeout(() => void boot(), 1);
         }
       }
 
