@@ -17,7 +17,7 @@ interface Props {
 }
 const SITE_NAME = "Dethanev 開發室";
 const DEFAULT_TITLE = "Dethanev 開發室";
-const DEFAULT_DESCRIPTION = "這裡是 Dethanev 的開發室，記錄把想法做成 App、Web 與後端服務的過程，也分享 side project、開發中遇到的問題、解法與一些生活碎念。";
+const DEFAULT_DESCRIPTION = "Dethanev 開發室是個人網站與開發筆記，記錄 App、Web、後端服務、side project、作品集與自架系統實作。";
 const {
   title = DEFAULT_TITLE,
   description = DEFAULT_DESCRIPTION,
@@ -26,6 +26,63 @@ const {
 } = Astro.props;
 const fullTitle = title === DEFAULT_TITLE ? title : `${title} — ${SITE_NAME}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
+const ogImageURL = new URL(ogImage, Astro.site ?? Astro.url.origin);
+const personId = new URL("/#person", Astro.site ?? Astro.url.origin).toString();
+const websiteId = new URL("/#website", Astro.site ?? Astro.url.origin).toString();
+const webpageId = `${canonicalURL.toString()}#webpage`;
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": personId,
+      name: "Dethanev",
+      url: new URL("/", Astro.site ?? Astro.url.origin).toString(),
+      sameAs: [
+        "https://github.com/Dethanev",
+        "https://wakatime.com/@Dethanev"
+      ],
+      knowsAbout: [
+        "Flutter",
+        "FastAPI",
+        "Docker",
+        "Supabase",
+        "PostgreSQL",
+        "Proxmox",
+        "Cloudflare Tunnel",
+        "Prometheus",
+        "Grafana",
+        "Astro",
+        "Web development",
+        "App development",
+        "Backend development"
+      ],
+      jobTitle: "Software Developer",
+      description: "Dethanev 專注 App、Web、後端服務、自架系統與資料驅動應用。"
+    },
+    {
+      "@type": "WebSite",
+      "@id": websiteId,
+      name: SITE_NAME,
+      alternateName: ["Dethanev", "Dethanev Blog", "Dethanev 開發室"],
+      url: new URL("/", Astro.site ?? Astro.url.origin).toString(),
+      inLanguage: "zh-Hant-TW",
+      publisher: { "@id": personId },
+      author: { "@id": personId }
+    },
+    {
+      "@type": "WebPage",
+      "@id": webpageId,
+      url: canonicalURL.toString(),
+      name: fullTitle,
+      description,
+      isPartOf: { "@id": websiteId },
+      author: { "@id": personId },
+      publisher: { "@id": personId },
+      inLanguage: "zh-Hant-TW"
+    }
+  ]
+};
 const fontFaceCSS = `
   @font-face {
     font-family: "Unbounded Variable";
@@ -65,11 +122,20 @@ const fontFaceCSS = `
     <style is:inline set:html={fontFaceCSS}></style>
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <meta name="author" content="Dethanev" />
+    <meta name="keywords" content="Dethanev, Dethanev 開發室, 個人網站, 作品集, 開發筆記, App 開發, Web 開發, 後端服務, Flutter, FastAPI, Astro" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageURL} />
     <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_TW" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     <ClientRouter />
     <script is:inline>
       (function () {
