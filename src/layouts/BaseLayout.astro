@@ -4,7 +4,6 @@ import Nav from "~/components/Nav.astro";
 import Footer from "~/components/Footer.astro";
 import ScrollProgress from "~/components/ScrollProgress.astro";
 import BackToTop from "~/components/BackToTop.astro";
-import { ClientRouter } from "astro:transitions";
 import bricolageFont from "@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url";
 import jetbrainsFont from "@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url";
 import unboundedFont from "@fontsource-variable/unbounded/files/unbounded-latin-wght-normal.woff2?url";
@@ -116,8 +115,6 @@ const fontFaceCSS = `
     <meta name="theme-color" content="#fff7e6" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="preload" href={bricolageFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
-    <link rel="preload" href={jetbrainsFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
     <link rel="preload" href={unboundedFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
     <style is:inline set:html={fontFaceCSS}></style>
     <title>{fullTitle}</title>
@@ -136,7 +133,6 @@ const fontFaceCSS = `
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-    <ClientRouter />
     <script is:inline>
       (function () {
         try {
@@ -165,32 +161,60 @@ const fontFaceCSS = `
         }
       }
 
-      async function boot() {
-        const [{ initInteractions }, { initLenis }, { initScrollAnimations }] = await Promise.all([
-          import("~/scripts/interactions"),
+      async function bootCore() {
+        const { initInteractions } = await import("~/scripts/interactions");
+        runInit(initInteractions);
+      }
+
+      async function bootMotion() {
+        const [{ initLenis }, { initScrollAnimations }] = await Promise.all([
           import("~/scripts/lenis"),
           import("~/scripts/scroll-anims"),
         ]);
-        runInit(initInteractions);
         runInit(initLenis);
         runInit(initScrollAnimations);
       }
 
-      function scheduleBoot() {
+      function scheduleCoreBoot() {
         if ("requestIdleCallback" in window) {
-          window.requestIdleCallback(() => void boot(), { timeout: 1500 });
+          window.requestIdleCallback(() => void bootCore(), { timeout: 1200 });
         } else {
-          setTimeout(() => void boot(), 1);
+          setTimeout(() => void bootCore(), 1);
         }
       }
 
-      if (document.readyState === "complete") {
-        scheduleBoot();
-      } else {
-        window.addEventListener("load", scheduleBoot, { once: true });
+      let motionBooted = false;
+      let motionTimer: number | undefined;
+      function scheduleMotionBoot() {
+        if (motionBooted) return;
+
+        const bootOnce = () => {
+          if (motionBooted) return;
+          motionBooted = true;
+          if (motionTimer !== undefined) window.clearTimeout(motionTimer);
+          window.removeEventListener("scroll", bootOnce);
+          window.removeEventListener("wheel", bootOnce);
+          window.removeEventListener("touchstart", bootOnce);
+          window.removeEventListener("keydown", bootOnce);
+          void bootMotion();
+        };
+
+        window.addEventListener("scroll", bootOnce, { once: true, passive: true });
+        window.addEventListener("wheel", bootOnce, { once: true, passive: true });
+        window.addEventListener("touchstart", bootOnce, { once: true, passive: true });
+        window.addEventListener("keydown", bootOnce, { once: true });
+        motionTimer = window.setTimeout(bootOnce, 12000);
       }
 
-      document.addEventListener("astro:after-swap", scheduleBoot);
+      if (document.readyState === "complete") {
+        scheduleCoreBoot();
+        scheduleMotionBoot();
+      } else {
+        window.addEventListener("load", () => {
+          scheduleCoreBoot();
+          scheduleMotionBoot();
+        }, { once: true });
+      }
     </script>
   </body>
 </html>

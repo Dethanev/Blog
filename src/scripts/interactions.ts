@@ -1,14 +1,36 @@
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { toggleTheme } from "./theme";
 import { initViewCounters } from "./views";
-import { getLenis } from "./lenis";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const CONFETTI_COLORS = ["#ff5c8a", "#fcec52", "#b8e14a", "#7b61ff", "#2de2e6"];
 
-function spawnConfetti(x: number, y: number, count = 8) {
+type MotionLibs = {
+  gsap: typeof import("gsap").gsap;
+  ScrollTrigger: typeof import("gsap/ScrollTrigger").ScrollTrigger;
+};
+
+type LenisHandle = {
+  scrollTo: (target: number) => void;
+};
+
+let motionLibs: Promise<MotionLibs> | null = null;
+
+function loadMotionLibs() {
+  motionLibs ??= Promise.all([
+    import("gsap"),
+    import("gsap/ScrollTrigger"),
+  ]).then(([{ gsap }, { ScrollTrigger }]) => {
+    gsap.registerPlugin(ScrollTrigger);
+    return { gsap, ScrollTrigger };
+  });
+  return motionLibs;
+}
+
+function getActiveLenis() {
+  return (window as Window & { __siteLenis?: LenisHandle | null }).__siteLenis ?? null;
+}
+
+async function spawnConfetti(x: number, y: number, count = 8) {
+  const { gsap } = await loadMotionLibs();
   const layer = ensureLayer();
   for (let i = 0; i < count; i++) {
     const piece = document.createElement("div");
@@ -53,25 +75,54 @@ function ensureLayer() {
   return layerEl;
 }
 
+let cleanupScrollProgress: (() => void) | null = null;
+
+function initScrollProgress() {
+  const bar = document.querySelector<HTMLElement>("[data-scroll-progress]");
+  if (!bar || bar.dataset.scrollProgressBound === "1") return;
+  bar.dataset.scrollProgressBound = "1";
+  cleanupScrollProgress?.();
+
+  const updateState = () => {
+    const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = scrollableHeight > 0 ? Math.min(window.scrollY / scrollableHeight, 1) : 0;
+    bar.style.transform = `scaleX(${progress})`;
+  };
+
+  window.addEventListener("scroll", updateState, { passive: true });
+  window.addEventListener("resize", updateState, { passive: true });
+  cleanupScrollProgress = () => {
+    window.removeEventListener("scroll", updateState);
+    window.removeEventListener("resize", updateState);
+  };
+  updateState();
+}
+
 function initStickers() {
   document.querySelectorAll<HTMLElement>("[data-sticker]").forEach((el) => {
-    el.addEventListener("click", (e) => {
-      const rect = el.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      gsap.fromTo(
-        el,
-        { rotate: 0 },
-        {
-          keyframes: [
-            { rotate: -18, duration: 0.08 },
-            { rotate: 14, duration: 0.08 },
-            { rotate: -8, duration: 0.08 },
-            { rotate: 0, duration: 0.12 },
-          ],
-        }
-      );
-      spawnConfetti(cx, cy, 8);
+    if (el.dataset.stickerBound === "1") return;
+    el.dataset.stickerBound = "1";
+
+    el.addEventListener("click", () => {
+      void (async () => {
+        const { gsap } = await loadMotionLibs();
+        const rect = el.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        gsap.fromTo(
+          el,
+          { rotate: 0 },
+          {
+            keyframes: [
+              { rotate: -18, duration: 0.08 },
+              { rotate: 14, duration: 0.08 },
+              { rotate: -8, duration: 0.08 },
+              { rotate: 0, duration: 0.12 },
+            ],
+          }
+        );
+        await spawnConfetti(cx, cy, 8);
+      })();
     });
   });
 }
@@ -97,58 +148,61 @@ function initClap() {
     let combo = 0;
     let comboTimer: number | null = null;
 
-    btn.addEventListener("click", (e) => {
-      const isCombo = combo > 0;
-      const increment = isCombo ? 2 : 1;
+    btn.addEventListener("click", () => {
+      void (async () => {
+        const { gsap } = await loadMotionLibs();
+        const isCombo = combo > 0;
+        const increment = isCombo ? 2 : 1;
 
-      count += increment;
-      combo = isCombo ? combo + 1 : 1;
-      if (counter) counter.textContent = String(count);
+        count += increment;
+        combo = isCombo ? combo + 1 : 1;
+        if (counter) counter.textContent = String(count);
 
-      gsap.fromTo(
-        btn,
-        { scale: 1, x: 0, y: 0 },
-        {
-          keyframes: [
-            { scale: 0.92, x: 2, y: 2, duration: 0.08 },
-            { scale: 1, x: 0, y: 0, duration: 0.18, ease: "back.out(3)" },
-          ],
+        gsap.fromTo(
+          btn,
+          { scale: 1, x: 0, y: 0 },
+          {
+            keyframes: [
+              { scale: 0.92, x: 2, y: 2, duration: 0.08 },
+              { scale: 1, x: 0, y: 0, duration: 0.18, ease: "back.out(3)" },
+            ],
+          }
+        );
+
+        const rect = btn.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + 6;
+        await spawnConfetti(cx, cy, 5);
+
+        if (isCombo) {
+          const comboEl = document.createElement("div");
+          comboEl.textContent = `+${increment} COMBO!`;
+          comboEl.style.cssText = `
+            position: fixed; left: ${cx}px; top: ${cy}px;
+            transform: translate(-50%, 0);
+            font-family: var(--font-display, system-ui); font-weight: 900;
+            font-size: 1.1rem; color: var(--ink, #000);
+            background: var(--accent-2, yellow);
+            border: 3px solid var(--ink, #000);
+            padding: 4px 10px;
+            pointer-events: none; z-index: 9998;
+          `;
+          ensureLayer().appendChild(comboEl);
+          gsap.to(comboEl, {
+            y: -50,
+            opacity: 0,
+            rotate: Math.random() * 14 - 7,
+            duration: 0.9,
+            ease: "power2.out",
+            onComplete: () => comboEl.remove(),
+          });
         }
-      );
 
-      const rect = btn.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + 6;
-      spawnConfetti(cx, cy, 5);
-
-      if (isCombo) {
-        const comboEl = document.createElement("div");
-        comboEl.textContent = `+${increment} COMBO!`;
-        comboEl.style.cssText = `
-          position: fixed; left: ${cx}px; top: ${cy}px;
-          transform: translate(-50%, 0);
-          font-family: var(--font-display, system-ui); font-weight: 900;
-          font-size: 1.1rem; color: var(--ink, #000);
-          background: var(--accent-2, yellow);
-          border: 3px solid var(--ink, #000);
-          padding: 4px 10px;
-          pointer-events: none; z-index: 9998;
-        `;
-        ensureLayer().appendChild(comboEl);
-        gsap.to(comboEl, {
-          y: -50,
-          opacity: 0,
-          rotate: Math.random() * 14 - 7,
-          duration: 0.9,
-          ease: "power2.out",
-          onComplete: () => comboEl.remove(),
-        });
-      }
-
-      if (comboTimer) window.clearTimeout(comboTimer);
-      comboTimer = window.setTimeout(() => {
-        combo = 0;
-      }, 1200);
+        if (comboTimer) window.clearTimeout(comboTimer);
+        comboTimer = window.setTimeout(() => {
+          combo = 0;
+        }, 1200);
+      })();
     });
   });
 }
@@ -156,6 +210,8 @@ function initClap() {
 function initLogoEgg() {
   const logo = document.querySelector<HTMLElement>("[data-logo]");
   if (!logo) return;
+  if (logo.dataset.logoEggBound === "1") return;
+  logo.dataset.logoEggBound = "1";
   let taps = 0;
   let tapTimer: number | null = null;
   logo.addEventListener("click", (e) => {
@@ -167,47 +223,50 @@ function initLogoEgg() {
 
     if (taps >= 5) {
       e.preventDefault();
-      taps = 0;
-      const stickers = document.querySelectorAll<HTMLElement>("[data-sticker]");
-      stickers.forEach((el) => {
-        const dx = (Math.random() - 0.5) * 80;
-        const dy = (Math.random() - 0.5) * 60;
-        const rot = (Math.random() - 0.5) * 90;
-        gsap.to(el, {
-          x: dx,
-          y: dy,
-          rotate: rot,
-          duration: 0.6,
-          ease: "elastic.out(1, 0.5)",
-          yoyo: true,
-          repeat: 1,
+      void (async () => {
+        const { gsap } = await loadMotionLibs();
+        taps = 0;
+        const stickers = document.querySelectorAll<HTMLElement>("[data-sticker]");
+        stickers.forEach((el) => {
+          const dx = (Math.random() - 0.5) * 80;
+          const dy = (Math.random() - 0.5) * 60;
+          const rot = (Math.random() - 0.5) * 90;
+          gsap.to(el, {
+            x: dx,
+            y: dy,
+            rotate: rot,
+            duration: 0.6,
+            ease: "elastic.out(1, 0.5)",
+            yoyo: true,
+            repeat: 1,
+          });
         });
-      });
 
-      const banner = document.createElement("div");
-      banner.textContent = "✦  YOU FOUND IT  ✦";
-      banner.style.cssText = `
-        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-4deg);
-        font-family: var(--font-display, system-ui); font-weight: 900; font-size: 2rem;
-        background: var(--accent-1, hotpink);
-        color: var(--ink, #000);
-        border: 4px solid var(--ink, #000);
-        padding: 14px 28px;
-        box-shadow: 8px 8px 0 0 var(--ink, #000);
-        pointer-events: none; z-index: 9999;
-      `;
-      document.body.appendChild(banner);
-      gsap.fromTo(
-        banner,
-        { scale: 0.3, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)" }
-      );
-      gsap.to(banner, {
-        opacity: 0,
-        duration: 0.4,
-        delay: 1.6,
-        onComplete: () => banner.remove(),
-      });
+        const banner = document.createElement("div");
+        banner.textContent = "✦  YOU FOUND IT  ✦";
+        banner.style.cssText = `
+          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-4deg);
+          font-family: var(--font-display, system-ui); font-weight: 900; font-size: 2rem;
+          background: var(--accent-1, hotpink);
+          color: var(--ink, #000);
+          border: 4px solid var(--ink, #000);
+          padding: 14px 28px;
+          box-shadow: 8px 8px 0 0 var(--ink, #000);
+          pointer-events: none; z-index: 9999;
+        `;
+        document.body.appendChild(banner);
+        gsap.fromTo(
+          banner,
+          { scale: 0.3, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)" }
+        );
+        gsap.to(banner, {
+          opacity: 0,
+          duration: 0.4,
+          delay: 1.6,
+          onComplete: () => banner.remove(),
+        });
+      })();
     }
   });
 }
@@ -218,7 +277,7 @@ function initTagFilter() {
   const cards = document.querySelectorAll<HTMLElement>("[data-post-tags]");
   const count = document.querySelector<HTMLElement>("[data-filter-count]");
 
-  const releaseRevealState = (card: HTMLElement) => {
+  const releaseRevealState = (card: HTMLElement, ScrollTrigger: MotionLibs["ScrollTrigger"]) => {
     ScrollTrigger.getAll().forEach((trigger) => {
       if (trigger.trigger === card) trigger.kill(false);
     });
@@ -229,60 +288,66 @@ function initTagFilter() {
   };
 
   tags.forEach((t) => {
+    if (t.dataset.filterBound === "1") return;
+    t.dataset.filterBound = "1";
+
     t.addEventListener("click", () => {
-      const target = t.dataset.categoryFilter ?? t.dataset.tagFilter ?? "all";
-      const isCategoryFilter = t.dataset.categoryFilter !== undefined;
-      tags.forEach((x) => {
-        const active = x === t;
-        x.classList.toggle("is-active", active);
-        x.setAttribute("aria-pressed", String(active));
-      });
-
-      gsap.fromTo(t, { scale: 1 }, { scale: 1.1, duration: 0.12, yoyo: true, repeat: 1 });
-
-      let visibleCount = 0;
-      cards.forEach((card) => {
-        const tagsAttr = card.dataset.postTags ?? "";
-        const match = target === "all" || (isCategoryFilter
-          ? card.dataset.postCategory === target
-          : tagsAttr.split(",").includes(target));
-        if (match) visibleCount += 1;
-
-        const wasHidden = card.hidden;
-        gsap.killTweensOf(card);
-        releaseRevealState(card);
-        card.style.pointerEvents = match ? "auto" : "none";
-
-        if (match) {
-          card.hidden = false;
-          const fadeIn = {
-            opacity: 1,
-            duration: 0.2,
-            ease: "power2.out",
-            clearProps: "opacity",
-          };
-          if (wasHidden) {
-            gsap.fromTo(card, { opacity: 0 }, fadeIn);
-          } else {
-            gsap.to(card, fadeIn);
-          }
-          return;
-        }
-
-        if (wasHidden) return;
-
-        gsap.to(card, {
-          opacity: 0,
-          duration: 0.18,
-          ease: "power2.out",
-          onComplete: () => {
-            card.hidden = true;
-            gsap.set(card, { clearProps: "opacity" });
-          },
+      void (async () => {
+        const { gsap, ScrollTrigger } = await loadMotionLibs();
+        const target = t.dataset.categoryFilter ?? t.dataset.tagFilter ?? "all";
+        const isCategoryFilter = t.dataset.categoryFilter !== undefined;
+        tags.forEach((x) => {
+          const active = x === t;
+          x.classList.toggle("is-active", active);
+          x.setAttribute("aria-pressed", String(active));
         });
-      });
-      if (count) count.textContent = String(visibleCount);
-      gsap.delayedCall(0.22, () => ScrollTrigger.refresh());
+
+        gsap.fromTo(t, { scale: 1 }, { scale: 1.1, duration: 0.12, yoyo: true, repeat: 1 });
+
+        let visibleCount = 0;
+        cards.forEach((card) => {
+          const tagsAttr = card.dataset.postTags ?? "";
+          const match = target === "all" || (isCategoryFilter
+            ? card.dataset.postCategory === target
+            : tagsAttr.split(",").includes(target));
+          if (match) visibleCount += 1;
+
+          const wasHidden = card.hidden;
+          gsap.killTweensOf(card);
+          releaseRevealState(card, ScrollTrigger);
+          card.style.pointerEvents = match ? "auto" : "none";
+
+          if (match) {
+            card.hidden = false;
+            const fadeIn = {
+              opacity: 1,
+              duration: 0.2,
+              ease: "power2.out",
+              clearProps: "opacity",
+            };
+            if (wasHidden) {
+              gsap.fromTo(card, { opacity: 0 }, fadeIn);
+            } else {
+              gsap.to(card, fadeIn);
+            }
+            return;
+          }
+
+          if (wasHidden) return;
+
+          gsap.to(card, {
+            opacity: 0,
+            duration: 0.18,
+            ease: "power2.out",
+            onComplete: () => {
+              card.hidden = true;
+              gsap.set(card, { clearProps: "opacity" });
+            },
+          });
+        });
+        if (count) count.textContent = String(visibleCount);
+        gsap.delayedCall(0.22, () => ScrollTrigger.refresh());
+      })();
     });
   });
 }
@@ -313,7 +378,7 @@ function initBackToTop() {
 
   button.addEventListener("click", () => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const activeLenis = getLenis();
+    const activeLenis = getActiveLenis();
 
     if (!reduceMotion) {
       button.classList.remove("is-jumping");
@@ -331,6 +396,7 @@ function initBackToTop() {
 
 export function initInteractions() {
   initViewCounters();
+  initScrollProgress();
   initStickers();
   initThemeToggle();
   initClap();

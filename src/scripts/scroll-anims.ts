@@ -3,21 +3,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function initScrollProgress() {
-  const bar = document.querySelector<HTMLElement>("[data-scroll-progress]");
-  if (!bar) return;
-  gsap.to(bar, {
-    scaleX: 1,
-    ease: "none",
-    scrollTrigger: {
-      trigger: document.documentElement,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: true,
-    },
-  });
-}
-
 function initHeroPin() {
   const hero = document.querySelector<HTMLElement>("[data-hero]");
   const title = document.querySelector<HTMLElement>("[data-hero-title]");
@@ -188,7 +173,6 @@ export function initScrollAnimations() {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce) return;
 
-  initScrollProgress();
   initHeroPin();
   initMarquees();
   initRevealCards();
