@@ -6,12 +6,18 @@ import { formatDate } from "~/lib/utils";
 const updated = new Date("2026-06-19");
 
 const items = [
-  { color: "pink", title: "目前主線", body: "先把這個 Blog 做好。持續整理內容、版面與閱讀體驗，讓它真正成為能長期累積的作品。" },
-  { color: "yellow", title: "作品整理", body: "把做過的專案整理成更完整的作品紀錄，說清楚想法、技術選擇，以及過程中學到的事。" },
-  { color: "lime", title: "正在寫", body: "把做過的專案、踩過的坑與技術筆記整理成文章，不只留下結果，也說清楚過程和判斷。" },
-  { color: "violet", title: "正在調整", body: "繼續改善 Blog 的首頁、文章內容與互動細節，讓作品資訊更一致，也更容易閱讀。" },
-  { color: "pink", title: "最近完成", body: "通過 ITS Java 與 ITS Database 認證，替程式設計與資料庫基礎留下一個階段性的學習紀錄。" },
-  { color: "yellow", title: "接下來", body: "暫時不急著開新的大專案。先把 Blog 和既有內容收尾，再決定下一個真正值得投入的方向。" },
+  { color: "pink", layout: "feature", status: "active", title: "主線任務", body: "先把 Blog 做到我自己願意一直更新。不是只弄漂亮，而是讓文章、作品和紀錄都能被好好放進來。" },
+  { color: "pink", layout: "normal", status: "done", title: "剛完成", body: "通過 ITS Java 和 ITS Database。算是幫程式基礎留一個階段性紀錄，也提醒自己不要只會做畫面。" },
+  { color: "violet", layout: "normal", status: "tuning", title: "還在調", body: "首頁、About、Now 這些頁面都還在微調。現在比較在意的是讀起來順，不只是元素很多。" },
+  { color: "yellow", layout: "normal", status: "sorting", title: "正在補完", body: "把以前做過的專案重新整理。很多東西當時有做出來，但現在要補上思路、技術選擇和踩坑紀錄。" },
+  { color: "lime", layout: "normal", status: "drafting", title: "最近在寫", body: "整理開發筆記和專案文章。目標不是寫很長，而是把當時怎麼判斷、怎麼修正講清楚。" },
+  { color: "yellow", layout: "normal", status: "next", title: "下一步", body: "暫時不急著開新坑。先把 Blog 和作品整理到能展示，再決定下一個真的值得投入的專案。" },
+];
+
+const mainTimeline = [
+  { step: "now", state: "current", title: "版面先順", lines: ["首頁 / About / Now", "先調到好讀"] },
+  { step: "next", state: "queued", title: "補足脈絡", lines: ["目的、取捨、踩坑", "一起補齊"] },
+  { step: "goal", state: "queued", title: "可以展示", lines: ["打開就能看懂", "我做過什麼"] },
 ];
 ---
 
@@ -31,11 +37,41 @@ const items = [
       </p>
     </header>
 
-    <div class="grid" data-stagger>
+    <div class="grid">
       {items.map((it) => (
-        <div class:list={["card", "brutal-border-thick", "brutal-shadow", `card-${it.color}`]} data-stagger-item>
-          <h3 class="card-title">{it.title}</h3>
-          <p class="card-body">{it.body}</p>
+        <div class:list={["card", "brutal-border-thick", "brutal-shadow", `card-${it.color}`, `card-${it.layout}`]}>
+          {it.layout === "feature" ? (
+            <>
+              <div class="feature-head">
+                <span class="card-status">{it.status}</span>
+                <div class="card-copy">
+                  <h3 class="card-title">{it.title}</h3>
+                  <p class="card-body">{it.body}</p>
+                </div>
+              </div>
+              <ol class="timeline" aria-label="主線任務時間軸">
+                {mainTimeline.map((point) => (
+                  <li data-state={point.state}>
+                    <span class="timeline-step">{point.step}</span>
+                    <strong>{point.title}</strong>
+                    <p>
+                      {point.lines.map((line) => (
+                        <span>{line}</span>
+                      ))}
+                    </p>
+                  </li>
+                ))}
+              </ol>
+            </>
+          ) : (
+            <>
+              <span class="card-status">{it.status}</span>
+              <div class="card-copy">
+                <h3 class="card-title">{it.title}</h3>
+                <p class="card-body">{it.body}</p>
+              </div>
+            </>
+          )}
         </div>
       ))}
     </div>
@@ -101,13 +137,27 @@ const items = [
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 1.5rem;
     margin-bottom: 3rem;
   }
   .card {
-    padding: 1.2rem 1.4rem 1.4rem;
+    grid-column: span 2;
+    min-height: 11rem;
+    padding: 1rem 1.15rem 1.2rem;
+    display: grid;
+    align-content: space-between;
+    gap: 1.25rem;
     transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .card-feature {
+    grid-column: span 4;
+    grid-row: span 2;
+    min-height: 23.5rem;
+    padding: 1.35rem 1.5rem 1.55rem;
+    align-content: stretch;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 1.6rem;
   }
   .card:hover {
     transform: translate(-3px, -3px);
@@ -119,15 +169,162 @@ const items = [
   .card-lime { background: var(--accent-3); }
   .card-violet { background: var(--accent-4); color: white; }
   :global(.dark) .card-violet { color: var(--ink); }
+  .card-status {
+    width: fit-content;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    padding: 0.22rem 0.45rem;
+  }
+  .card-copy {
+    display: grid;
+    gap: 0.55rem;
+  }
   .card-title {
     font-family: var(--font-display);
     font-weight: 800;
     font-size: 1.2rem;
-    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+  .card-feature .card-title {
+    font-size: clamp(2.35rem, 4.4vw, 3.25rem);
+    line-height: 1;
+  }
+  .feature-head {
+    display: grid;
+    gap: 1.05rem;
+    align-content: start;
   }
   .card-body {
     font-size: 0.95rem;
     line-height: 1.55;
+    max-width: 38rem;
+    text-wrap: pretty;
+  }
+  .card-feature .card-body {
+    font-size: 1.02rem;
+    max-width: 36rem;
+  }
+  .timeline {
+    align-self: end;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+    margin: 0;
+    padding: 1.15rem 0 0;
+    list-style: none;
+  }
+  .timeline::before,
+  .timeline::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 3px;
+  }
+  .timeline::before {
+    right: 0;
+    background: color-mix(in oklab, var(--ink) 28%, transparent);
+  }
+  .timeline::after {
+    width: 42%;
+    background: var(--ink);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--ink) 10%, transparent);
+  }
+  .timeline li {
+    position: relative;
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+    padding: 0.85rem 0.75rem 0.8rem;
+    background: color-mix(in oklab, var(--paper) 68%, transparent);
+    border: 2px solid var(--ink);
+    transform: translateY(var(--lift, 0));
+    transition: transform 0.18s ease, background-color 0.18s ease;
+  }
+  .timeline li::before {
+    content: "";
+    position: absolute;
+    top: -1.57rem;
+    left: 0.75rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    z-index: 1;
+  }
+  .timeline li[data-state="current"] {
+    --lift: -0.28rem;
+    background: var(--paper);
+    box-shadow: 5px 5px 0 0 var(--ink);
+  }
+  .timeline li[data-state="current"]::before {
+    background: var(--accent-2);
+  }
+  .timeline li[data-state="queued"] {
+    opacity: 0.86;
+  }
+  .timeline-step {
+    width: fit-content;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+  .timeline li[data-state="current"] .timeline-step {
+    opacity: 1;
+  }
+  .timeline strong {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+  .timeline p {
+    display: grid;
+    gap: 0.1rem;
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    text-wrap: balance;
+  }
+  .timeline p span {
+    display: block;
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .timeline::after {
+      background:
+        repeating-linear-gradient(
+          90deg,
+          var(--ink) 0 14px,
+          color-mix(in oklab, var(--ink) 45%, transparent) 14px 18px
+        );
+      background-size: 32px 100%;
+      animation: timeline-flow 1.6s linear infinite;
+    }
+    .timeline li[data-state="current"]::before {
+      animation: timeline-pulse 1.8s ease-in-out infinite;
+    }
+  }
+
+  @keyframes timeline-flow {
+    to { background-position-x: 32px; }
+  }
+
+  @keyframes timeline-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.18); }
   }
 
   .footnote {
@@ -139,7 +336,54 @@ const items = [
     margin: 0 auto;
   }
 
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card,
+    .card-feature {
+      grid-column: auto;
+      grid-row: auto;
+      min-height: auto;
+    }
+    .card-feature { grid-column: 1 / -1; }
+    .card-feature .card-copy {
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+    }
+  }
+
   @media (max-width: 640px) {
     .grid { grid-template-columns: 1fr; }
+    .card,
+    .card-feature {
+      grid-column: auto;
+      grid-row: auto;
+      min-height: auto;
+    }
+    .timeline {
+      grid-template-columns: 1fr;
+      gap: 0.9rem;
+      padding: 0 0 0 1rem;
+    }
+    .timeline::before,
+    .timeline::after {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 3px;
+      height: auto;
+    }
+    .timeline::after {
+      height: 42%;
+    }
+    .timeline li {
+      padding-top: 0;
+      padding-left: 0.35rem;
+      transform: translateX(var(--lift, 0));
+    }
+    .timeline li[data-state="current"] { --lift: 0.28rem; }
+    .timeline li::before {
+      top: 0.15rem;
+      left: -1.55rem;
+    }
   }
 </style>
