@@ -34,10 +34,9 @@ const looped = Array.from({ length: 4 }, () => items).flat();
     width: 100%;
   }
   .marquee-ink { background: var(--ink); color: var(--bg); }
-  .marquee-pink { background: var(--accent-1); color: var(--ink); }
-  .marquee-yellow { background: var(--accent-2); color: var(--ink); }
-  .marquee-violet { background: var(--accent-4); color: white; }
-  :global(.dark) .marquee-violet { color: var(--ink); }
+  .marquee-pink { background: var(--accent-pink); color: var(--text-on-pink); border-color: var(--ink); }
+  .marquee-yellow { background: var(--accent-yellow); color: var(--text-on-yellow); border-color: var(--ink); }
+  .marquee-violet { background: var(--accent-violet); color: var(--text-on-violet); border-color: var(--ink); }
   .marquee-inner {
     display: inline-flex;
     min-width: max-content;
@@ -54,9 +53,9 @@ const looped = Array.from({ length: 4 }, () => items).flat();
     padding-inline: 1.4rem;
   }
   .sep {
-    color: var(--accent-2);
+    color: var(--accent-yellow);
     padding-inline: 0.8rem;
   }
-  .marquee-yellow .sep { color: var(--accent-1); }
-  .marquee-pink .sep { color: var(--ink); }
+  .marquee-yellow .sep { color: var(--accent-pink); }
+  .marquee-pink .sep { color: var(--text-on-pink); }
 </style>

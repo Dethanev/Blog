@@ -31,36 +31,60 @@
   --ink: var(--color-ink);
   --paper: var(--color-paper);
   --muted: var(--color-muted);
-  --shadow: var(--shadow-brutal);
-  --shadow-sm: var(--shadow-brutal-sm);
-  --shadow-lg: var(--shadow-brutal-lg);
-  --accent-1: var(--color-pink);
-  --accent-2: var(--color-yellow);
-  --accent-3: var(--color-lime);
-  --accent-4: var(--color-violet);
+  --accent-pink: var(--color-pink);
+  --accent-yellow: var(--color-yellow);
+  --accent-lime: var(--color-lime);
+  --accent-violet: var(--color-violet);
+  --accent-cyan: var(--color-cyan);
+  --accent-blue: var(--color-blue);
+  --text-on-pink: #180b10;
+  --text-on-yellow: #1b1805;
+  --text-on-lime: #101806;
+  --text-on-violet: #0a0a0f;
+  --text-on-cyan: #071718;
+  --text-on-blue: #07151c;
+  --shadow-color: var(--color-ink);
+  --shadow: 6px 6px 0 0 var(--shadow-color);
+  --shadow-sm: 3px 3px 0 0 var(--shadow-color);
+  --shadow-lg: 10px 10px 0 0 var(--shadow-color);
+  --focus-ring: #5f46df;
+  --marker-strength: 82%;
 }
 
 .dark {
   --bg: #0e0e14;
-  --ink: #f4ecd8;
+  --ink: #eee6d3;
   --paper: #1a1a22;
   --muted: #9a9aab;
-  --accent-1: #ff7bb3;
-  --accent-2: #ffe45c;
-  --accent-3: #2de2e6;
-  --accent-4: #9d8aff;
-  --shadow: 6px 6px 0 0 #ffe45c;
-  --shadow-sm: 3px 3px 0 0 #ffe45c;
-  --shadow-lg: 10px 10px 0 0 #ffe45c;
+  --accent-pink: #e76f9f;
+  --accent-yellow: #d9c34f;
+  --accent-lime: #91bd5c;
+  --accent-violet: #8777dc;
+  --accent-cyan: #45b9bd;
+  --accent-blue: #4d9fc7;
+  --text-on-pink: #211016;
+  --text-on-yellow: #1c1806;
+  --text-on-lime: #101a08;
+  --text-on-violet: #140e24;
+  --text-on-cyan: #07191a;
+  --text-on-blue: #081720;
+  --shadow-color: #75688e;
+  --focus-ring: #f5da57;
+  --marker-strength: 64%;
 }
 
 html {
   background: var(--bg);
   color: var(--ink);
+  color-scheme: light;
   font-family: var(--font-sans);
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -99,8 +123,8 @@ body {
 }
 
 ::selection {
-  background: var(--accent-2);
-  color: var(--ink);
+  background: var(--accent-yellow);
+  color: var(--text-on-yellow);
 }
 
 @utility brutal-border {
@@ -129,19 +153,12 @@ body {
 @utility brutal-hover {
   &:hover {
     transform: translate(-3px, -3px);
-    box-shadow: 9px 9px 0 0 var(--ink);
+    box-shadow: 9px 9px 0 0 var(--shadow-color);
   }
   &:active {
     transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0 0 var(--ink);
+    box-shadow: 2px 2px 0 0 var(--shadow-color);
   }
-}
-
-.dark .brutal-hover:hover {
-  box-shadow: 9px 9px 0 0 var(--accent-2);
-}
-.dark .brutal-hover:active {
-  box-shadow: 2px 2px 0 0 var(--accent-2);
 }
 
 @utility heading-stroke {
@@ -177,7 +194,7 @@ body {
   top: 0.55em;
   width: 0.8em;
   height: 0.45em;
-  background: var(--accent-2);
+  background: var(--accent-yellow);
   border: 2px solid var(--ink);
   transform: rotate(-3deg);
 }
@@ -192,19 +209,20 @@ body {
   color: var(--ink);
   text-decoration: underline;
   text-decoration-thickness: 3px;
-  text-decoration-color: var(--accent-1);
+  text-decoration-color: var(--accent-pink);
   text-underline-offset: 4px;
 }
 .prose-body a:hover {
-  background: var(--accent-2);
+  background: var(--accent-yellow);
+  color: var(--text-on-yellow);
 }
 .prose-body mark {
-  --marker: #2de2e6;
+  --marker: var(--accent-cyan);
   color: inherit;
   background:
     linear-gradient(
       to top,
-      color-mix(in oklab, var(--marker) 82%, transparent) 0 42%,
+      color-mix(in oklab, var(--marker) var(--marker-strength), transparent) 0 42%,
       transparent 42% 100%
     );
   padding: 0 0.08em;
@@ -212,15 +230,16 @@ body {
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
-.prose-body mark.marker-cyan { --marker: #2de2e6; }
-.prose-body mark.marker-pink { --marker: #ff5c8a; }
-.prose-body mark.marker-yellow { --marker: #fcec52; }
-.prose-body mark.marker-lime { --marker: #b8e14a; }
+.prose-body mark.marker-cyan { --marker: var(--accent-cyan); }
+.prose-body mark.marker-pink { --marker: var(--accent-pink); }
+.prose-body mark.marker-yellow { --marker: var(--accent-yellow); }
+.prose-body mark.marker-lime { --marker: var(--accent-lime); }
 .prose-body mark.marker-orange { --marker: #ff9f1c; }
-.prose-body mark.marker-violet { --marker: #9d8aff; }
+.prose-body mark.marker-violet { --marker: var(--accent-violet); }
 .prose-body code:not(pre code) {
   font-family: var(--font-mono);
-  background: var(--accent-2);
+  background: var(--accent-yellow);
+  color: var(--text-on-yellow);
   border: 2px solid var(--ink);
   padding: 0.05em 0.4em;
   font-size: 0.9em;
@@ -244,7 +263,7 @@ body {
   background:
     linear-gradient(
       to top,
-      color-mix(in oklab, var(--accent-2) 82%, transparent) 0 48%,
+      color-mix(in oklab, var(--accent-yellow) var(--marker-strength), transparent) 0 48%,
       transparent 48% 100%
     );
   padding: 0 0.08em;
@@ -262,7 +281,7 @@ body {
 }
 .prose-body ul li::before {
   content: "▸";
-  color: var(--accent-1);
+  color: var(--accent-pink);
   position: absolute;
   left: -1.2em;
   font-weight: 900;
@@ -279,7 +298,7 @@ body {
   inset: 0;
   pointer-events: none;
   z-index: 9999;
-  background: var(--accent-2);
+  background: var(--accent-yellow);
   clip-path: circle(0% at var(--x, 50%) var(--y, 50%));
   transition: clip-path 0.55s cubic-bezier(0.7, 0, 0.3, 1);
 }

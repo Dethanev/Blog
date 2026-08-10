@@ -64,16 +64,16 @@ const isActive = (href: string) =>
     user-select: none;
   }
   .logo-mark {
-    background: var(--accent-1);
+    background: var(--accent-pink);
+    color: var(--text-on-pink);
     border: 2.5px solid var(--ink);
-    box-shadow: 3px 3px 0 0 var(--ink);
+    box-shadow: 3px 3px 0 0 var(--shadow-color);
     padding: 0.1em 0.4em;
     font-weight: 900;
     font-size: 1.1rem;
     transform: rotate(0deg);
     display: inline-block;
   }
-  :global(.dark) .logo-mark { box-shadow: 3px 3px 0 0 var(--accent-2); }
   .logo-text {
     font-family: var(--font-mono);
     font-weight: 700;
@@ -100,15 +100,20 @@ const isActive = (href: string) =>
     transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
   }
   .link:hover {
-    background: var(--accent-2);
+    background: var(--accent-yellow);
+    color: var(--text-on-yellow);
     border-color: var(--ink);
     transform: translate(-1px, -1px);
   }
   .link.active {
-    background: var(--accent-1);
+    background: var(--accent-pink);
+    color: var(--text-on-pink);
     border-color: var(--ink);
   }
-  :global(.dark) .link.active { background: var(--accent-2); }
+  :global(.dark) .link.active {
+    background: var(--accent-yellow);
+    color: var(--text-on-yellow);
+  }
   .actions { display: flex; align-items: center; gap: 0.6rem; }
 
   @media (max-width: 720px) {

@@ -32,8 +32,9 @@ const { start = 0 } = Astro.props;
     display: inline-flex;
     align-items: center;
     gap: 0.8rem;
-    background: var(--accent-2);
-    color: var(--ink);
+    background: var(--accent-yellow);
+    color: var(--text-on-yellow);
+    border-color: var(--ink);
     padding: 0.85rem 1.6rem;
     font-family: var(--font-display);
     font-weight: 900;
@@ -44,20 +45,18 @@ const { start = 0 } = Astro.props;
   }
   .clap:hover {
     transform: translate(-3px, -3px);
-    box-shadow: 9px 9px 0 0 var(--ink);
-  }
-  :global(.dark) .clap:hover {
-    box-shadow: 9px 9px 0 0 var(--accent-1);
+    box-shadow: 9px 9px 0 0 var(--shadow-color);
   }
   .clap .emoji {
     font-size: 1.5rem;
     transform: rotate(-12deg);
     display: inline-block;
-    color: var(--accent-1);
-    -webkit-text-stroke: 1.5px var(--ink);
+    color: var(--accent-pink);
+    -webkit-text-stroke: 1.5px var(--text-on-yellow);
   }
   .clap .count {
     background: var(--paper);
+    color: var(--ink);
     border: 2px solid var(--ink);
     padding: 0.05em 0.6em;
     font-family: var(--font-mono);

@@ -39,15 +39,19 @@ const Tag = href ? "a" : "span";
     line-height: 1.4;
   }
   .tag-pill:hover {
-    background: var(--accent-2);
+    background: var(--accent-yellow);
+    color: var(--text-on-yellow);
+    border-color: var(--ink);
     transform: translate(-1px, -1px);
   }
   button.tag-pill.is-active {
-    background: var(--accent-1);
+    background: var(--accent-pink);
+    color: var(--text-on-pink);
+    border-color: var(--ink);
     transform: rotate(-1.5deg);
   }
   :global(.dark) button.tag-pill.is-active {
-    background: var(--accent-2);
-    color: var(--ink);
+    background: var(--accent-yellow);
+    color: var(--text-on-yellow);
   }
 </style>

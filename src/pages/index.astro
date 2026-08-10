@@ -200,7 +200,7 @@ const marqueeItems = [
     position: relative;
   }
   .q-mark {
-    color: var(--accent-1);
+    color: var(--accent-pink);
     font-size: 2em;
     line-height: 0;
     margin-right: 0.1em;
@@ -212,8 +212,8 @@ const marqueeItems = [
   }
   .cta {
     display: inline-block;
-    background: var(--accent-2);
-    color: var(--ink);
+    background: var(--accent-yellow);
+    color: var(--text-on-yellow);
     text-decoration: none;
     padding: 0.7rem 1.2rem;
     font-family: var(--font-display);
@@ -258,10 +258,10 @@ const marqueeItems = [
     font-weight: 700;
     color: var(--ink);
     text-decoration: none;
-    border-bottom: 3px solid var(--accent-1);
+    border-bottom: 3px solid var(--accent-pink);
     padding-bottom: 2px;
   }
-  .see-all:hover { background: var(--accent-2); }
+  .see-all:hover { background: var(--accent-yellow); color: var(--text-on-yellow); }
 
   .posts-grid {
     display: grid;
@@ -287,9 +287,8 @@ const marqueeItems = [
   }
   .stack-item:hover {
     transform: translate(-2px, -2px);
-    box-shadow: 5px 5px 0 0 var(--ink);
+    box-shadow: 5px 5px 0 0 var(--shadow-color);
   }
-  :global(.dark) .stack-item:hover { box-shadow: 5px 5px 0 0 var(--accent-2); }
   .stack-name {
     font-family: var(--font-display);
     font-weight: 800;
@@ -356,15 +355,14 @@ const marqueeItems = [
     white-space: nowrap;
   }
   .h-title .accent {
-    background: var(--accent-1);
-    color: var(--ink);
+    background: var(--accent-pink);
+    color: var(--text-on-pink);
     border: 4px solid var(--ink);
-    box-shadow: 6px 6px 0 0 var(--ink);
+    box-shadow: 6px 6px 0 0 var(--shadow-color);
     padding: 0.08em 0.15em;
     box-sizing: border-box;
     margin-top: 0.1em;
   }
-  :global(.dark) .h-title .accent { box-shadow: 6px 6px 0 0 var(--accent-2); }
   .h-subtitle {
     margin: 0;
     color: var(--muted);
@@ -386,8 +384,8 @@ const marqueeItems = [
     text-transform: uppercase;
     letter-spacing: 0.08em;
     border: 3px solid var(--ink);
-    background: var(--accent-2);
-    color: var(--ink);
+    background: var(--accent-yellow);
+    color: var(--text-on-yellow);
     padding: 0.45rem 0.9rem;
     align-self: stretch;
     transform: rotate(1deg);
@@ -413,16 +411,14 @@ const marqueeItems = [
   }
   .h-card:hover {
     transform: rotate(0deg) translate(-4px, -4px);
-    box-shadow: 10px 10px 0 0 var(--ink);
+    box-shadow: 10px 10px 0 0 var(--shadow-color);
     z-index: 2;
   }
-  :global(.dark) .h-card:hover { box-shadow: 10px 10px 0 0 var(--accent-2); }
   .h-card.card-paper { background: var(--paper); }
-  .h-card.card-pink { background: var(--accent-1); }
-  .h-card.card-yellow { background: var(--accent-2); }
-  .h-card.card-lime { background: var(--accent-3); }
-  .h-card.card-violet { background: var(--accent-4); color: white; }
-  :global(.dark) .h-card.card-violet { color: var(--ink); }
+  .h-card.card-pink { background: var(--accent-pink); color: var(--text-on-pink); border-color: var(--ink); }
+  .h-card.card-yellow { background: var(--accent-yellow); color: var(--text-on-yellow); border-color: var(--ink); }
+  .h-card.card-lime { background: var(--accent-lime); color: var(--text-on-lime); border-color: var(--ink); }
+  .h-card.card-violet { background: var(--accent-violet); color: var(--text-on-violet); border-color: var(--ink); }
 
   .h-num {
     font-family: var(--font-mono);
@@ -435,7 +431,7 @@ const marqueeItems = [
     align-self: flex-start;
     border: 2px solid var(--ink);
   }
-  :global(.dark) .h-num { background: var(--accent-2); color: var(--ink); }
+  :global(.dark) .h-num { background: var(--accent-yellow); color: var(--text-on-yellow); border-color: var(--ink); }
   .h-card-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
   .h-name {
     font-family: var(--font-display);
@@ -458,7 +454,7 @@ const marqueeItems = [
     border-top: 2px dashed color-mix(in oklab, var(--ink) 30%, transparent);
     padding-top: 0.9rem;
   }
-  .card-violet .h-card-foot { border-color: color-mix(in oklab, white 35%, transparent); }
+  .card-violet .h-card-foot { border-color: color-mix(in oklab, currentColor 35%, transparent); }
   .h-tag {
     font-family: var(--font-mono);
     font-weight: 700;
@@ -491,7 +487,7 @@ const marqueeItems = [
     font-family: var(--font-display);
     font-weight: 900;
   }
-  :global(.dark) .h-end { background: var(--accent-2); color: var(--ink); }
+  :global(.dark) .h-end { background: var(--accent-yellow); color: var(--text-on-yellow); }
   .h-end .end-arrow { font-size: 4rem; line-height: 1; }
   .h-end .end-text { font-size: 1.4rem; line-height: 1.2; letter-spacing: -0.02em; }
 
@@ -521,11 +517,11 @@ const marqueeItems = [
   }
   .h-progress-fill {
     height: 100%;
-    background: var(--accent-1);
+    background: var(--accent-pink);
     transform-origin: left center;
     transform: scaleX(0);
   }
-  :global(.dark) .h-progress-fill { background: var(--accent-2); }
+  :global(.dark) .h-progress-fill { background: var(--accent-yellow); }
 
   @media (max-width: 720px) {
     .h-showcase {
@@ -594,8 +590,8 @@ const marqueeItems = [
     padding: 0 1.5rem;
   }
   .cta-inner {
-    background: var(--accent-4);
-    color: white;
+    background: var(--accent-violet);
+    color: var(--text-on-violet);
     padding: 2rem 2.5rem;
     display: flex;
     justify-content: space-between;
@@ -608,20 +604,16 @@ const marqueeItems = [
   .cta-inner:hover,
   .cta-inner:focus-visible {
     transform: translate(-4px, -4px);
-    box-shadow: 12px 12px 0 0 var(--ink);
+    box-shadow: 12px 12px 0 0 var(--shadow-color);
   }
   .cta-inner:active {
     transform: translate(2px, 2px);
-    box-shadow: 4px 4px 0 0 var(--ink);
+    box-shadow: 4px 4px 0 0 var(--shadow-color);
   }
   .cta-inner:focus-visible {
-    outline: 4px solid var(--accent-2);
+    outline: 4px solid var(--focus-ring);
     outline-offset: 4px;
   }
-  :global(.dark) .cta-inner { color: var(--ink); }
-  :global(.dark) .cta-inner:hover,
-  :global(.dark) .cta-inner:focus-visible { box-shadow: 12px 12px 0 0 var(--accent-2); }
-  :global(.dark) .cta-inner:active { box-shadow: 4px 4px 0 0 var(--accent-2); }
   .cta-text {
     font-family: var(--font-display);
     font-weight: 800;
@@ -632,7 +624,7 @@ const marqueeItems = [
     color: inherit;
     text-decoration: underline;
     text-decoration-thickness: 4px;
-    text-decoration-color: var(--accent-2);
+    text-decoration-color: var(--accent-yellow);
     text-underline-offset: 4px;
   }
   .cta-arrow {
@@ -648,9 +640,9 @@ const marqueeItems = [
     flex: 0 0 auto;
     padding: 0.5rem 1rem;
     border: 3px solid var(--ink);
-    background: #fff;
+    background: var(--paper);
     color: var(--ink);
-    box-shadow: 4px 4px 0 0 var(--ink);
+    box-shadow: 4px 4px 0 0 var(--shadow-color);
     font-family: var(--font-display);
     font-size: 1rem;
     font-weight: 800;
@@ -660,18 +652,18 @@ const marqueeItems = [
   .cta-inner:hover .live-badge,
   .cta-inner:focus-visible .live-badge {
     transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 0 var(--ink);
+    box-shadow: 6px 6px 0 0 var(--shadow-color);
   }
   .cta-inner:active .live-badge {
     transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 0 var(--ink);
+    box-shadow: 1px 1px 0 0 var(--shadow-color);
   }
   .live-dot {
     width: 0.6rem;
     height: 0.6rem;
     border: 2px solid var(--ink);
     border-radius: 50%;
-    background: var(--accent-1);
+    background: var(--accent-pink);
     animation: live-pulse 1.8s ease-in-out infinite;
   }
   @keyframes live-pulse {

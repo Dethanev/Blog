@@ -181,8 +181,8 @@ function initClap() {
             position: fixed; left: ${cx}px; top: ${cy}px;
             transform: translate(-50%, 0);
             font-family: var(--font-display, system-ui); font-weight: 900;
-            font-size: 1.1rem; color: var(--ink, #000);
-            background: var(--accent-2, yellow);
+            font-size: 1.1rem; color: var(--text-on-yellow, #1b1805);
+            background: var(--accent-yellow, #fcec52);
             border: 3px solid var(--ink, #000);
             padding: 4px 10px;
             pointer-events: none; z-index: 9998;
@@ -247,11 +247,11 @@ function initLogoEgg() {
         banner.style.cssText = `
           position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-4deg);
           font-family: var(--font-display, system-ui); font-weight: 900; font-size: 2rem;
-          background: var(--accent-1, hotpink);
-          color: var(--ink, #000);
+          background: var(--accent-pink, #ff5c8a);
+          color: var(--text-on-pink, #180b10);
           border: 4px solid var(--ink, #000);
           padding: 14px 28px;
-          box-shadow: 8px 8px 0 0 var(--ink, #000);
+          box-shadow: 8px 8px 0 0 var(--shadow-color, #0a0a0f);
           pointer-events: none; z-index: 9999;
         `;
         document.body.appendChild(banner);

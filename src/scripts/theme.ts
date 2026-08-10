@@ -1,16 +1,37 @@
 type Theme = "light" | "dark";
 
 const KEY = "theme";
+const THEME_COLORS: Record<Theme, string> = {
+  light: "#fff7e6",
+  dark: "#0e0e14",
+};
 
 function preferred(): Theme {
-  const stored = localStorage.getItem(KEY) as Theme | null;
-  if (stored === "light" || stored === "dark") return stored;
+  try {
+    const stored = localStorage.getItem(KEY) as Theme | null;
+    if (stored === "light" || stored === "dark") return stored;
+  } catch {
+    // Browsers may block storage; light remains the deterministic fallback.
+  }
   return "light";
 }
 
 function apply(theme: Theme) {
-  document.documentElement.classList.toggle("dark", theme === "dark");
-  document.documentElement.dataset.theme = theme;
+  const root = document.documentElement;
+  root.classList.toggle("dark", theme === "dark");
+  root.dataset.theme = theme;
+  root.style.colorScheme = theme;
+
+  document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+    ?.setAttribute("content", THEME_COLORS[theme]);
+
+  document.querySelectorAll<HTMLElement>("[data-theme-toggle]").forEach((toggle) => {
+    const isDark = theme === "dark";
+    const label = isDark ? "切換為日間模式" : "切換為夜間模式";
+    toggle.setAttribute("aria-pressed", String(isDark));
+    toggle.setAttribute("aria-label", label);
+    toggle.setAttribute("title", label);
+  });
 }
 
 export function initTheme() {
@@ -20,11 +41,22 @@ export function initTheme() {
 export function toggleTheme(originX?: number, originY?: number): Theme {
   const next: Theme = document.documentElement.classList.contains("dark") ? "light" : "dark";
 
+  try {
+    localStorage.setItem(KEY, next);
+  } catch {
+    // The theme still changes for the current page when storage is unavailable.
+  }
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    apply(next);
+    return next;
+  }
+
   const stamp = document.createElement("div");
   stamp.className = "theme-stamp";
   if (originX !== undefined) stamp.style.setProperty("--x", `${originX}px`);
   if (originY !== undefined) stamp.style.setProperty("--y", `${originY}px`);
-  stamp.style.background = next === "dark" ? "#0e0e14" : "#fcec52";
+  stamp.style.background = THEME_COLORS[next];
   document.body.appendChild(stamp);
 
   requestAnimationFrame(() => {
@@ -33,7 +65,6 @@ export function toggleTheme(originX?: number, originY?: number): Theme {
 
   window.setTimeout(() => {
     apply(next);
-    localStorage.setItem(KEY, next);
   }, 280);
 
   window.setTimeout(() => {

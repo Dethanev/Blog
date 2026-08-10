@@ -97,14 +97,14 @@ const friends = [
     font-size: 0.95rem;
     padding: 0.25em 0.8em;
     border: 3px solid var(--bg);
-    background: var(--accent-1);
-    color: var(--ink);
+    background: var(--accent-pink);
+    color: var(--text-on-pink);
     text-transform: uppercase;
   }
   :global(.dark) .badge { border-color: var(--ink); }
-  .badge-pink { background: var(--accent-1); }
-  .badge-violet { background: var(--accent-4); color: var(--color-ink); }
-  .badge-yellow { background: var(--accent-2); }
+  .badge-pink { background: var(--accent-pink); color: var(--text-on-pink); }
+  .badge-violet { background: var(--accent-violet); color: var(--text-on-violet); }
+  .badge-yellow { background: var(--accent-yellow); color: var(--text-on-yellow); }
   .sign-block .badge-yellow {
     box-sizing: border-box;
     width: var(--footer-badge-width);
@@ -134,8 +134,8 @@ const friends = [
   }
   .contact-row:hover, .friend-row:hover {
     padding-inline: 0.4rem;
-    background: var(--accent-2);
-    color: var(--ink);
+    background: var(--accent-yellow);
+    color: var(--text-on-yellow);
   }
   .contact-label, .friend-name {
     font-family: var(--font-display);

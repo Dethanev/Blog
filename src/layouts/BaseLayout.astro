@@ -113,6 +113,7 @@ const fontFaceCSS = `
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#fff7e6" />
+    <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonicalURL} />
     <link rel="preload" href={unboundedFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
@@ -135,11 +136,17 @@ const fontFaceCSS = `
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     <script is:inline>
       (function () {
+        var root = document.documentElement;
+        var t = "light";
         try {
-          var t = localStorage.getItem("theme") || "light";
-          if (t === "dark") document.documentElement.classList.add("dark");
-          document.documentElement.dataset.theme = t;
+          var stored = localStorage.getItem("theme");
+          if (stored === "light" || stored === "dark") t = stored;
         } catch (e) {}
+        root.classList.toggle("dark", t === "dark");
+        root.dataset.theme = t;
+        root.style.colorScheme = t;
+        var themeColor = document.querySelector('meta[name="theme-color"]');
+        if (themeColor) themeColor.setAttribute("content", t === "dark" ? "#0e0e14" : "#fff7e6");
       })();
     </script>
   </head>

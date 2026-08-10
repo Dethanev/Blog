@@ -4,7 +4,9 @@
   type="button"
   class="theme-toggle brutal-border brutal-shadow-sm brutal-hover"
   data-theme-toggle
-  aria-label="切換主題"
+  aria-label="切換為夜間模式"
+  aria-pressed="false"
+  title="切換為夜間模式"
 >
   <svg class="icon sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <circle cx="12" cy="12" r="4" />
@@ -28,6 +30,10 @@
     position: relative;
   }
   .icon { position: absolute; }
+  .theme-toggle:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 4px;
+  }
   .sun { display: none; }
   .moon { display: block; }
   :global(.dark) .sun { display: block; }

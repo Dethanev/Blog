@@ -78,8 +78,12 @@ import Sticker from "./Sticker.astro";
     background: var(--paper);
     padding: 0.25em 0.7em;
   }
-  .kicker-block--alt { background: var(--accent-2); }
-  .kicker-dots { color: var(--accent-1); }
+  .kicker-block--alt {
+    background: var(--accent-yellow);
+    color: var(--text-on-yellow);
+    border-color: var(--ink);
+  }
+  .kicker-dots { color: var(--accent-pink); }
   .hero-title {
     font-family: var(--font-display);
     font-weight: 900;
@@ -94,8 +98,8 @@ import Sticker from "./Sticker.astro";
   }
   .hero-title em {
     font-style: normal;
-    background: var(--accent-1);
-    color: var(--ink);
+    background: var(--accent-pink);
+    color: var(--text-on-pink);
     -webkit-text-stroke: 0;
     padding: 0.12em 0.15em 0.08em;
     line-height: 1;
@@ -105,12 +109,10 @@ import Sticker from "./Sticker.astro";
     border: none;
     box-shadow:
       0 0 0 4px var(--ink),
-      10px 10px 0 0 var(--ink);
+      10px 10px 0 0 var(--shadow-color);
   }
   :global(.dark) .hero-title em {
-    box-shadow:
-      0 0 0 4px var(--ink),
-      10px 10px 0 0 var(--accent-2);
+    color: var(--ink);
   }
   .hero-sub {
     max-width: 38ch;

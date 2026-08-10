@@ -430,16 +430,19 @@ const stackGroups = [
   }
   .big-title .line { display: block; }
   .big-title .accent {
-    background: var(--accent-1);
-    color: var(--ink);
+    background: var(--accent-pink);
+    color: var(--text-on-pink);
     border: 4px solid var(--ink);
-    box-shadow: 8px 8px 0 0 var(--ink);
+    box-shadow: 8px 8px 0 0 var(--shadow-color);
     padding: 0.08em 0.15em 0.1em;
     display: inline-block;
     transform: rotate(0deg);
     margin-top: 0.1em;
   }
-  :global(.dark) .big-title .accent { box-shadow: 8px 8px 0 0 var(--accent-2); }
+  :global(.dark) .big-title .accent {
+    color: var(--ink);
+    border-color: var(--ink);
+  }
   .hero-copy {
     width: min(100%, 760px);
     margin-top: 2.15rem;
@@ -459,8 +462,8 @@ const stackGroups = [
     line-height: 1;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--ink);
-    background: var(--accent-2);
+    color: var(--text-on-yellow);
+    background: var(--accent-yellow);
     border: 2px solid var(--ink);
     padding: 0.28rem 0.42rem;
     text-align: center;
@@ -483,18 +486,17 @@ const stackGroups = [
     font-family: var(--font-display);
     font-weight: 900;
     font-size: 0.85rem;
-    background: var(--accent-1);
-    color: var(--ink);
+    background: var(--accent-pink);
+    color: var(--text-on-pink);
     border: 3px solid var(--ink);
     padding: 0.2em 0.7em;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     transform: none;
   }
-  .badge.yellow { background: var(--accent-2); }
-  .badge.violet { background: var(--accent-4); color: white; }
-  :global(.dark) .badge.violet { color: var(--ink); }
-  .badge.pink { background: var(--accent-1); }
+  .badge.yellow { background: var(--accent-yellow); color: var(--text-on-yellow); }
+  .badge.violet { background: var(--accent-violet); color: var(--text-on-violet); }
+  .badge.pink { background: var(--accent-pink); color: var(--text-on-pink); }
 
   .fact-list {
     display: grid;
@@ -524,8 +526,9 @@ const stackGroups = [
   }
 
   .wakatime-card {
-    background: var(--accent-3);
-    color: var(--ink);
+    background: var(--accent-lime);
+    color: var(--text-on-lime);
+    border-color: var(--ink);
     padding: 1.25rem 1.4rem;
     display: flex;
     align-items: center;
@@ -578,17 +581,19 @@ const stackGroups = [
     color: var(--ink);
     text-decoration: underline;
     text-decoration-thickness: 3px;
-    text-decoration-color: var(--accent-1);
+    text-decoration-color: var(--accent-pink);
     text-underline-offset: 3px;
   }
-  .text-block a:hover { background: var(--accent-2); }
+  .text-block a:hover { background: var(--accent-yellow); color: var(--text-on-yellow); }
 
   .intro-section {
     display: grid;
     gap: 1.35rem;
   }
   .note {
-    background: var(--accent-3);
+    background: var(--accent-lime);
+    color: var(--text-on-lime);
+    border-color: var(--ink);
     padding: 1.15rem 1.25rem;
     box-sizing: border-box;
     display: grid;
@@ -645,18 +650,16 @@ const stackGroups = [
     transition: transform 0.15s ease;
   }
   .certification-card.cert-auto,
-  .certifications-grid .certification-card.cert-auto:hover { background: var(--accent-2); }
+  .certifications-grid .certification-card.cert-auto:hover { background: var(--accent-yellow); color: var(--text-on-yellow) !important; border-color: var(--ink); }
   .certification-card.cert-it,
-  .certifications-grid .certification-card.cert-it:hover { background: var(--accent-4); color: white !important; }
+  .certifications-grid .certification-card.cert-it:hover { background: var(--accent-violet); color: var(--text-on-violet) !important; border-color: var(--ink); }
   .certification-card.cert-math,
-  .certifications-grid .certification-card.cert-math:hover { background: var(--accent-1); }
+  .certifications-grid .certification-card.cert-math:hover { background: var(--accent-pink); color: var(--text-on-pink) !important; border-color: var(--ink); }
   .certification-card.cert-language,
-  .certifications-grid .certification-card.cert-language:hover { background: var(--accent-3); }
+  .certifications-grid .certification-card.cert-language:hover { background: var(--accent-lime); color: var(--text-on-lime) !important; border-color: var(--ink); }
   .certification-card.cert-security,
-  .certifications-grid .certification-card.cert-security:hover { background: var(--color-cyan); }
+  .certifications-grid .certification-card.cert-security:hover { background: var(--accent-cyan); color: var(--text-on-cyan) !important; border-color: var(--ink); }
   .certifications-grid .certification-card:hover { transform: translate(-2px, -2px); }
-  :global(.dark) .certification-card.cert-it,
-  :global(.dark) .certifications-grid .certification-card.cert-it:hover { color: var(--ink) !important; }
   .certification-category {
     display: inline-flex;
     align-items: center;
@@ -712,8 +715,9 @@ const stackGroups = [
   }
   .mos-card {
     grid-column: 1 / -1;
-    background: var(--color-blue);
-    color: var(--color-ink);
+    background: var(--accent-blue);
+    color: var(--text-on-blue);
+    border-color: var(--ink);
     overflow: hidden;
   }
   .mos-card summary {
@@ -797,7 +801,9 @@ const stackGroups = [
     transform-origin: center center;
   }
   .focus-card:nth-child(2) {
-    background: var(--accent-2);
+    background: var(--accent-yellow);
+    color: var(--text-on-yellow);
+    border-color: var(--ink);
   }
   .focus-card h3,
   .project-head h3,
@@ -834,7 +840,7 @@ const stackGroups = [
     transition: background-color 0.15s ease, transform 0.15s ease;
   }
   .project-row:hover {
-    background: color-mix(in oklab, var(--accent-2) 28%, transparent);
+    background: color-mix(in oklab, var(--accent-yellow) 28%, transparent);
     transform: translateX(0.25rem);
     text-decoration: none !important;
   }
@@ -855,8 +861,8 @@ const stackGroups = [
     font-family: var(--font-mono);
     font-size: 0.78rem;
     text-transform: uppercase;
-    background: var(--accent-2);
-    color: var(--ink);
+    background: var(--accent-yellow);
+    color: var(--text-on-yellow);
     border: 2px solid var(--ink);
     padding: 0.1rem 0.45rem;
     white-space: nowrap;
@@ -920,15 +926,17 @@ const stackGroups = [
     text-decoration: none !important;
     background: var(--paper);
     border: 2px solid var(--ink);
-    box-shadow: 2px 2px 0 0 var(--ink);
+    box-shadow: 2px 2px 0 0 var(--shadow-color);
     padding: 0.16rem 0.5rem;
     transform: rotate(var(--tilt));
     transition: transform 0.15s ease, background-color 0.15s ease;
   }
-  .stack-group div a:nth-child(4n + 2) { background: color-mix(in oklab, var(--accent-2) 42%, var(--paper)); }
-  .stack-group div a:nth-child(4n + 3) { background: color-mix(in oklab, var(--accent-3) 34%, var(--paper)); }
+  .stack-group div a:nth-child(4n + 2) { background: color-mix(in oklab, var(--accent-yellow) 42%, var(--paper)); }
+  .stack-group div a:nth-child(4n + 3) { background: color-mix(in oklab, var(--accent-lime) 34%, var(--paper)); }
   .stack-group div a:hover {
-    background: var(--accent-2);
+    background: var(--accent-yellow);
+    color: var(--text-on-yellow);
+    border-color: var(--ink);
     transform: translate(-2px, -2px) rotate(var(--tilt));
   }
 
@@ -943,12 +951,13 @@ const stackGroups = [
     content: "▸";
     position: absolute;
     left: 0;
-    color: var(--accent-1);
+    color: var(--accent-pink);
     font-weight: 900;
   }
   .list strong {
     font-family: var(--font-mono);
-    background: var(--accent-2);
+    background: var(--accent-yellow);
+    color: var(--text-on-yellow);
     border: 2px solid var(--ink);
     padding: 0.05em 0.4em;
     font-size: 0.85em;
@@ -956,8 +965,9 @@ const stackGroups = [
   }
 
   .contact {
-    background: var(--accent-1);
-    color: var(--ink);
+    background: var(--accent-pink);
+    color: var(--text-on-pink);
+    border-color: var(--ink);
     padding: 1.3rem 1.5rem;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -976,13 +986,14 @@ const stackGroups = [
     max-width: 62ch;
   }
   .contact a {
-    color: var(--ink);
+    color: inherit;
     text-decoration: underline;
     text-decoration-thickness: 3px;
     text-underline-offset: 3px;
   }
   .contact-link {
     background: var(--paper);
+    color: var(--ink) !important;
     padding: 0.65rem 0.95rem;
     font-family: var(--font-display);
     font-weight: 800;
