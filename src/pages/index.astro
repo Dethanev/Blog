@@ -69,9 +69,8 @@ const marqueeItems = [
   <!-- Latest posts -->
   <section class="section">
     <header class="section-head">
-      <h2 class="section-title">
-        <span>最近寫的</span>
-        <span class="section-en">latest posts</span>
+      <h2 class="section-title latest-posts-title">
+        <span>LATEST</span><span>POSTS</span>
       </h2>
       <a href="/blog" class="see-all">全部文章 →</a>
     </header>
@@ -86,6 +85,7 @@ const marqueeItems = [
           tags={p.data.tags}
           variant={p.data.variant}
           index={i}
+          tilt={0}
         />
       ))}
     </div>
@@ -147,10 +147,7 @@ const marqueeItems = [
   <!-- Stack -->
   <section class="section">
     <header class="section-head">
-      <h2 class="section-title">
-        <span>用的東西</span>
-        <span class="section-en">stack & tools</span>
-      </h2>
+      <h2 class="section-title">STACK &amp; TOOLS</h2>
       <Sticker text="✦ 隨時換" color="pink" rotate={0} size="sm" />
     </header>
 
@@ -238,20 +235,15 @@ const marqueeItems = [
     font-family: var(--font-display);
     font-weight: 900;
     font-size: clamp(1.8rem, 4vw, 3rem);
-    letter-spacing: -0.02em;
+    letter-spacing: 0.04em;
     line-height: 1;
     display: flex;
     align-items: baseline;
     gap: 0.8rem;
     flex-wrap: wrap;
   }
-  .section-en {
-    font-family: var(--font-mono);
-    font-size: 0.75em;
-    font-weight: 500;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+  .latest-posts-title {
+    column-gap: 1em;
   }
   .see-all {
     font-family: var(--font-mono);
@@ -267,6 +259,18 @@ const marqueeItems = [
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
+  }
+  .posts-grid :global(.post-card) {
+    box-sizing: border-box;
+    height: 100%;
+  }
+  .posts-grid :global(.card-link) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .posts-grid :global(.tags) {
+    margin-top: auto;
   }
 
   .stack-grid {
