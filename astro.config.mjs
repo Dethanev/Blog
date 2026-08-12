@@ -14,6 +14,14 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      proxy: {
+        "/wakatime-badge.svg": {
+          target: "https://dethanev.app",
+          changeOrigin: true,
+        },
+      },
+    },
   },
 
   markdown: {

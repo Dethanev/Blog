@@ -2,7 +2,19 @@
 import BaseLayout from "~/layouts/BaseLayout.astro";
 
 const wakatimeProfile = "https://wakatime.com/@Dethanev";
-const wakatimeBadge = "https://wakatime.com/badge/user/befca022-bf1e-4d10-a1fe-ce2001dfc840.svg?style=for-the-badge";
+const wakatimeBadge = "https://dethanev.app/wakatime-badge.svg";
+let wakatimeTotal = "持續累積中";
+
+try {
+  const response = await fetch(wakatimeBadge);
+  if (response.ok) {
+    const badge = await response.text();
+    const total = badge.match(/WAKATIME:\s*([^<"]+)/i)?.[1];
+    if (total) wakatimeTotal = total.toLowerCase();
+  }
+} catch {
+  // Keep the card usable when WakaTime is unavailable during a build.
+}
 
 const factoids = [
   { k: "現居", v: "台灣" },
@@ -280,12 +292,7 @@ const stackGroups = [
     >
       <div class="wakatime-copy">
         <span class="wakatime-label">coding time</span>
-        <img
-          src={wakatimeBadge}
-          alt="Dethanev 的 WakaTime 累積 Coding 時數"
-          width="248"
-          height="28"
-        />
+        <strong class="wakatime-total" data-wakatime-total>{wakatimeTotal}</strong>
         <span class="wakatime-since">WakaTime tracked since 2025/08/17</span>
       </div>
       <span class="wakatime-link">完整統計 <span aria-hidden="true">↗</span></span>
@@ -553,10 +560,12 @@ const stackGroups = [
     color: var(--paper);
     padding: 0.3rem 0.55rem;
   }
-  .wakatime-card img {
-    display: block;
-    max-width: 100%;
-    height: auto;
+  .wakatime-total {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
   }
   .wakatime-since {
     font-family: var(--font-mono);
@@ -1051,3 +1060,26 @@ const stackGroups = [
     .mos-card { grid-column: 1 / -1; }
   }
 </style>
+
+<script is:inline>
+  const wakatimeTotal = document.querySelector("[data-wakatime-total]");
+
+  if (wakatimeTotal) {
+    fetch("/wakatime-badge.svg", { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) throw new Error(`WakaTime badge returned ${response.status}`);
+        return response.text();
+      })
+      .then((badge) => {
+        const parsedBadge = new DOMParser().parseFromString(badge, "image/svg+xml");
+        const total = parsedBadge.querySelector("title")?.textContent
+          ?.replace(/^WAKATIME:\s*/i, "")
+          .trim();
+
+        if (total) wakatimeTotal.textContent = total.toLowerCase();
+      })
+      .catch(() => {
+        // Keep the build-time value when the Worker is unavailable.
+      });
+  }
+</script>
