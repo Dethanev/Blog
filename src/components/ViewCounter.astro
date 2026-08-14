@@ -23,6 +23,7 @@ const accessibleLabel = scope === "site" ? "此裝置網站瀏覽次數" : "此�
 >
   <span class="view-mark" aria-hidden="true">◉</span>
   <span class="view-count" data-view-count>--</span>
+  <span class="view-label">{tone === "footer" ? "TOTAL VIEWS" : "VIEWS"}</span>
 </span>
 
 <style>
@@ -74,5 +75,8 @@ const accessibleLabel = scope === "site" ? "此裝置網站瀏覽次數" : "此�
   }
   .view-counter-footer .view-count {
     font-size: 1.05em;
+  }
+  .view-label {
+    opacity: 1;
   }
 </style>

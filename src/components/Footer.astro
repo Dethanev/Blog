@@ -7,6 +7,11 @@ const socials = [
   { label: "Discussions", href: "https://github.com/Dethanev/Blog/discussions", handle: "Dethanev/Blog" },
   { label: "RSS", href: "/rss.xml", handle: "訂閱文章" },
 ];
+const friends = [
+  { name: "Friend", note: "DEMO" },
+  { name: "Friend", note: "DEMO" },
+  { name: "Friend", note: "DEMO" },
+];
 ---
 
 <footer class="footer">
@@ -22,6 +27,22 @@ const socials = [
               <span class="contact-label">{s.label}</span>
               <span class="contact-handle">{s.handle} →</span>
             </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="block friends-block">
+      <h3 class="block-title">
+        <span class="badge badge-violet">friends</span>
+      </h3>
+      <ul class="friends-list">
+        {friends.map((friend) => (
+          <li>
+            <span class="friend-row">
+              <span class="friend-name">{friend.name}</span>
+              <span class="friend-note">{friend.note}</span>
+            </span>
           </li>
         ))}
       </ul>
@@ -59,7 +80,7 @@ const socials = [
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 2.5rem;
   }
   .block-title { margin-bottom: 1.2rem; }
@@ -85,7 +106,8 @@ const socials = [
   }
   .rotate-it { transform: none; }
 
-  .contact-list {
+  .contact-list,
+  .friends-list {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -93,7 +115,8 @@ const socials = [
     flex-direction: column;
     gap: 0.6rem;
   }
-  .contact-row {
+  .contact-row,
+  .friend-row {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -103,20 +126,24 @@ const socials = [
     border-bottom: 1.5px solid color-mix(in oklab, var(--bg) 30%, transparent);
     transition: padding 0.15s ease, background 0.15s ease;
   }
-  :global(.dark) .contact-row {
+  :global(.dark) .contact-row,
+  :global(.dark) .friend-row {
     border-color: color-mix(in oklab, var(--ink) 20%, transparent);
   }
-  .contact-row:hover {
+  .contact-row:hover,
+  .friend-row:hover {
     padding-inline: 0.4rem;
     background: var(--accent-yellow);
     color: var(--text-on-yellow);
   }
-  .contact-label {
+  .contact-label,
+  .friend-name {
     font-family: var(--font-display);
     font-weight: 800;
     font-size: 1.05rem;
   }
-  .contact-handle {
+  .contact-handle,
+  .friend-note {
     font-family: var(--font-mono);
     font-size: 0.8rem;
     opacity: 0.7;

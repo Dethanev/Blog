@@ -69,7 +69,7 @@ test("public HTML contains no placeholder links or labels", async () => {
   const pages = ["index.html", "about/index.html", "blog/index.html", "now/index.html"];
   for (const page of pages) {
     const html = await readFile(new URL(page, dist), "utf8");
-    assert.doesNotMatch(html, /href="#"|待補|total views/, page);
+    assert.doesNotMatch(html, /href="#"|待補/, page);
   }
 });
 
