@@ -2,16 +2,15 @@
 interface Props {
   scope: "post" | "site";
   viewKey?: string;
-  label?: string;
   tone?: "inline" | "footer";
 }
 
 const {
   scope,
   viewKey = scope,
-  label = "此裝置瀏覽",
   tone = "inline",
 } = Astro.props;
+const accessibleLabel = scope === "site" ? "此裝置網站瀏覽次數" : "此裝置文章瀏覽次數";
 ---
 
 <span
@@ -19,12 +18,11 @@ const {
   data-view-counter
   data-view-scope={scope}
   data-view-key={viewKey}
-  aria-label={label}
+  aria-label={accessibleLabel}
   title="只計算這台裝置的瀏覽次數，不是全站統計"
 >
   <span class="view-mark" aria-hidden="true">◉</span>
   <span class="view-count" data-view-count>--</span>
-  <span class="view-label">{label}</span>
 </span>
 
 <style>
@@ -75,11 +73,5 @@ const {
   }
   .view-counter-footer .view-count {
     font-size: 1.05em;
-  }
-  .view-label {
-    opacity: 0.74;
-  }
-  .view-counter-footer .view-label {
-    opacity: 0.8;
   }
 </style>
