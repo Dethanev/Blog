@@ -6,7 +6,7 @@ Dethanev 的個人網站與部落格。這裡放開發筆記、專案紀錄、�
 
 ## Tech Stack
 
-- Astro 6
+- Astro 7
 - TypeScript
 - MDX content collections
 - Tailwind CSS v4

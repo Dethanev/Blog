@@ -1,28 +1,16 @@
 ---
 interface Props {
   tag: string;
-  filter?: boolean;
-  active?: boolean;
   href?: string;
   class?: string;
 }
-const { tag, filter = false, active = false, href, class: cls = "" } = Astro.props;
+const { tag, href, class: cls = "" } = Astro.props;
 const Tag = href ? "a" : "span";
 ---
 
-{filter ? (
-  <button
-    type="button"
-    class:list={["tag-pill brutal-border-thick", { "is-active": active }, cls]}
-    data-tag-filter={tag}
-  >
-    #{tag}
-  </button>
-) : (
-  <Tag href={href} class:list={["tag-pill brutal-border-thick", cls]}>
-    #{tag}
-  </Tag>
-)}
+<Tag href={href} class:list={["tag-pill brutal-border-thick", cls]}>
+  #{tag}
+</Tag>
 
 <style>
   .tag-pill {
@@ -34,24 +22,13 @@ const Tag = href ? "a" : "span";
     background: var(--paper);
     color: var(--ink);
     text-decoration: none;
-    cursor: pointer;
     transition: transform 0.15s ease, background 0.15s ease;
     line-height: 1.4;
   }
-  .tag-pill:hover {
+  a.tag-pill:hover {
     background: var(--accent-yellow);
     color: var(--text-on-yellow);
     border-color: var(--ink);
     transform: translate(-1px, -1px);
-  }
-  button.tag-pill.is-active {
-    background: var(--accent-pink);
-    color: var(--text-on-pink);
-    border-color: var(--ink);
-    transform: rotate(-1.5deg);
-  }
-  :global(.dark) button.tag-pill.is-active {
-    background: var(--accent-yellow);
-    color: var(--text-on-yellow);
   }
 </style>

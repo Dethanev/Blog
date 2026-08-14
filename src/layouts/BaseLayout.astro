@@ -13,6 +13,7 @@ interface Props {
   description?: string;
   ogImage?: string;
   article?: { publishedTime: Date; tags: string[] };
+  noIndex?: boolean;
   showFooter?: boolean;
 }
 const SITE_NAME = "Dethanev 開發室";
@@ -24,6 +25,7 @@ const {
   description = DEFAULT_DESCRIPTION,
   ogImage = "/og-default.png",
   article,
+  noIndex = false,
   showFooter = true,
 } = Astro.props;
 const fullTitle = title === DEFAULT_TITLE ? title : `${title} — ${SITE_NAME}`;
@@ -126,7 +128,7 @@ const fontFaceCSS = `
 ---
 
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="zh-Hant-TW">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -140,7 +142,7 @@ const fontFaceCSS = `
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Dethanev" />
-    <meta name="keywords" content="Dethanev, Dethanev 開發室, 個人網站, 作品集, 開發筆記, App 開發, Web 開發, 後端服務, Flutter, FastAPI, Astro" />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageURL} />
@@ -177,9 +179,10 @@ const fontFaceCSS = `
     </script>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">跳到主要內容</a>
     <ScrollProgress />
     <Nav />
-    <main>
+    <main id="main-content" tabindex="-1">
       <slot />
     </main>
     {showFooter && <Footer />}

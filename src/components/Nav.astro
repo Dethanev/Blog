@@ -23,6 +23,7 @@ const isActive = (href: string) =>
           <a
             href={l.href}
             class:list={["link", { active: isActive(l.href) }]}
+            aria-current={isActive(l.href) ? "page" : undefined}
           >
             {l.label}
           </a>

@@ -6,6 +6,16 @@ import test from "node:test";
 const root = new URL("../", import.meta.url);
 const dist = new URL("dist/", root);
 
+async function getHtmlPages(directory = dist) {
+  const pages = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const url = new URL(`${entry.name}${entry.isDirectory() ? "/" : ""}`, directory);
+    if (entry.isDirectory()) pages.push(...await getHtmlPages(url));
+    else if (entry.name.endsWith(".html")) pages.push(url);
+  }
+  return pages;
+}
+
 test("RSS lists every published post newest first with absolute links", async () => {
   const contentDirectory = new URL("src/content/posts/", root);
   const files = (await readdir(contentDirectory)).filter((file) => file.endsWith(".mdx"));
@@ -61,4 +71,43 @@ test("public HTML contains no placeholder links or labels", async () => {
     const html = await readFile(new URL(page, dist), "utf8");
     assert.doesNotMatch(html, /href="#"|待補|total views/, page);
   }
+});
+
+test("HTML pages expose consistent language, landmarks, and heading levels", async () => {
+  for (const page of await getHtmlPages()) {
+    const html = await readFile(page, "utf8");
+    if (!/<html\b/.test(html)) continue;
+    const headings = [...html.matchAll(/<h([1-6])\b/g)].map((match) => Number(match[1]));
+
+    assert.match(html, /<html lang="zh-Hant-TW">/, page.pathname);
+    assert.match(html, /<body>\s*<a class="skip-link" href="#main-content"/, page.pathname);
+    assert.match(html, /<main id="main-content" tabindex="-1">/, page.pathname);
+    assert.equal(headings.filter((level) => level === 1).length, 1, page.pathname);
+    for (let index = 1; index < headings.length; index += 1) {
+      assert.ok(headings[index] <= headings[index - 1] + 1, `${page.pathname} skips h${headings[index - 1]} to h${headings[index]}`);
+    }
+    assert.doesNotMatch(html, /<meta name="keywords"/, page.pathname);
+  }
+});
+
+test("primary navigation identifies the current page", async () => {
+  const cases = [
+    ["index.html", "/"],
+    ["about/index.html", "/about"],
+    ["blog/index.html", "/blog"],
+    ["blog/2026-05-15-hello-world/index.html", "/blog"],
+    ["now/index.html", "/now"],
+  ];
+
+  for (const [page, href] of cases) {
+    const html = await readFile(new URL(page, dist), "utf8");
+    const escapedHref = href.replace("/", "\\/");
+    assert.match(html, new RegExp(`href="${escapedHref}"[^>]*aria-current="page"`), page);
+    assert.equal([...html.matchAll(/aria-current="page"/g)].length, 1, page);
+  }
+});
+
+test("404 output tells crawlers not to index it", async () => {
+  const html = await readFile(new URL("404.html", dist), "utf8");
+  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
 });

@@ -9,7 +9,7 @@ interface Props {
   date: Date;
   tags: string[];
   category?: string;
-  cover?: string;
+  headingLevel?: "h2" | "h3";
   variant?: "paper" | "pink" | "yellow" | "lime" | "violet" | "blue";
   index?: number;
   tilt?: number;
@@ -21,11 +21,13 @@ const {
   date,
   tags,
   category,
+  headingLevel = "h3",
   variant = "paper",
   index = 0,
   tilt: tiltOverride,
 } = Astro.props;
 const tilt = tiltOverride ?? pickTilt(hashString(title) + index);
+const Heading = headingLevel;
 ---
 
 <article
@@ -41,7 +43,7 @@ const tilt = tiltOverride ?? pickTilt(hashString(title) + index);
       <span class="dot">·</span>
       <span class="hint">read →</span>
     </div>
-    <h3 class="title">{title}</h3>
+    <Heading class="title">{title}</Heading>
     <p class="desc">{description}</p>
     <div class="tags">
       {tags.map((t) => <TagPill tag={t} />)}

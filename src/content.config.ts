@@ -9,7 +9,6 @@ const posts = defineCollection({
     description: z.string(),
     date: z.coerce.date(),
     tags: z.array(z.string()).default([]),
-    cover: z.string().optional(),
     draft: z.boolean().default(false),
     variant: z.enum(["paper", "pink", "yellow", "lime", "violet", "blue"]).default("paper"),
   }),
