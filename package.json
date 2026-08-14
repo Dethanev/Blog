@@ -8,6 +8,7 @@
     "start": "astro dev",
     "build": "astro build",
     "check:contrast": "node --test tests/theme-contrast.test.mjs",
+    "check:og": "node --test tests/og-image.test.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

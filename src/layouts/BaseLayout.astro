@@ -17,6 +17,7 @@ interface Props {
 const SITE_NAME = "Dethanev 開發室";
 const DEFAULT_TITLE = "Dethanev 開發室";
 const DEFAULT_DESCRIPTION = "Dethanev 開發室是個人網站與開發筆記，記錄 App、Web、Server、Side Project 與自架系統實作。";
+const DEFAULT_OG_IMAGE_ALT = "Dethanev 開發室 — App / Web / Server";
 const {
   title = DEFAULT_TITLE,
   description = DEFAULT_DESCRIPTION,
@@ -125,6 +126,10 @@ const fontFaceCSS = `
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={DEFAULT_OG_IMAGE_ALT} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:type" content="website" />
@@ -133,6 +138,7 @@ const fontFaceCSS = `
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image:alt" content={DEFAULT_OG_IMAGE_ALT} />
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     <script is:inline>
       (function () {

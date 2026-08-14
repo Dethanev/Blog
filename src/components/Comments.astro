@@ -3,6 +3,7 @@ const repo = "Dethanev/Blog";
 const repoId = "R_kgDOShmJkw";
 const category = "Announcements";
 const categoryId = "DIC_kwDOShmJk84C9ntb";
+const discussionsURL = "https://github.com/Dethanev/Blog/discussions";
 
 const configured =
   !repo.startsWith("<") &&
@@ -14,14 +15,14 @@ const configured =
 <section class="comments" aria-label="留言區">
   <header class="comments-header">
     <h2>留言 / 想法</h2>
-    <p>有疑問、建議或不同看法?歡迎在下方留言(需要 GitHub 帳號)。</p>
+    <p>有疑問、建議或不同看法？歡迎在下方留言（需要 GitHub 帳號）。</p>
   </header>
 
   {configured ? (
     <div id="giscus-container"></div>
   ) : (
     <div class="comments-todo brutal-border brutal-shadow-sm">
-      留言區尚未設定 giscus。請到 <a href="https://giscus.app" target="_blank" rel="noopener">giscus.app</a> 取得 4 個 ID 後填入 <code>src/components/Comments.astro</code>。
+      留言區暫時無法載入，請前往 <a href={discussionsURL} target="_blank" rel="noopener">GitHub Discussions</a> 留言。
     </div>
   )}
 </section>
@@ -103,10 +104,5 @@ const configured =
     font-family: var(--font-mono);
     font-size: 0.85rem;
     line-height: 1.6;
-  }
-  .comments-todo code {
-    font-size: 0.8rem;
-    padding: 0.05rem 0.35rem;
-    background: color-mix(in oklab, var(--ink) 8%, transparent);
   }
 </style>
