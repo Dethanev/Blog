@@ -1,4 +1,4 @@
-import { toggleTheme } from "./theme";
+import { initThemeToggle } from "./theme";
 import { initViewCounters } from "./views";
 
 const CONFETTI_COLORS = ["#ff5c8a", "#fcec52", "#b8e14a", "#7b61ff", "#2de2e6"];
@@ -123,17 +123,6 @@ function initStickers() {
         );
         await spawnConfetti(cx, cy, 8);
       })();
-    });
-  });
-}
-
-function initThemeToggle() {
-  document.querySelectorAll<HTMLElement>("[data-theme-toggle]").forEach((el) => {
-    if (el.dataset.themeBound === "1") return;
-    el.dataset.themeBound = "1";
-    el.addEventListener("click", (e) => {
-      const rect = el.getBoundingClientRect();
-      toggleTheme(rect.left + rect.width / 2, rect.top + rect.height / 2);
     });
   });
 }

@@ -74,6 +74,17 @@ export function toggleTheme(originX?: number, originY?: number): Theme {
   return next;
 }
 
+export function initThemeToggle() {
+  document.querySelectorAll<HTMLElement>("[data-theme-toggle]").forEach((toggle) => {
+    if (toggle.dataset.themeBound === "1") return;
+    toggle.dataset.themeBound = "1";
+    toggle.addEventListener("click", () => {
+      const rect = toggle.getBoundingClientRect();
+      toggleTheme(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    });
+  });
+}
+
 if (typeof window !== "undefined") {
   initTheme();
 }

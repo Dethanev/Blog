@@ -189,6 +189,8 @@ const fontFaceCSS = `
     <BackToTop />
 
     <script>
+      import { initThemeToggle } from "~/scripts/theme";
+
       function runInit(fn: () => void) {
         try {
           fn();
@@ -241,6 +243,8 @@ const fontFaceCSS = `
         window.addEventListener("keydown", bootOnce, { once: true });
         motionTimer = window.setTimeout(bootOnce, 12000);
       }
+
+      runInit(initThemeToggle);
 
       if (document.readyState === "complete") {
         scheduleCoreBoot();
