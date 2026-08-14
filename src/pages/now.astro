@@ -3,12 +3,12 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
 import Sticker from "~/components/Sticker.astro";
 import { formatDate } from "~/lib/utils";
 
-const updated = new Date("2026-06-19");
+const updated = new Date("2026-08-14");
 
 const items = [
   { color: "pink", layout: "feature", status: "active", title: "主線任務", body: "先把 Blog 做到我自己願意一直更新。不是只弄漂亮，而是讓文章、作品和紀錄都能被好好放進來。" },
-  { color: "pink", layout: "normal", status: "done", title: "剛完成", body: "通過 ITS Java 和 ITS Database。算是幫程式基礎留一個階段性紀錄，也提醒自己不要只會做畫面。" },
-  { color: "violet", layout: "normal", status: "tuning", title: "還在調", body: "首頁、About、Now 這些頁面都還在微調。現在比較在意的是讀起來順，不只是元素很多。" },
+  { color: "pink", layout: "normal", status: "done", title: "剛完成", body: "補上 Metadata、RSS、Sitemap 和 OG 圖片，也重新整理頁尾與瀏覽次數顯示。網站不只要能看，分享出去和被搜尋到時也要完整。" },
+  { color: "violet", layout: "normal", status: "tuning", title: "還在調", body: "持續修首頁、About、Now 的閱讀體驗、無障礙和互動細節。現在更在意每一頁是不是真的好讀、好找。" },
   { color: "yellow", layout: "normal", status: "sorting", title: "正在補完", body: "把以前做過的專案重新整理。很多東西當時有做出來，但現在要補上思路、技術選擇和踩坑紀錄。" },
   { color: "lime", layout: "normal", status: "drafting", title: "最近在寫", body: "整理開發筆記和專案文章。目標不是寫很長，而是把當時怎麼判斷、怎麼修正講清楚。" },
   { color: "yellow", layout: "normal", status: "next", title: "下一步", body: "暫時不急著開新坑。先把 Blog 和作品整理到能展示，再決定下一個真的值得投入的專案。" },
@@ -16,7 +16,7 @@ const items = [
 
 const mainTimeline = [
   { step: "now", state: "current", title: "版面先順", lines: ["首頁 / About / Now", "先調到好讀"] },
-  { step: "next", state: "queued", title: "補足脈絡", lines: ["目的、取捨、踩坑", "一起補齊"] },
+  { step: "next", state: "current", title: "補足脈絡", lines: ["目的、取捨、踩坑", "一起補齊"] },
   { step: "goal", state: "queued", title: "可以展示", lines: ["打開就能看懂", "我做過什麼"] },
 ];
 ---
