@@ -12,6 +12,7 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  article?: { publishedTime: Date; tags: string[] };
   showFooter?: boolean;
 }
 const SITE_NAME = "Dethanev 開發室";
@@ -22,6 +23,7 @@ const {
   title = DEFAULT_TITLE,
   description = DEFAULT_DESCRIPTION,
   ogImage = "/og-default.png",
+  article,
   showFooter = true,
 } = Astro.props;
 const fullTitle = title === DEFAULT_TITLE ? title : `${title} — ${SITE_NAME}`;
@@ -80,7 +82,22 @@ const structuredData = {
       author: { "@id": personId },
       publisher: { "@id": personId },
       inLanguage: "zh-Hant-TW"
-    }
+    },
+    ...(article ? [{
+      "@type": "BlogPosting",
+      "@id": `${canonicalURL.toString()}#article`,
+      headline: title,
+      description,
+      datePublished: article.publishedTime.toISOString(),
+      keywords: article.tags,
+      image: ogImageURL.toString(),
+      url: canonicalURL.toString(),
+      mainEntityOfPage: { "@id": webpageId },
+      isPartOf: { "@id": websiteId },
+      author: { "@id": personId },
+      publisher: { "@id": personId },
+      inLanguage: "zh-Hant-TW"
+    }] : [])
   ]
 };
 const fontFaceCSS = `
@@ -117,6 +134,7 @@ const fontFaceCSS = `
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE_NAME} RSS`} href="/rss.xml" />
     <link rel="preload" href={unboundedFont} as="font" type="font/woff2" crossorigin media="(min-width: 721px)" />
     <style is:inline set:html={fontFaceCSS}></style>
     <title>{fullTitle}</title>
@@ -132,7 +150,9 @@ const fontFaceCSS = `
     <meta property="og:image:alt" content={DEFAULT_OG_IMAGE_ALT} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content={SITE_NAME} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? "article" : "website"} />
+    {article && <meta property="article:published_time" content={article.publishedTime.toISOString()} />}
+    {article?.tags.map((tag) => <meta property="article:tag" content={tag} />)}
     <meta property="og:locale" content="zh_TW" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />

@@ -55,6 +55,9 @@ const categoryCounts = Object.fromEntries(
   </section>
 
   <section class="posts-section">
+    <p class="filter-status" aria-live="polite">
+      顯示 <strong data-filter-count>{posts.length}</strong> 篇文章
+    </p>
     <div class="posts-list">
       {posts.map((p, i) => (
         <PostCard
@@ -153,6 +156,12 @@ const categoryCounts = Object.fromEntries(
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.8rem;
+  }
+  .filter-status {
+    margin-bottom: 1.5rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
   }
 
   @media (max-width: 720px) {

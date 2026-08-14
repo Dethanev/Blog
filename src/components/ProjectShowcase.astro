@@ -16,8 +16,8 @@ const { src, alt, caption, quality = 85 } = Astro.props;
   <Image
     src={src}
     alt={alt}
-    widths={[640, 960, 1400]}
-    sizes="(max-width: 760px) 100vw, 700px"
+    width={700}
+    layout="constrained"
     format="webp"
     quality={quality}
     loading="lazy"

@@ -69,7 +69,7 @@ function initMarquees() {
 }
 
 function initRevealCards() {
-  document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((el, i) => {
+  document.querySelectorAll<HTMLElement>("[data-reveal]:not([hidden])").forEach((el, i) => {
     if (el.dataset.revealReady === "true") return;
     el.dataset.revealReady = "true";
 

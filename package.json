@@ -8,12 +8,14 @@
     "start": "astro dev",
     "build": "astro build",
     "check:contrast": "node --test tests/theme-contrast.test.mjs",
+    "check:build-output": "npm run build && node --test tests/build-output.test.mjs",
     "check:og": "node --test tests/og-image.test.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.5",
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@fontsource-variable/bricolage-grotesque": "^5.2.0",
     "@fontsource-variable/jetbrains-mono": "^5.2.0",

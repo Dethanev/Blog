@@ -9,7 +9,7 @@ interface Props {
 const {
   scope,
   viewKey = scope,
-  label = scope === "site" ? "site views" : "views",
+  label = "此裝置瀏覽",
   tone = "inline",
 } = Astro.props;
 ---
@@ -20,7 +20,7 @@ const {
   data-view-scope={scope}
   data-view-key={viewKey}
   aria-label={label}
-  title="目前先用這台瀏覽器的本機資料計算"
+  title="只計算這台裝置的瀏覽次數，不是全站統計"
 >
   <span class="view-mark" aria-hidden="true">◉</span>
   <span class="view-count" data-view-count>--</span>

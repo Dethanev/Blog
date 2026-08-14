@@ -139,23 +139,37 @@ function initThemeToggle() {
 }
 
 function initClap() {
+  const storageKey = "dethanev:claps:v1";
+  const readClaps = (): Record<string, number> => {
+    try {
+      const parsed = JSON.parse(window.localStorage.getItem(storageKey) ?? "{}");
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch {
+      return {};
+    }
+  };
+
   document.querySelectorAll<HTMLElement>("[data-clap]").forEach((btn) => {
     if (btn.dataset.clapBound === "1") return;
     btn.dataset.clapBound = "1";
 
     const counter = btn.querySelector<HTMLElement>("[data-clap-count]");
-    let count = Number(btn.dataset.clapStart ?? counter?.textContent ?? "0");
-    let combo = 0;
-    let comboTimer: number | null = null;
+    const postId = btn.dataset.clapPostId;
+    if (!postId) return;
+    const claps = readClaps();
+    let count = typeof claps[postId] === "number" ? claps[postId] : 0;
+    if (counter) counter.textContent = String(count);
 
     btn.addEventListener("click", () => {
       void (async () => {
         const { gsap } = await loadMotionLibs();
-        const isCombo = combo > 0;
-        const increment = isCombo ? 2 : 1;
-
-        count += increment;
-        combo = isCombo ? combo + 1 : 1;
+        count += 1;
+        claps[postId] = count;
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify(claps));
+        } catch {
+          // Keep the in-memory count when storage is unavailable.
+        }
         if (counter) counter.textContent = String(count);
 
         gsap.fromTo(
@@ -174,34 +188,6 @@ function initClap() {
         const cy = rect.top + 6;
         await spawnConfetti(cx, cy, 5);
 
-        if (isCombo) {
-          const comboEl = document.createElement("div");
-          comboEl.textContent = `+${increment} COMBO!`;
-          comboEl.style.cssText = `
-            position: fixed; left: ${cx}px; top: ${cy}px;
-            transform: translate(-50%, 0);
-            font-family: var(--font-display, system-ui); font-weight: 900;
-            font-size: 1.1rem; color: var(--text-on-yellow, #1b1805);
-            background: var(--accent-yellow, #fcec52);
-            border: 3px solid var(--ink, #000);
-            padding: 4px 10px;
-            pointer-events: none; z-index: 9998;
-          `;
-          ensureLayer().appendChild(comboEl);
-          gsap.to(comboEl, {
-            y: -50,
-            opacity: 0,
-            rotate: Math.random() * 14 - 7,
-            duration: 0.9,
-            ease: "power2.out",
-            onComplete: () => comboEl.remove(),
-          });
-        }
-
-        if (comboTimer) window.clearTimeout(comboTimer);
-        comboTimer = window.setTimeout(() => {
-          combo = 0;
-        }, 1200);
       })();
     });
   });
@@ -272,84 +258,52 @@ function initLogoEgg() {
 }
 
 function initTagFilter() {
-  const tags = document.querySelectorAll<HTMLElement>("[data-tag-filter], [data-category-filter]");
-  if (tags.length === 0) return;
+  const filters = document.querySelectorAll<HTMLElement>("[data-category-filter]");
+  if (filters.length === 0) return;
   const cards = document.querySelectorAll<HTMLElement>("[data-post-tags]");
   const count = document.querySelector<HTMLElement>("[data-filter-count]");
+  const allowed = new Set(Array.from(filters, (filter) => filter.dataset.categoryFilter ?? "all"));
 
-  const releaseRevealState = (card: HTMLElement, ScrollTrigger: MotionLibs["ScrollTrigger"]) => {
-    ScrollTrigger.getAll().forEach((trigger) => {
-      if (trigger.trigger === card) trigger.kill(false);
+  const applyFilter = (target: string) => {
+    filters.forEach((filter) => {
+      const active = filter.dataset.categoryFilter === target;
+      filter.classList.toggle("is-active", active);
+      filter.setAttribute("aria-pressed", String(active));
     });
-    card.style.removeProperty("transform");
-    card.style.removeProperty("translate");
-    card.style.removeProperty("rotate");
-    card.style.removeProperty("scale");
+
+    let visibleCount = 0;
+    cards.forEach((card) => {
+      const visible = target === "all" || card.dataset.postCategory === target;
+      card.hidden = !visible;
+      if (visible) visibleCount += 1;
+    });
+    if (count) count.textContent = String(visibleCount);
   };
 
-  tags.forEach((t) => {
-    if (t.dataset.filterBound === "1") return;
-    t.dataset.filterBound = "1";
+  const targetFromURL = () => {
+    const url = new URL(window.location.href);
+    const target = url.searchParams.get("category") ?? "all";
+    if (allowed.has(target)) return target;
+    url.searchParams.delete("category");
+    window.history.replaceState({}, "", url);
+    return "all";
+  };
 
-    t.addEventListener("click", () => {
-      void (async () => {
-        const { gsap, ScrollTrigger } = await loadMotionLibs();
-        const target = t.dataset.categoryFilter ?? t.dataset.tagFilter ?? "all";
-        const isCategoryFilter = t.dataset.categoryFilter !== undefined;
-        tags.forEach((x) => {
-          const active = x === t;
-          x.classList.toggle("is-active", active);
-          x.setAttribute("aria-pressed", String(active));
-        });
-
-        gsap.fromTo(t, { scale: 1 }, { scale: 1.1, duration: 0.12, yoyo: true, repeat: 1 });
-
-        let visibleCount = 0;
-        cards.forEach((card) => {
-          const tagsAttr = card.dataset.postTags ?? "";
-          const match = target === "all" || (isCategoryFilter
-            ? card.dataset.postCategory === target
-            : tagsAttr.split(",").includes(target));
-          if (match) visibleCount += 1;
-
-          const wasHidden = card.hidden;
-          gsap.killTweensOf(card);
-          releaseRevealState(card, ScrollTrigger);
-          card.style.pointerEvents = match ? "auto" : "none";
-
-          if (match) {
-            card.hidden = false;
-            const fadeIn = {
-              opacity: 1,
-              duration: 0.2,
-              ease: "power2.out",
-              clearProps: "opacity",
-            };
-            if (wasHidden) {
-              gsap.fromTo(card, { opacity: 0 }, fadeIn);
-            } else {
-              gsap.to(card, fadeIn);
-            }
-            return;
-          }
-
-          if (wasHidden) return;
-
-          gsap.to(card, {
-            opacity: 0,
-            duration: 0.18,
-            ease: "power2.out",
-            onComplete: () => {
-              card.hidden = true;
-              gsap.set(card, { clearProps: "opacity" });
-            },
-          });
-        });
-        if (count) count.textContent = String(visibleCount);
-        gsap.delayedCall(0.22, () => ScrollTrigger.refresh());
-      })();
+  filters.forEach((filter) => {
+    if (filter.dataset.filterBound === "1") return;
+    filter.dataset.filterBound = "1";
+    filter.addEventListener("click", () => {
+      const target = filter.dataset.categoryFilter ?? "all";
+      const url = new URL(window.location.href);
+      if (target === "all") url.searchParams.delete("category");
+      else url.searchParams.set("category", target);
+      window.history.pushState({}, "", url);
+      applyFilter(target);
     });
   });
+
+  window.addEventListener("popstate", () => applyFilter(targetFromURL()));
+  applyFilter(targetFromURL());
 }
 
 let cleanupBackToTop: (() => void) | null = null;

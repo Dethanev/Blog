@@ -5,12 +5,7 @@ const year = new Date().getFullYear();
 const socials = [
   { label: "GitHub", href: "https://github.com/Dethanev", handle: "@Dethanev" },
   { label: "Discussions", href: "https://github.com/Dethanev/Blog/discussions", handle: "Dethanev/Blog" },
-  { label: "Discord", href: "#", handle: "@dethanev" },
-];
-const friends = [
-  { name: "friend", href: "#", note: "待補" },
-  { name: "friend", href: "#", note: "待補" },
-  { name: "friend", href: "#", note: "待補" },
+  { label: "RSS", href: "/rss.xml", handle: "訂閱文章" },
 ];
 ---
 
@@ -32,28 +27,6 @@ const friends = [
       </ul>
     </section>
 
-    <section class="block friends-block">
-      <h3 class="block-title">
-        <span class="badge badge-violet">friends</span>
-      </h3>
-      <ul class="friends-list">
-        {friends.map((f, i) => (
-          <li>
-            <a
-              href={f.href}
-              class="friend-row"
-              style={`--n:${i}`}
-              target={f.href.startsWith("http") ? "_blank" : undefined}
-              rel="noopener"
-            >
-              <span class="friend-name">{f.name}</span>
-              <span class="friend-note">{f.note}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </section>
-
     <section class="block sign-block">
       <p class="signoff">
         <span class="signoff-line">made with</span>
@@ -61,7 +34,7 @@ const friends = [
       </p>
       <p class="copyright">© {year} DETHANEV. no rights reserved.</p>
       <div class="footer-views">
-        <ViewCounter scope="site" label="total views" tone="footer" />
+        <ViewCounter scope="site" tone="footer" />
       </div>
     </section>
   </div>
@@ -86,7 +59,7 @@ const friends = [
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2.5rem;
   }
   .block-title { margin-bottom: 1.2rem; }
@@ -111,7 +84,7 @@ const friends = [
   }
   .rotate-it { transform: none; }
 
-  .contact-list, .friends-list {
+  .contact-list {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -119,7 +92,7 @@ const friends = [
     flex-direction: column;
     gap: 0.6rem;
   }
-  .contact-row, .friend-row {
+  .contact-row {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -129,20 +102,20 @@ const friends = [
     border-bottom: 1.5px solid color-mix(in oklab, var(--bg) 30%, transparent);
     transition: padding 0.15s ease, background 0.15s ease;
   }
-  :global(.dark) .contact-row, :global(.dark) .friend-row {
+  :global(.dark) .contact-row {
     border-color: color-mix(in oklab, var(--ink) 20%, transparent);
   }
-  .contact-row:hover, .friend-row:hover {
+  .contact-row:hover {
     padding-inline: 0.4rem;
     background: var(--accent-yellow);
     color: var(--text-on-yellow);
   }
-  .contact-label, .friend-name {
+  .contact-label {
     font-family: var(--font-display);
     font-weight: 800;
     font-size: 1.05rem;
   }
-  .contact-handle, .friend-note {
+  .contact-handle {
     font-family: var(--font-mono);
     font-size: 0.8rem;
     opacity: 0.7;

@@ -19,7 +19,7 @@ const titleLines = (displayTitle ?? title).split("\n");
 const minutes = readingTime(rawBody);
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} article={{ publishedTime: date, tags }}>
   <article class="post">
     <header class="post-header">
       <div class="header-meta">
@@ -48,7 +48,7 @@ const minutes = readingTime(rawBody);
       </div>
     </div>
 
-    <ClapButton />
+    <ClapButton postId={post.id} />
 
     <Comments />
 
